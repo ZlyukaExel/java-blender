@@ -1,9 +1,9 @@
-package company.name.blender;
+package super_puper_mega_programmisty.blender.app;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class BlenderController {
     @FXML
     private Label welcomeText;
 
