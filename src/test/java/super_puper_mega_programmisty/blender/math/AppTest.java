@@ -1,4 +1,4 @@
-package mathTest;
+package super_puper_mega_programmisty.blender.math;
 
 import junit.framework.TestCase;
 import org.junit.runner.RunWith;
