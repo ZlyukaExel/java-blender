@@ -39,17 +39,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-<<<<<<< HEAD
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-=======
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.1</version>
             <scope>test</scope>
->>>>>>> 4c11fa35c4d5c56376ffeb3964c4a0f3fbb1477c
         </dependency>
     </dependencies>
 
