@@ -1,10 +1,9 @@
 package super_puper_mega_programmisty.blender.graphics.model.triangulation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleTriangulator {
-    public TriangulatedModel triangulate(Model3D model) {
+    public TriangulatedModel triangulate(Model model) {
         if (model == null) {
             throw new IllegalArgumentException("Модель не может быть нулевой");
         }

@@ -3,18 +3,18 @@ package super_puper_mega_programmisty.blender.graphics.model.triangulation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Model3D {
+public class Model {
     protected List<Point3D> vertices;
     protected List<Edge> edges;
     protected String name;
 
-    public Model3D() {
+    public Model() {
         this.vertices = new ArrayList<>();
         this.edges = new ArrayList<>();
         this.name = "Модель";
     }
 
-    public Model3D(String name) {
+    public Model(String name) {
         this();
         this.name = name;
     }

@@ -3,7 +3,7 @@ package super_puper_mega_programmisty.blender.graphics.model.triangulation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TriangulatedModel extends Model3D {
+public class TriangulatedModel extends Model {
     private List<Triangle> triangles;
 
     public TriangulatedModel() {
