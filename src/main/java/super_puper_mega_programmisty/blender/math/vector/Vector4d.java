@@ -121,6 +121,22 @@ public class Vector4d extends AbstractVector {
         return new double[]{x, y, z, w};
     }
 
+    public double X() {
+        return x;
+    }
+
+    public double Y() {
+        return y;
+    }
+
+    public double Z() {
+        return z;
+    }
+
+    public double W() {
+        return w;
+    }
+
     /*
     Сеттеры
      */

@@ -1,4 +1,4 @@
-package graphics.camera;
+package super_puper_mega_programmisty.blender.graphics.camera;
 
 import java.awt.event.KeyEvent;
 

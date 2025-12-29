@@ -1,4 +1,4 @@
-package super_puper_mega_programmisty.blender.model;
+package super_puper_mega_programmisty.blender.graphics.model;
 
 import java.util.ArrayList;
 

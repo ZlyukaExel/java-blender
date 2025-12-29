@@ -112,6 +112,18 @@ public class Vector3d extends AbstractVector {
         return new double[]{x, y, z};
     }
 
+    public double X() {
+        return x;
+    }
+
+    public double Y() {
+        return y;
+    }
+
+    public double Z() {
+        return z;
+    }
+
     /**
      * Поиск векторного произведения векторов.
      * @param v второй вектор.

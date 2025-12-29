@@ -1,9 +1,9 @@
 package super_puper_mega_programmisty.blender.filer;
 
-import super_puper_mega_programmisty.blender.math.Vector3f;
-import super_puper_mega_programmisty.blender.math.Vector2f;
-import super_puper_mega_programmisty.blender.model.Polygon;
-import super_puper_mega_programmisty.blender.model.Model;
+import super_puper_mega_programmisty.blender.graphics.model.Polygon;
+import super_puper_mega_programmisty.blender.graphics.model.Model;
+import super_puper_mega_programmisty.blender.math.vector.Vector2d;
+import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class ObjWriter {
         try (FileWriter writer = new FileWriter(outputPath)) {
             int counter = 0;
             // Запись вершин
-            for (Vector3f vertex : model.vertices) {
+            for (Vector3d vertex : model.vertices) {
                 writer.write(OBJ_VERTEX_TOKEN + " " + vertex.X() + " " + vertex.Y() + " " + vertex.Z() + "\n");
                 counter++;
             }
@@ -31,7 +31,7 @@ public class ObjWriter {
             }
 
             // Запись текстур вершин
-            for (Vector2f vertexTexture : model.textureVertices) {
+            for (Vector2d vertexTexture : model.textureVertices) {
                 writer.write(OBJ_TEXTURE_TOKEN + " " + vertexTexture.X() + " " + vertexTexture.Y() + " 0.0000" + "\n");
                 counter++;
             }
@@ -42,7 +42,7 @@ public class ObjWriter {
             }
 
             // Запись нормалей вершин
-            for (Vector3f vertexNormal : model.normals) {
+            for (Vector3d vertexNormal : model.normals) {
                 writer.write(OBJ_NORMAL_TOKEN + " " + vertexNormal.X() + " " + vertexNormal.Y() + " " + vertexNormal.Z() + "\n");
                 counter++;
             }

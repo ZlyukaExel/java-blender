@@ -1,9 +1,9 @@
-package graphics.engine;
+package super_puper_mega_programmisty.blender.graphics.camera.engine;
 
-import graphics.camera.Camera;
-import graphics.camera.CameraController;
-import graphics.camera.FPSCameraController;
-import graphics.camera.OrbitCameraController;
+import super_puper_mega_programmisty.blender.graphics.camera.Camera;
+import super_puper_mega_programmisty.blender.graphics.camera.CameraController;
+import super_puper_mega_programmisty.blender.graphics.camera.FPSCameraController;
+import super_puper_mega_programmisty.blender.graphics.camera.OrbitCameraController;
 
 import javax.swing.*;
 import java.awt.*;

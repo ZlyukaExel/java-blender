@@ -1,7 +1,6 @@
 module company.name.blender {
     requires javafx.controls;
     requires javafx.fxml;
-    requires org.testng;
     requires java.desktop;
 
 
