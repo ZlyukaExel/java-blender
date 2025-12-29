@@ -1,13 +1,12 @@
 package super_puper_mega_programmisty.blender.graphics.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Polygon {
-
-    private ArrayList<Integer> vertexIndices;
-    private ArrayList<Integer> textureVertexIndices;
-    private ArrayList<Integer> normalIndices;
-
+    private List<Integer> vertexIndices;
+    private List<Integer> textureVertexIndices;
+    private List<Integer> normalIndices;
 
     public Polygon() {
         vertexIndices = new ArrayList<>();
@@ -15,30 +14,37 @@ public class Polygon {
         normalIndices = new ArrayList<>();
     }
 
-    public void setVertexIndices(ArrayList<Integer> vertexIndices) {
-        assert vertexIndices.size() >= 3;
-        this.vertexIndices = vertexIndices;
+    public Polygon(Polygon other) {
+        this.vertexIndices = new ArrayList<>(other.vertexIndices);
+        this.textureVertexIndices = new ArrayList<>(other.textureVertexIndices);
+        this.normalIndices = new ArrayList<>(other.normalIndices);
     }
 
-    public void setTextureVertexIndices(ArrayList<Integer> textureVertexIndices) {
-        assert textureVertexIndices.size() >= 3;
-        this.textureVertexIndices = textureVertexIndices;
+    public void addVertex(int vertexIndex) {
+        vertexIndices.add(vertexIndex);
     }
 
-    public void setNormalIndices(ArrayList<Integer> normalIndices) {
-        assert normalIndices.size() >= 3;
-        this.normalIndices = normalIndices;
+    public void addTextureVertex(int textureVertexIndex) {
+        textureVertexIndices.add(textureVertexIndex);
     }
 
-    public ArrayList<Integer> getVertexIndices() {
+    public void addNormal(int normalIndex) {
+        normalIndices.add(normalIndex);
+    }
+
+    public List<Integer> getVertexIndices() {
         return vertexIndices;
     }
 
-    public ArrayList<Integer> getTextureVertexIndices() {
+    public List<Integer> getTextureVertexIndices() {
         return textureVertexIndices;
     }
 
-    public ArrayList<Integer> getNormalIndices() {
+    public List<Integer> getNormalIndices() {
         return normalIndices;
+    }
+
+    public int getVertexCount() {
+        return vertexIndices.size();
     }
 }

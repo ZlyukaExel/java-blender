@@ -1,4 +1,6 @@
-package affine_transformation.jav.transform;
+package super_puper_mega_programmisty.blender.math.transform;
+
+import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
 
 public class Rotation extends AffineTransform {
     public enum Axis { X, Y, Z }
@@ -15,7 +17,7 @@ public class Rotation extends AffineTransform {
 
     @Override
     public void applyTransform() {
-        transformationMatrix.setIdentity();
+        transformationMatrix = (Matrix4d) Matrix4d.crateIdentity();
         float cos = (float) Math.cos(angle);
         float sin = (float) Math.sin(angle);
 
