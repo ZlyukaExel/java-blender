@@ -104,6 +104,14 @@ public class Vector2d extends AbstractVector {
         return new double[]{x, y};
     }
 
+    public double X() {
+        return x;
+    }
+
+    public double Y() {
+        return y;
+    }
+
     /*
     Сеттеры
      */

@@ -3,6 +3,7 @@ package super_puper_mega_programmisty.blender.math.matrix;
 import super_puper_mega_programmisty.blender.math.matrix.exception.MatrixDifferentMatrixDimension;
 import super_puper_mega_programmisty.blender.math.matrix.exception.MatrixDifferentVectorDimension;
 import super_puper_mega_programmisty.blender.math.vector.IVector;
+import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 import super_puper_mega_programmisty.blender.math.vector.Vector4d;
 
 public class Matrix4d extends AbstractMatrix{
@@ -66,6 +67,28 @@ public class Matrix4d extends AbstractMatrix{
         return v;
     }
 
+    public Vector3d transform(Vector3d point) {
+        double x = point.X();
+        double y = point.Y();
+        double z = point.Z();
+        double newX = elementsData[0][0] * x + elementsData[0][1] * y + elementsData[0][2] * z + elementsData[0][3];
+        double newY = elementsData[1][0] * x + elementsData[1][1] * y + elementsData[1][2] * z + elementsData[1][3];
+        double newZ = elementsData[2][0] * x + elementsData[2][1] * y + elementsData[2][2] * z + elementsData[2][3];
+        double w = elementsData[3][0] * x + elementsData[3][1] * y + elementsData[3][2] * z + elementsData[3][3];
+
+        if (w != 0 && w != 1) {
+            newX /= w;
+            newY /= w;
+            newZ /= w;
+        }
+
+        return new Vector3d(newX, newY, newZ);
+    }
+
+    public double get(int row, int col) {
+        return elementsData[row][col];
+    }
+
     /**
      * Создание единичной матрицы
      * @return матрица
@@ -79,5 +102,77 @@ public class Matrix4d extends AbstractMatrix{
                                            {0, 1, 0, 0},
                                            {0, 0, 1, 0},
                                            {0, 0, 0, 1}});
+    }
+
+    //матрица перемещения (трансляции)
+    public static Matrix4d createTranslationMatrix(double tx, double ty, double tz) {
+        Matrix4d matrix = new Matrix4d();
+        matrix.set(0, 3, tx);
+        matrix.set(1, 3, ty);
+        matrix.set(2, 3, tz);
+        return matrix;
+    }
+
+    //матрица масштабирования
+    public static Matrix4d createScalingMatrix(double sx, double sy, double sz) {
+        Matrix4d matrix = new Matrix4d();
+        matrix.set(0, 0, sx);
+        matrix.set(1, 1, sy);
+        matrix.set(2, 2, sz);
+        return matrix;
+    }
+
+
+    public static Matrix4d createRotationXMatrix(double angle) {
+        Matrix4d matrix = new Matrix4d();
+        float cos = (float) Math.cos(angle);
+        float sin = (float) Math.sin(angle);
+
+        matrix.set(1, 1, cos);
+        matrix.set(1, 2, -sin);
+        matrix.set(2, 1, sin);
+        matrix.set(2, 2, cos);
+        // [1, 0,    0,    0]
+        // [0, cos, -sin,  0]
+        // [0, sin,  cos,  0]
+        // [0, 0,    0,    1]
+        return matrix;
+    }
+
+    public static Matrix4d createRotationYMatrix(double angle) {
+        Matrix4d matrix = new Matrix4d();
+        float cos = (float) Math.cos(angle);
+        float sin = (float) Math.sin(angle);
+
+        matrix.set(0, 0, cos);
+        matrix.set(0, 2, sin);
+        matrix.set(2, 0, -sin);
+        matrix.set(2, 2, cos);
+        // Матрица имеет вид:
+        // [cos,  0, sin,  0]
+        // [0,    1, 0,    0]
+        // [-sin, 0, cos,  0]
+        // [0,    0, 0,    1]
+        return matrix;
+    }
+
+    public static Matrix4d createRotationZMatrix(double angle) {
+        Matrix4d matrix = new Matrix4d();
+        float cos = (float) Math.cos(angle);
+        float sin = (float) Math.sin(angle);
+
+        matrix.set(0, 0, cos);
+        matrix.set(0, 1, -sin);
+        matrix.set(1, 0, sin);
+        matrix.set(1, 1, cos);
+        // [cos, -sin, 0, 0]
+        // [sin,  cos, 0, 0]
+        // [0,    0,   1, 0]
+        // [0,    0,   0, 1]
+        return matrix;
+    }
+
+    public void set(int row, int col, double value) {
+        elementsData[row][col] = value;
     }
 }
