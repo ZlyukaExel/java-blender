@@ -5,7 +5,6 @@ public class Rotation extends AffineTransform {
 
     private Axis axis;
     private float angle;
-
     public Rotation(Axis axis, float angleRadians) {
         super();
         this.axis = axis;
