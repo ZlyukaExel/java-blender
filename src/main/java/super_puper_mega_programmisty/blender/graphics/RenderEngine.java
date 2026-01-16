@@ -26,8 +26,10 @@ public class RenderEngine {
         Matrix4d projectionMatrix = camera.getProjectionMatrix();
 
 
-        Matrix4d modelViewProjectionMatrix = (Matrix4d) modelMatrix.multiply(viewMatrix).multiply(projectionMatrix);
-        
+        Matrix4d modelViewProjectionMatrix = new Matrix4d();
+
+        modelViewProjectionMatrix.multiply(modelMatrix).multiply(viewMatrix).multiply(projectionMatrix);
+
         for (Polygon polygon : model.getPolygons()) {
             List<Vector3d> vertices = new ArrayList<>();
             for (Integer index : polygon.getVertexIndices()) {
