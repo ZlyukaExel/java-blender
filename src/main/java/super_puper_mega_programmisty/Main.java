@@ -1,11 +1,12 @@
 package super_puper_mega_programmisty;
 
-import super_puper_mega_programmisty.math.Transform;
-import super_puper_mega_programmisty.math.Vector3f;
-import super_puper_mega_programmisty.model.Model;
-import super_puper_mega_programmisty.model.Polygon;
-import super_puper_mega_programmisty.objreader.ObjReader;
-import super_puper_mega_programmisty.objwriter.ObjWriter;
+
+import super_puper_mega_programmisty.blender.graphics.model.Model;
+import super_puper_mega_programmisty.blender.graphics.model.Polygon;
+import super_puper_mega_programmisty.blender.math.transform.Transform;
+import super_puper_mega_programmisty.blender.math.vector.Vector3d;
+import super_puper_mega_programmisty.blender.objreader.ObjReader;
+import super_puper_mega_programmisty.blender.objwriter.ObjWriter;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -88,9 +89,9 @@ public class Main {
         // 9. Применяем трансформацию через объект Transform
         System.out.println("\n8. Applying transformation via Transform object...");
         Transform customTransform = new Transform(
-                new Vector3f(5.0f, 3.0f, 2.0f),
-                new Vector3f(0.0f, 90.0f, 0.0f),
-                new Vector3f(2.0f, 2.0f, 2.0f)
+                new Vector3d(5.0f, 3.0f, 2.0f),
+                new Vector3d(0.0f, 90.0f, 0.0f),
+                new Vector3d(2.0f, 2.0f, 2.0f)
         );
         model.setTransform(customTransform);
         ObjWriter.writeTransformed(model, "./3DModels/" + modelName + "_custom.obj");
@@ -109,18 +110,18 @@ public class Main {
         Model cube = new Model();
 
         // Вершины куба
-        cube.vertices.add(new Vector3f(-1, -1, -1));
-        cube.vertices.add(new Vector3f(1, -1, -1));
-        cube.vertices.add(new Vector3f(1, 1, -1));
-        cube.vertices.add(new Vector3f(-1, 1, -1));
-        cube.vertices.add(new Vector3f(-1, -1, 1));
-        cube.vertices.add(new Vector3f(1, -1, 1));
-        cube.vertices.add(new Vector3f(1, 1, 1));
-        cube.vertices.add(new Vector3f(-1, 1, 1));
+        cube.vertices.add(new Vector3d(-1, -1, -1));
+        cube.vertices.add(new Vector3d(1, -1, -1));
+        cube.vertices.add(new Vector3d(1, 1, -1));
+        cube.vertices.add(new Vector3d(-1, 1, -1));
+        cube.vertices.add(new Vector3d(-1, -1, 1));
+        cube.vertices.add(new Vector3d(1, -1, 1));
+        cube.vertices.add(new Vector3d(1, 1, 1));
+        cube.vertices.add(new Vector3d(-1, 1, 1));
 
         // Нормали (упрощённо)
         for (int i = 0; i < 8; i++) {
-            cube.normals.add(new Vector3f(0, 0, 1));
+            cube.normals.add(new Vector3d(0, 0, 1));
         }
 
         // Полигоны (6 граней куба)

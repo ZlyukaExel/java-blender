@@ -1,4 +1,4 @@
-package super_puper_mega_programmisty.blender.transfom_model.objreader;
+package super_puper_mega_programmisty.blender.objreader;
 
 public class ObjReaderException extends RuntimeException {
     public ObjReaderException(String errorMessage, int lineInd) {

@@ -1,9 +1,10 @@
-package super_puper_mega_programmisty.blender.transfom_model.objreader;
+package super_puper_mega_programmisty.blender.objreader;
 
-import super_puper_mega_programmisty.blender.transfom_model.math.Vector2f;
-import super_puper_mega_programmisty.blender.transfom_model.math.Vector3f;
-import super_puper_mega_programmisty.blender.transfom_model.model.Model;
-import super_puper_mega_programmisty.blender.transfom_model.model.Polygon;
+
+import super_puper_mega_programmisty.blender.graphics.model.Model;
+import super_puper_mega_programmisty.blender.graphics.model.Polygon;
+import super_puper_mega_programmisty.blender.math.vector.Vector2d;
+import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,15 +31,15 @@ public class ObjReader {
                 continue;
             }
 
-            final String token = wordsInLine.get(0);
-            wordsInLine.remove(0);
+            final String token = wordsInLine.getFirst();
+            wordsInLine.removeFirst();
 
             ++lineInd;
             switch (token) {
-                case OBJ_VERTEX_TOKEN -> result.vertices.add(parseVertex(wordsInLine, lineInd));
-                case OBJ_TEXTURE_TOKEN -> result.textureVertices.add(parseTextureVertex(wordsInLine, lineInd));
-                case OBJ_NORMAL_TOKEN -> result.normals.add(parseNormal(wordsInLine, lineInd));
-                case OBJ_FACE_TOKEN -> result.polygons.add(parseFace(wordsInLine, lineInd));
+                case OBJ_VERTEX_TOKEN -> result.getVertices().add(parseVertex(wordsInLine, lineInd));
+                case OBJ_TEXTURE_TOKEN -> result.getTextureVertices().add(parseTextureVertex(wordsInLine, lineInd));
+                case OBJ_NORMAL_TOKEN -> result.getNormals().add(parseNormal(wordsInLine, lineInd));
+                case OBJ_FACE_TOKEN -> result.getPolygons().add(parseFace(wordsInLine, lineInd));
                 default -> {}
             }
         }
@@ -46,9 +47,9 @@ public class ObjReader {
         return result;
     }
 
-    protected static Vector3f parseVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+    protected static Vector3d parseVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
         try {
-            return new Vector3f(
+            return new Vector3d(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
                     Float.parseFloat(wordsInLineWithoutToken.get(1)),
                     Float.parseFloat(wordsInLineWithoutToken.get(2)));
@@ -61,9 +62,9 @@ public class ObjReader {
         }
     }
 
-    protected static Vector2f parseTextureVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+    protected static Vector2d parseTextureVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
         try {
-            return new Vector2f(
+            return new Vector2d(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
                     Float.parseFloat(wordsInLineWithoutToken.get(1)));
 
@@ -75,9 +76,9 @@ public class ObjReader {
         }
     }
 
-    protected static Vector3f parseNormal(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+    protected static Vector3d parseNormal(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
         try {
-            return new Vector3f(
+            return new Vector3d(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
                     Float.parseFloat(wordsInLineWithoutToken.get(1)),
                     Float.parseFloat(wordsInLineWithoutToken.get(2)));

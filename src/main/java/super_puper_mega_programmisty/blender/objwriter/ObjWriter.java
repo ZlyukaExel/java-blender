@@ -1,9 +1,9 @@
-package super_puper_mega_programmisty.objwriter;
+package super_puper_mega_programmisty.blender.objwriter;
 
-import super_puper_mega_programmisty.math.Vector2f;
-import super_puper_mega_programmisty.math.Vector3f;
-import super_puper_mega_programmisty.model.Model;
-import super_puper_mega_programmisty.model.Polygon;
+import super_puper_mega_programmisty.blender.graphics.model.Model;
+import super_puper_mega_programmisty.blender.graphics.model.Polygon;
+import super_puper_mega_programmisty.blender.math.vector.Vector2d;
+import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -34,11 +34,11 @@ public class ObjWriter {
             writer.write("# Model saved " + (applyTransformations ? "WITH" : "WITHOUT") + " transformations\n");
             writer.write("# Original transform: " + model.getTransform().toString() + "\n\n");
 
-            for (Vector3f vertex : modelToSave.vertices) {
+            for (Vector3d vertex : modelToSave.getVertices()) {
                 writer.write(OBJ_VERTEX_TOKEN + " " +
-                        String.format("%.6f", vertex.getX()) + " " +
-                        String.format("%.6f", vertex.getY()) + " " +
-                        String.format("%.6f", vertex.getZ()) + "\n");
+                        String.format("%.6f", vertex.X()) + " " +
+                        String.format("%.6f", vertex.Y()) + " " +
+                        String.format("%.6f", vertex.Z()) + "\n");
                 counter++;
             }
 
@@ -47,7 +47,7 @@ public class ObjWriter {
                 counter = 0;
             }
 
-            for (Vector2f texture : modelToSave.textureVertices) {
+            for (Vector2d texture : modelToSave.textureVertices) {
                 writer.write(OBJ_TEXTURE_TOKEN + " " +
                         String.format("%.6f", texture.getX()) + " " +
                         String.format("%.6f", texture.getY()) + " 0.000000\n");
@@ -59,7 +59,7 @@ public class ObjWriter {
                 counter = 0;
             }
 
-            for (Vector3f normal : modelToSave.normals) {
+            for (Vector3d normal : modelToSave.normals) {
                 writer.write(OBJ_NORMAL_TOKEN + " " +
                         String.format("%.6f", normal.getX()) + " " +
                         String.format("%.6f", normal.getY()) + " " +
@@ -75,7 +75,7 @@ public class ObjWriter {
             int triangles = 0;
             int quads = 0;
 
-            for (Polygon polygon : modelToSave.polygons) {
+            for (Polygon polygon : modelToSave.getPolygons()) {
                 writer.write(OBJ_FACE_TOKEN);
 
                 int vertexCount = polygon.getVertexIndices().size();
