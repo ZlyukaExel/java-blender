@@ -16,13 +16,29 @@ public class ObjWriter {
     private static final String OBJ_FACE_TOKEN = "f";
 
     public static void write(Model model, String outputPath) {
+        write(model, outputPath, false);
+    }
+
+    public static void write(Model model, String outputPath, boolean applyTransformations) {
+
+        Model modelToSave;
+        if (applyTransformations) {
+            modelToSave = model.getTransformedCopy();
+        } else {
+            modelToSave = model.getOriginalCopy();
+        }
 
         try (FileWriter writer = new FileWriter(outputPath)) {
             int counter = 0;
 
-            // Запись вершин
-            for (Vector3f vertex : model.vertices) {
-                writer.write(OBJ_VERTEX_TOKEN + " " + vertex.X() + " " + vertex.Y() + " " + vertex.Z() + "\n");
+            writer.write("# Model saved " + (applyTransformations ? "WITH" : "WITHOUT") + " transformations\n");
+            writer.write("# Original transform: " + model.getTransform().toString() + "\n\n");
+
+            for (Vector3f vertex : modelToSave.vertices) {
+                writer.write(OBJ_VERTEX_TOKEN + " " +
+                        String.format("%.6f", vertex.getX()) + " " +
+                        String.format("%.6f", vertex.getY()) + " " +
+                        String.format("%.6f", vertex.getZ()) + "\n");
                 counter++;
             }
 
@@ -31,74 +47,86 @@ public class ObjWriter {
                 counter = 0;
             }
 
-            // Запись текстур вершин
-            for (Vector2f vertexTexture : model.textureVertices) {
-                writer.write(OBJ_TEXTURE_TOKEN + " " + vertexTexture.X() + " " + vertexTexture.Y() + " 0.0000" + "\n");
+            for (Vector2f texture : modelToSave.textureVertices) {
+                writer.write(OBJ_TEXTURE_TOKEN + " " +
+                        String.format("%.6f", texture.getX()) + " " +
+                        String.format("%.6f", texture.getY()) + " 0.000000\n");
                 counter++;
             }
 
             if (counter > 0) {
-                writer.write("# " + counter + " texture coords\n\n");
+                writer.write("# " + counter + " texture coordinates\n\n");
                 counter = 0;
             }
 
-            // Запись нормалей вершин
-            for (Vector3f vertexNormal : model.normals) {
-                writer.write(OBJ_NORMAL_TOKEN + " " + vertexNormal.X() + " " + vertexNormal.Y() + " " + vertexNormal.Z() + "\n");
+            for (Vector3f normal : modelToSave.normals) {
+                writer.write(OBJ_NORMAL_TOKEN + " " +
+                        String.format("%.6f", normal.getX()) + " " +
+                        String.format("%.6f", normal.getY()) + " " +
+                        String.format("%.6f", normal.getZ()) + "\n");
                 counter++;
             }
 
             if (counter > 0) {
-                writer.write("# " + counter + " normals\n\n");
+                writer.write("# " + counter + " vertex normals\n\n");
                 counter = 0;
             }
 
-            int trianglesCounter = 0;
+            int triangles = 0;
+            int quads = 0;
 
-            // Запись полигонов
-            for (Polygon polygon : model.polygons) {
-
+            for (Polygon polygon : modelToSave.polygons) {
                 writer.write(OBJ_FACE_TOKEN);
 
-                if (polygon.getVertexIndices().size() == 3){
-                    trianglesCounter++;
-                }
-
                 int vertexCount = polygon.getVertexIndices().size();
+                if (vertexCount == 3) triangles++;
+                else if (vertexCount == 4) quads++;
+
                 boolean hasTextures = polygon.getTextureVertexIndices().size() == vertexCount;
-                boolean hasNormales = polygon.getNormalIndices().size() == vertexCount;
+                boolean hasNormals = polygon.getNormalIndices().size() == vertexCount;
 
                 for (int i = 0; i < vertexCount; i++) {
-                    // Пишем ID вертекса
-                    writer.write( " " + polygon.getVertexIndices().get(i));
+                    int vertexIndex = polygon.getVertexIndices().get(i) + 1;
 
-                    // Пишем ID текстуры
-                    if (hasTextures){
-                        writer.write("/" + polygon.getTextureVertexIndices().get(i));
-                    }
+                    writer.write(" " + vertexIndex);
 
-                    // Пишем ID нормали
-                    if (hasNormales){
-                        if (!hasTextures) {
-                            writer.write("/");
+                    if (hasTextures || hasNormals) {
+                        writer.write("/");
+
+                        if (hasTextures) {
+                            int texIndex = polygon.getTextureVertexIndices().get(i) + 1;
+                            writer.write(String.valueOf(texIndex));
                         }
-                        writer.write("/" + polygon.getNormalIndices().get(i));
+
+                        if (hasNormals) {
+                            writer.write("/");
+                            int normalIndex = polygon.getNormalIndices().get(i) + 1;
+                            writer.write(String.valueOf(normalIndex));
+                        }
                     }
                 }
 
                 writer.write("\n");
-
                 counter++;
             }
 
             if (counter > 0) {
-                writer.write("# " + counter + " polygons - " + trianglesCounter + " triangles\n\n");
+                writer.write("# " + counter + " polygons (" + triangles + " triangles, " + quads + " quads)\n");
             }
 
-            System.out.println("Модель успешно сохранена в " + outputPath);
+            System.out.println("Model saved to: " + outputPath);
+            System.out.println("Transformations applied: " + applyTransformations);
 
         } catch (IOException e) {
-            System.out.println("Возникла ошибка при сохранении модели: " + e.getMessage());;
+            System.err.println("Error saving model: " + e.getMessage());
         }
+    }
+
+    public static void writeOriginal(Model model, String outputPath) {
+        write(model, outputPath, false);
+    }
+
+    public static void writeTransformed(Model model, String outputPath) {
+        write(model, outputPath, true);
     }
 }
