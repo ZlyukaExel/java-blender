@@ -21,7 +21,7 @@ public class Camera {
         this.target = new Vector3d(0.0, 0.0, 0.0);
         this.up = new Vector3d(0.0, 1.0, 0.0);
 
-        this.fov = 45.0;
+        this.fov = 1;
         this.aspectRatio = 16.0 / 9.0;
         this.nearClip = 0.1;
         this.farClip = 100.0;
@@ -33,61 +33,60 @@ public class Camera {
     private void updateViewMatrix() {
         Vector3d zAxis = (Vector3d) position.subVector(target).normalize();
         Vector3d xAxis = (Vector3d) up.cross(zAxis).normalize();
-        Vector3d yAxis = (Vector3d) zAxis.cross(xAxis);
+        Vector3d yAxis = (Vector3d) zAxis.cross(xAxis).normalize();
 
         double[][] viewData = new double[4][4];
 
         // First row
         viewData[0][0] = xAxis.X();
-        viewData[0][1] = yAxis.X();
-        viewData[0][2] = zAxis.X();
-        viewData[0][3] = 0;
+        viewData[1][0] = yAxis.X();
+        viewData[2][0] = zAxis.X();
+        viewData[3][0] = 0;
 
         // Second row
-        viewData[1][0] = xAxis.Y();
+        viewData[0][1] = xAxis.Y();
         viewData[1][1] = yAxis.Y();
-        viewData[1][2] = zAxis.Y();
-        viewData[1][3] = 0;
+        viewData[2][1] = zAxis.Y();
+        viewData[3][1] = 0;
 
         // Third row
-        viewData[2][0] = xAxis.Z();
-        viewData[2][1] = yAxis.Z();
+        viewData[0][2] = xAxis.Z();
+        viewData[1][2] = yAxis.Z();
         viewData[2][2] = zAxis.Z();
-        viewData[2][3] = 0;
+        viewData[3][2] = 0;
 
         // Fourth row
-        viewData[3][0] = -xAxis.dot(position);
-        viewData[3][1] = -yAxis.dot(position);
-        viewData[3][2] = -zAxis.dot(position);
+        viewData[0][3] = -xAxis.dot(position);
+        viewData[1][3] = -yAxis.dot(position);
+        viewData[2][3] = -zAxis.dot(position);
         viewData[3][3] = 1;
 
         viewMatrix = new Matrix4d(viewData);
     }
 
     private void updateProjectionMatrix() {
-        double f = 1.0 / Math.tan(Math.toRadians(fov) / 2.0);
-        double rangeInv = 1.0 / (nearClip - farClip);
+        double f = 1.0 / Math.tan(fov / 2.0);
 
         double[][] projData = new double[4][4];
 
         projData[0][0] = f / aspectRatio;
-        projData[0][1] = 0;
-        projData[0][2] = 0;
-        projData[0][3] = 0;
-
         projData[1][0] = 0;
-        projData[1][1] = f;
-        projData[1][2] = 0;
-        projData[1][3] = 0;
-
         projData[2][0] = 0;
-        projData[2][1] = 0;
-        projData[2][2] = (nearClip + farClip) * rangeInv;
-        projData[2][3] = -1;
-
         projData[3][0] = 0;
+
+        projData[0][1] = 0;
+        projData[1][1] = f;
+        projData[2][1] = 0;
         projData[3][1] = 0;
-        projData[3][2] = nearClip * farClip * rangeInv * 2;
+
+        projData[0][2] = 0;
+        projData[1][2] = 0;
+        projData[2][2] = (nearClip + farClip) * (farClip - nearClip);
+        projData[3][2] = 1;
+
+        projData[0][3] = 0;
+        projData[1][3] = 0;
+        projData[2][3] = nearClip * farClip * (nearClip - farClip) * 2;
         projData[3][3] = 0;
 
         projectionMatrix = new Matrix4d(projData);
