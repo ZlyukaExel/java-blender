@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class TriangleRasterization {
-    private void fillTriangle(GraphicsContext gc, double x1, double y1, double z1,
+    public void fillTriangle(GraphicsContext gc, double x1, double y1, double z1,
                               double x2, double y2, double z2,
                               double x3, double y3, double z3,
                               javafx.scene.paint.Color c1,
@@ -146,7 +146,7 @@ public class TriangleRasterization {
         }
     }
 
-    private void sortByY(Point3D[] array) {
+    public void sortByY(Point3D[] array) {
         Arrays.sort(array, new Comparator<Point3D>() {
             @Override
             public int compare(Point3D o1, Point3D o2) {
@@ -160,7 +160,7 @@ public class TriangleRasterization {
         });
     }
 
-    private javafx.scene.paint.Color interpolationColor(double alpha, double beta, double gamma,
+    public javafx.scene.paint.Color interpolationColor(double alpha, double beta, double gamma,
                                                         Color c1, Color c2, Color c3) {
         double red = alpha * c1.getRed() + beta * c2.getRed() + gamma * c3.getRed();
         double green = alpha * c1.getGreen() + beta * c2.getGreen() + gamma * c3.getGreen();
@@ -173,14 +173,14 @@ public class TriangleRasterization {
         return new Color(red, green, blue, 1);
     }
 
-    private double clamp(double a, double left, double right) {
+    public double clamp(double a, double left, double right) {
         if (a > right) {
             return right;
         }
         return Math.max(a, left);
     }
 
-    private double[] getBarycentric(double x, double y,
+    public double[] getBarycentric(double x, double y,
                                     double x1, double y1,
                                     double x2, double y2,
                                     double x3, double y3) {
