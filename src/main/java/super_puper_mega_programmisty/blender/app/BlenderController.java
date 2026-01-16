@@ -1,14 +1,7 @@
 package super_puper_mega_programmisty.blender.app;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import super_puper_mega_programmisty.blender.scene.Scene;
 
 public class BlenderController {
-    @FXML
-    private Label welcomeText;
-
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
+    private final Scene scene = new Scene();
 }

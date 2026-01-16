@@ -18,8 +18,8 @@ public class RenderPanel extends JPanel implements MouseListener, MouseMotionLis
     private long lastFrameTime;
     private float deltaTime;
 
-    public RenderPanel() {
-        camera = new Camera();
+    public RenderPanel(Camera camera) {
+        this.camera = camera;
         cameraController = new FPSCameraController(camera);
 
         setBackground(Color.BLACK);
@@ -43,13 +43,17 @@ public class RenderPanel extends JPanel implements MouseListener, MouseMotionLis
         inputMap.put(KeyStroke.getKeyStroke("F1"), "toggleCameraMode");
         actionMap.put("toggleCameraMode", new AbstractAction() {
             @Override
-            public void actionPerformed(ActionEvent e) { toggleCameraMode(); }
+            public void actionPerformed(ActionEvent e) {
+                toggleCameraMode();
+            }
         });
 
         inputMap.put(KeyStroke.getKeyStroke("F2"), "resetCamera");
         actionMap.put("resetCamera", new AbstractAction() {
             @Override
-            public void actionPerformed(ActionEvent e) { resetCamera(); }
+            public void actionPerformed(ActionEvent e) {
+                resetCamera();
+            }
         });
     }
 
@@ -68,8 +72,6 @@ public class RenderPanel extends JPanel implements MouseListener, MouseMotionLis
     }
 
     private void resetCamera() {
-        camera = new Camera();
-
         if (fpsMode) {
             cameraController = new FPSCameraController(camera);
         } else {
@@ -183,12 +185,36 @@ public class RenderPanel extends JPanel implements MouseListener, MouseMotionLis
         repaint();
     }
 
-    @Override public void mouseClicked(MouseEvent e) {}
-    @Override public void mouseEntered(MouseEvent e) {}
-    @Override public void mouseExited(MouseEvent e) {}
-    @Override public void keyTyped(KeyEvent e) {}
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
 
-    public Camera getCamera() { return camera; }
-    public CameraController getCameraController() { return cameraController; }
-    public boolean isFpsMode() { return fpsMode; }
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    public void setCamera(Camera camera) {
+        this.camera = camera;
+        resetCamera();
+    }
+
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public CameraController getCameraController() {
+        return cameraController;
+    }
+
+    public boolean isFpsMode() {
+        return fpsMode;
+    }
 }
