@@ -16,7 +16,7 @@ public class Rotation extends AffineTransform {
 
     @Override
     public void applyTransform() {
-        transformationMatrix = (Matrix4d) Matrix4d.crateIdentity();
+        transformationMatrix = Matrix4d.crateIdentity();
         float cos = (float) Math.cos(angle);
         float sin = (float) Math.sin(angle);
 

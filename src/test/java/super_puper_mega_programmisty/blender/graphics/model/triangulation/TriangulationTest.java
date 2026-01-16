@@ -13,4 +13,4 @@ import org.junit.runners.Suite;
         TriangulatedModelTest.class,
         TriangleTest.class
 })
-public class AppTest extends TestCase {}
+public class TriangulationTest extends TestCase {}

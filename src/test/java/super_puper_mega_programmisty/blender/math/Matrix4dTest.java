@@ -135,7 +135,7 @@ public class Matrix4dTest {
 
     @Test
     public void testCreateIdentity() {
-        Matrix4d identity = (Matrix4d) new Matrix4d().crateIdentity();
+        Matrix4d identity = Matrix4d.crateIdentity();
         double[][] data = identity.getMatrix();
 
         for (int i = 0; i < 4; i++) {

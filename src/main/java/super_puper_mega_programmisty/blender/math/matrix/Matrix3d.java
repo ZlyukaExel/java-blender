@@ -7,13 +7,17 @@ import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 public class Matrix3d extends AbstractMatrix{
     public Matrix3d() {
-        super(new double[][] {{0, 0, 0},
-                              {0, 0, 0},
-                              {0, 0, 0}});
+        super(new double[][] {{1, 0, 0},
+                              {0, 1, 0},
+                              {0, 0, 1}});
     }
 
     public Matrix3d(double[][] a) {
         super(a);
+    }
+
+    public Matrix3d(Matrix3d m) {
+        super(m);
     }
 
     @Override
