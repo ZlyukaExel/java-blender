@@ -1,5 +1,6 @@
 package super_puper_mega_programmisty.blender.graphics.camera;
 
+import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 import java.awt.event.KeyEvent;
 
 public class FPSCameraController implements CameraController {
@@ -12,8 +13,8 @@ public class FPSCameraController implements CameraController {
     private int lastMouseX = -1;
     private int lastMouseY = -1;
 
-    private float yaw = -90.0f;
-    private float pitch = 0.0f;
+    private double yaw = -90.0;
+    private double pitch = 0.0;
 
     private boolean forwardPressed = false;
     private boolean backwardPressed = false;
@@ -22,8 +23,8 @@ public class FPSCameraController implements CameraController {
     private boolean upPressed = false;
     private boolean downPressed = false;
 
-    private float[] front = new float[]{0.0f, 0.0f, -1.0f};
-    private float[] worldUp = new float[]{0.0f, 1.0f, 0.0f};
+    private Vector3d front = new Vector3d(0.0, 0.0, -1.0);
+    private Vector3d worldUp = new Vector3d(0.0, 1.0, 0.0);
 
     public FPSCameraController(Camera camera) {
         this.camera = camera;
@@ -32,7 +33,7 @@ public class FPSCameraController implements CameraController {
 
     @Override
     public void update(float deltaTime) {
-        float velocity = movementSpeed * deltaTime;
+        double velocity = movementSpeed * deltaTime;
 
         if (forwardPressed) camera.moveForward(velocity);
         if (backwardPressed) camera.moveForward(-velocity);
@@ -59,34 +60,26 @@ public class FPSCameraController implements CameraController {
         yaw += xOffset;
         pitch += yOffset;
 
-        if (pitch > 89.0f) pitch = 89.0f;
-        if (pitch < -89.0f) pitch = -89.0f;
+        if (pitch > 89.0) pitch = 89.0;
+        if (pitch < -89.0) pitch = -89.0;
 
         updateCameraVectors();
 
-        float[] position = camera.getPosition();
-        float[] target = new float[]{
-                position[0] + front[0],
-                position[1] + front[1],
-                position[2] + front[2]
-        };
-        camera.setTarget(target[0], target[1], target[2]);
+        Vector3d position = camera.getPosition();
+        Vector3d target = (Vector3d) position.addVector(front);
+        camera.setTarget(target.X(), target.Y(), target.Z());
     }
 
     private void updateCameraVectors() {
-        float yawRad = (float) Math.toRadians(yaw);
-        float pitchRad = (float) Math.toRadians(pitch);
+        double yawRad = Math.toRadians(yaw);
+        double pitchRad = Math.toRadians(pitch);
 
-        front[0] = (float) (Math.cos(yawRad) * Math.cos(pitchRad));
-        front[1] = (float) Math.sin(pitchRad);
-        front[2] = (float) (Math.sin(yawRad) * Math.cos(pitchRad));
+        double x = Math.cos(yawRad) * Math.cos(pitchRad);
+        double y = Math.sin(pitchRad);
+        double z = Math.sin(yawRad) * Math.cos(pitchRad);
 
-        float length = (float) Math.sqrt(front[0]*front[0] + front[1]*front[1] + front[2]*front[2]);
-        if (length > 0) {
-            front[0] /= length;
-            front[1] /= length;
-            front[2] /= length;
-        }
+        front = new Vector3d(x, y, z);
+        front = (Vector3d) front.normalize();
     }
 
     @Override
@@ -109,11 +102,11 @@ public class FPSCameraController implements CameraController {
 
     @Override
     public void handleMouseWheel(int rotation) {
-        float currentFOV = camera.getFOV();
-        currentFOV -= rotation * 2.0f;
+        double currentFOV = camera.getFOV();
+        currentFOV -= rotation * 2.0;
 
-        if (currentFOV < 10.0f) currentFOV = 10.0f;
-        if (currentFOV > 120.0f) currentFOV = 120.0f;
+        if (currentFOV < 10.0) currentFOV = 10.0;
+        if (currentFOV > 120.0) currentFOV = 120.0;
 
         camera.setFOV(currentFOV);
     }
@@ -147,10 +140,10 @@ public class FPSCameraController implements CameraController {
     }
 
     private void resetCamera() {
-        camera.setPosition(0.0f, 0.0f, 5.0f);
-        camera.setTarget(0.0f, 0.0f, 0.0f);
-        yaw = -90.0f;
-        pitch = 0.0f;
+        camera.setPosition(0.0, 0.0, 5.0);
+        camera.setTarget(0.0, 0.0, 0.0);
+        yaw = -90.0;
+        pitch = 0.0;
         updateCameraVectors();
     }
 
@@ -164,16 +157,16 @@ public class FPSCameraController implements CameraController {
         this.movementSpeed = speed;
     }
 
-    public float getYaw() { return yaw; }
-    public float getPitch() { return pitch; }
+    public double getYaw() { return yaw; }
+    public double getPitch() { return pitch; }
     public boolean isMouseCaptured() { return mouseCaptured; }
 
-    public void setYaw(float yaw) {
+    public void setYaw(double yaw) {
         this.yaw = yaw;
         updateCameraVectors();
     }
 
-    public void setPitch(float pitch) {
+    public void setPitch(double pitch) {
         this.pitch = pitch;
         updateCameraVectors();
     }
