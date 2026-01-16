@@ -13,9 +13,8 @@ public class Triangulator {
             throw new IllegalArgumentException("Модель должна иметь как минимум 3 вершины для триангуляции");
         }
 
+        List<Polygon> polygonList = new ArrayList<>(model.getPolygons());
         model.clearPolygons();
-
-        List<Polygon> polygonList = model.getPolygons();
 
         for (Polygon polygon : polygonList) {
             addTriangles(model, polygon);
