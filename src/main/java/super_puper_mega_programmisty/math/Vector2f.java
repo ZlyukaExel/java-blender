@@ -1,4 +1,4 @@
-package transfom_model.math;
+package super_puper_mega_programmisty.math;
 
 public class Vector2f {
     public Vector2f(float x, float y) {

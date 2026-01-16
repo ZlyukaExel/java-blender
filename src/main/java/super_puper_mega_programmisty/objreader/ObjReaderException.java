@@ -1,4 +1,4 @@
-package transfom_model.objreader;
+package super_puper_mega_programmisty.objreader;
 
 public class ObjReaderException extends RuntimeException {
     public ObjReaderException(String errorMessage, int lineInd) {

@@ -1,4 +1,4 @@
-package transfom_model.org.example;
+package super_puper_mega_programmisty.example;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.

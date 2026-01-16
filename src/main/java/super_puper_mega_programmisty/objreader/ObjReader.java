@@ -1,9 +1,9 @@
-package transfom_model.objreader;
+package super_puper_mega_programmisty.objreader;
 
-import transfom_model.math.Vector2f;
-import transfom_model.math.Vector3f;
-import transfom_model.model.Model;
-import transfom_model.model.Polygon;
+import super_puper_mega_programmisty.math.Vector2f;
+import super_puper_mega_programmisty.math.Vector3f;
+import super_puper_mega_programmisty.model.Model;
+import super_puper_mega_programmisty.model.Polygon;
 
 import java.util.ArrayList;
 import java.util.Arrays;

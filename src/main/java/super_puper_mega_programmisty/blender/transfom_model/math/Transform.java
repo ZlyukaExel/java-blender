@@ -1,6 +1,6 @@
 package super_puper_mega_programmisty.blender.transfom_model.math;
 
-import transfom_model.math.Vector3f;
+import super_puper_mega_programmisty.math.Vector3f;
 
 public class Transform {
     private Vector3f position = new Vector3f(0, 0, 0);

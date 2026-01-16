@@ -1,4 +1,4 @@
-package transfom_model.math;
+package super_puper_mega_programmisty.math;
 
 public class Transform {
     private Vector3f position = new Vector3f(0, 0, 0);

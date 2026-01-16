@@ -1,11 +1,11 @@
-package transfom_model;
+package super_puper_mega_programmisty;
 
-import transfom_model.math.Transform;
-import transfom_model.math.Vector3f;
-import transfom_model.model.Model;
-import transfom_model.model.Polygon;
-import transfom_model.objreader.ObjReader;
-import transfom_model.objwriter.ObjWriter;
+import super_puper_mega_programmisty.math.Transform;
+import super_puper_mega_programmisty.math.Vector3f;
+import super_puper_mega_programmisty.model.Model;
+import super_puper_mega_programmisty.model.Polygon;
+import super_puper_mega_programmisty.objreader.ObjReader;
+import super_puper_mega_programmisty.objwriter.ObjWriter;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,4 +1,4 @@
-package transfom_model.model;
+package super_puper_mega_programmisty.model;
 
 import java.util.ArrayList;
 

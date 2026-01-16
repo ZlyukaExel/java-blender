@@ -1,8 +1,8 @@
 package super_puper_mega_programmisty.blender.transform_model;
 
 import org.junit.Test;
-import transfom_model.math.Matrix4f;
-import transfom_model.math.Vector3f;
+import super_puper_mega_programmisty.math.Matrix4f;
+import super_puper_mega_programmisty.math.Vector3f;
 
 import static org.junit.Assert.*;
 

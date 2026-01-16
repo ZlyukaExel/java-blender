@@ -1,4 +1,4 @@
-package transfom_model.math;
+package super_puper_mega_programmisty.math;
 
 public class Matrix4f {
     private float[][] m = new float[4][4];

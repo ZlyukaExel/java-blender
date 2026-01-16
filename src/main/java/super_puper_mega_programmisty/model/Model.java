@@ -1,9 +1,9 @@
-package transfom_model.model;
+package super_puper_mega_programmisty.model;
 
-import transfom_model.math.Vector2f;
-import transfom_model.math.Vector3f;
-import transfom_model.math.Transform;
-import transfom_model.math.Matrix4f;
+import super_puper_mega_programmisty.math.Vector2f;
+import super_puper_mega_programmisty.math.Vector3f;
+import super_puper_mega_programmisty.math.Transform;
+import super_puper_mega_programmisty.math.Matrix4f;
 
 import java.util.ArrayList;
 
