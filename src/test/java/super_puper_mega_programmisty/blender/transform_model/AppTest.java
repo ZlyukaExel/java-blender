@@ -1,10 +1,5 @@
-package blender.transform_model;
+package super_puper_mega_programmisty.blender.transform_model;
 
-import blender.tests.Matrix4fTest;
-import blender.tests.ModelTransformTest;
-import blender.tests.TransformTest;
-import blender.tests.Vector2fTest;
-import blender.tests.Vector3fTest;
 import junit.framework.TestCase;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

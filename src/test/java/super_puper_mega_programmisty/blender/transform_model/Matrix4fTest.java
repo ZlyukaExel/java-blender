@@ -1,8 +1,9 @@
-package blender.tests;
+package super_puper_mega_programmisty.blender.transform_model;
 
-import blender.math.Matrix4f;
-import blender.math.Vector3f;
 import org.junit.Test;
+import transfom_model.math.Matrix4f;
+import transfom_model.math.Vector3f;
+
 import static org.junit.Assert.*;
 
 public class Matrix4fTest {

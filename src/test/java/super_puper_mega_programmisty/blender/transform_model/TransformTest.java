@@ -1,8 +1,9 @@
-package blender.tests;
+package super_puper_mega_programmisty.blender.transform_model;
 
-import blender.math.Transform;
-import blender.math.Vector3f;
 import org.junit.Test;
+import transfom_model.math.Transform;
+import transfom_model.math.Vector3f;
+
 import static org.junit.Assert.*;
 
 public class TransformTest {

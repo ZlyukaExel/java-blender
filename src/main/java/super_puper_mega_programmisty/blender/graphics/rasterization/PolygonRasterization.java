@@ -1,14 +1,14 @@
-package super_puper_mega_programmisty.blender.graphics;
+package super_puper_mega_programmisty.blender.graphics.rasterization;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import super_puper_mega_programmisty.blender.graphics.model.Polygon;
+import super_puper_mega_programmisty.blender.graphics.ZBuffer;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.util.List;
 
 public class PolygonRasterization extends TriangleRasterization {
-    private void drawPolygon(GraphicsContext gc, List<Vector3d> vertices, List<Color> colors, ZBuffer buffer) {
+    public static void drawPolygon(GraphicsContext gc, List<Vector3d> vertices, List<Color> colors, ZBuffer buffer) {
         for (int i = 1; i < vertices.size() - 1; i++) {
             Vector3d v1 = vertices.get(i - 1);
             Vector3d v2 = vertices.get(i);

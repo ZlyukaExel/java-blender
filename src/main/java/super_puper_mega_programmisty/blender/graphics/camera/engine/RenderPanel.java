@@ -4,6 +4,7 @@ import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.camera.CameraController;
 import super_puper_mega_programmisty.blender.graphics.camera.FPSCameraController;
 import super_puper_mega_programmisty.blender.graphics.camera.OrbitCameraController;
+import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import javax.swing.*;
 import java.awt.*;
@@ -128,11 +129,11 @@ public class RenderPanel extends JPanel implements MouseListener, MouseMotionLis
         g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
-        float[] position = camera.getPosition();
+        Vector3d position = camera.getPosition();
         String mode = fpsMode ? "FPS" : "Orbit";
 
         String info = String.format("Mode: %s | Pos: (%.1f, %.1f, %.1f) | FPS: %.0f",
-                mode, position[0], position[1], position[2], 1.0f / deltaTime);
+                mode, position.X(), position.Y(), position.Z(), 1.0f / deltaTime);
 
         g2d.drawString(info, 10, 20);
 

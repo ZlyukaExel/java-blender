@@ -1,7 +1,8 @@
-package blender.tests;
+package super_puper_mega_programmisty.blender.transform_model;
 
-import blender.math.Vector2f;
 import org.junit.Test;
+import transfom_model.math.Vector2f;
+
 import static org.junit.Assert.*;
 
 public class Vector2fTest {

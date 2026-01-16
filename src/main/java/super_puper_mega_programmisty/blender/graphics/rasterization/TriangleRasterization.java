@@ -1,23 +1,22 @@
-package super_puper_mega_programmisty.blender.graphics;
+package super_puper_mega_programmisty.blender.graphics.rasterization;
 
-import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
-import super_puper_mega_programmisty.blender.graphics.model.Polygon;
+import super_puper_mega_programmisty.blender.graphics.ZBuffer;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
 public class TriangleRasterization {
-    public void fillTriangle(GraphicsContext gc, double x1, double y1, double z1,
-                              double x2, double y2, double z2,
-                              double x3, double y3, double z3,
-                              javafx.scene.paint.Color c1,
-                              javafx.scene.paint.Color c2,
-                              javafx.scene.paint.Color c3,
-                              ZBuffer buffer) {
+    static void fillTriangle(GraphicsContext gc, double x1, double y1, double z1,
+                             double x2, double y2, double z2,
+                             double x3, double y3, double z3,
+                             javafx.scene.paint.Color c1,
+                             javafx.scene.paint.Color c2,
+                             javafx.scene.paint.Color c3,
+                             ZBuffer buffer) {
         class LinearEquation {
             private final Double k;
             private final Double b;
@@ -146,7 +145,7 @@ public class TriangleRasterization {
         }
     }
 
-    public void sortByY(Point3D[] array) {
+    private static void sortByY(Point3D[] array) {
         Arrays.sort(array, new Comparator<Point3D>() {
             @Override
             public int compare(Point3D o1, Point3D o2) {
@@ -160,7 +159,7 @@ public class TriangleRasterization {
         });
     }
 
-    public javafx.scene.paint.Color interpolationColor(double alpha, double beta, double gamma,
+    private static javafx.scene.paint.Color interpolationColor(double alpha, double beta, double gamma,
                                                         Color c1, Color c2, Color c3) {
         double red = alpha * c1.getRed() + beta * c2.getRed() + gamma * c3.getRed();
         double green = alpha * c1.getGreen() + beta * c2.getGreen() + gamma * c3.getGreen();
@@ -173,14 +172,14 @@ public class TriangleRasterization {
         return new Color(red, green, blue, 1);
     }
 
-    public double clamp(double a, double left, double right) {
+    private static double clamp(double a, double left, double right) {
         if (a > right) {
             return right;
         }
         return Math.max(a, left);
     }
 
-    public double[] getBarycentric(double x, double y,
+    private static double[] getBarycentric(double x, double y,
                                     double x1, double y1,
                                     double x2, double y2,
                                     double x3, double y3) {
