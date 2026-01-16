@@ -3,7 +3,12 @@ package super_puper_mega_programmisty.blender.graphics;
 import javafx.scene.canvas.GraphicsContext;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
+import super_puper_mega_programmisty.blender.graphics.model.Polygon;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
+import super_puper_mega_programmisty.blender.math.vector.Vector3d;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RenderEngine {
     public static void renderModel(
@@ -21,5 +26,11 @@ public class RenderEngine {
         Matrix4d modelViewProjectionMatrix = (Matrix4d) modelMatrix.multiply(viewMatrix).multiply(projectionMatrix);
 
         // TODO: iliak|16.01.2026|дописать отрисовку
+        for (Polygon polygon : model.getPolygons()) {
+            List<Vector3d> vertices = new ArrayList<>();
+            for (Integer index : polygon.getVertexIndices()) {
+
+            }
+        }
     }
 }

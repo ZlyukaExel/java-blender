@@ -1,3 +1,5 @@
+package transfom_model;
+
 import transfom_model.model.Model;
 import transfom_model.objreader.ObjReader;
 import transfom_model.objwriter.ObjWriter;

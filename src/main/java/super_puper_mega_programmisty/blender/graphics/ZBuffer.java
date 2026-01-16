@@ -5,6 +5,7 @@ public class ZBuffer {
 
     public ZBuffer(int width, int height) {
         elementsData = new double[height][width];
+        clearBuffer();
     }
 
     public void clearBuffer() {
