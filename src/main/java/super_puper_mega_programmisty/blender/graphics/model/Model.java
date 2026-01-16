@@ -109,4 +109,8 @@ public class Model implements Transformable {
         normals.clear();
         polygons.clear();
     }
+
+    public void clearPolygons() {
+        polygons.clear();
+    }
 }

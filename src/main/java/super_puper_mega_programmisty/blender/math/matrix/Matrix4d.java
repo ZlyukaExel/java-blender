@@ -12,10 +12,14 @@ public class Matrix4d extends AbstractMatrix{
     }
 
     public Matrix4d() {
-        super(new double[][]{{0, 0, 0, 0},
-                             {0, 0, 0, 0},
-                             {0, 0, 0, 0},
-                             {0, 0, 0, 0}});
+        super(new double[][]{{1, 0, 0, 0},
+                             {0, 1, 0, 0},
+                             {0, 0, 1, 0},
+                             {0, 0, 0, 1}});
+    }
+
+    public Matrix4d(Matrix4d m) {
+        super(m);
     }
 
     @Override
@@ -97,7 +101,7 @@ public class Matrix4d extends AbstractMatrix{
         return !v.getClass().equals(Vector4d.class);
     }
 
-    public static IMatrix crateIdentity() {
+    public static Matrix4d crateIdentity() {
         return new Matrix4d(new double[][]{{1, 0, 0, 0},
                                            {0, 1, 0, 0},
                                            {0, 0, 1, 0},

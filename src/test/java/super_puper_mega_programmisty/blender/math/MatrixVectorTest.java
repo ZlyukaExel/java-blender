@@ -18,4 +18,4 @@ import org.junit.runners.Suite;
         Vector3dTest.class,
         Vector4dTest.class,
 })
-public class AppTest extends TestCase {}
+public class MatrixVectorTest extends TestCase {}

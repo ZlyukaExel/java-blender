@@ -18,7 +18,7 @@ public class Scaling extends AffineTransform {
 
     @Override
     public void applyTransform() {
-        transformationMatrix = (Matrix4d) Matrix4d.crateIdentity();
+        transformationMatrix = Matrix4d.crateIdentity();
         transformationMatrix.set(0, 0, scaleFactors.X());
         transformationMatrix.set(1, 1, scaleFactors.Y());
         transformationMatrix.set(2, 2, scaleFactors.Z());

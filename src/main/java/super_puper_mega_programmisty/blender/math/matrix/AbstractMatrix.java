@@ -7,7 +7,11 @@ public abstract class AbstractMatrix implements IMatrix{
     protected double[][] elementsData;
 
     public AbstractMatrix(double[][] a) {
-        elementsData = a;
+        elementsData = a.clone();
+    }
+
+    public AbstractMatrix(AbstractMatrix m) {
+        this(m.getMatrix());
     }
 
     @Override
