@@ -18,10 +18,15 @@ import java.util.List;
 
 public class RenderEngine {
     public static void renderScene(GraphicsContext gc, Camera curCamera, Scene scene, int width, int height) {
-        List<LightSource> lightSources = scene.getLightSources();
         ZBuffer buffer = new ZBuffer(width, height);
         // TODO: iliak|17.01.2026|коэф-т k брать из сцены
         double k = 0.8;
+        // TODO: iliak|17.01.2026|использовать флаг из сцены
+        boolean useLight = true;
+        List<LightSource> lightSources = new ArrayList<>();
+        if (useLight) {
+            lightSources = scene.getLightSources();
+        }
         for (Model model : scene.getModels()) {
             renderModel(gc, curCamera, model, lightSources, buffer, k, width, height);
         }
@@ -44,7 +49,10 @@ public class RenderEngine {
 
         Matrix4d modelViewProjectionMatrix = new Matrix4d();
 
-        modelViewProjectionMatrix.multiply(modelMatrix).multiply(viewMatrix).multiply(projectionMatrix);
+//        modelViewProjectionMatrix.multiply(modelMatrix)
+//                .multiply(viewMatrix)
+//                .multiply(projectionMatrix)
+        ;
         Matrix4d normalMatrix = model.getNormalMatrix();
 
         if (model.getMaterial().getTexture() == null) {

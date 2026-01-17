@@ -1,6 +1,7 @@
 package super_puper_mega_programmisty.blender.objreader;
 
 import super_puper_mega_programmisty.blender.graphics.model.Model;
+import super_puper_mega_programmisty.blender.graphics.model.NormalsCalculator;
 import super_puper_mega_programmisty.blender.graphics.model.Polygon;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
@@ -36,6 +37,8 @@ public class ObjReader {
                 }
             }
         }
+
+        NormalsCalculator.recalculateNormals(model);
 
         return model;
     }

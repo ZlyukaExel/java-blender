@@ -45,19 +45,19 @@ public class Transform {
         if (doScale) this.scale = scale;
     }
 
-    public void translate(float dx, float dy, float dz) {
+    public void translate(double dx, double dy, double dz) {
         position.setX(position.X() + dx);
         position.setY(position.Y() + dy);
         position.setZ(position.Z() + dz);
     }
 
-    public void rotate(float dx, float dy, float dz) {
+    public void rotate(double dx, double dy, double dz) {
         rotation.setX(rotation.X() + dx);
         rotation.setY(rotation.Y() + dy);
         rotation.setZ(rotation.Z() + dz);
     }
 
-    public void scale(float sx, float sy, float sz) {
+    public void scale(double sx, double sy, double sz) {
         scale.setX(scale.X() * sx);
         scale.setY(scale.Y() * sy);
         scale.setZ(scale.Z() * sz);
