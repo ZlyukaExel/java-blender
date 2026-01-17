@@ -30,7 +30,7 @@ public class ObjReader {
                 }
 
                 try {
-                    processLine(line, model, lineNumber);
+                    processLine(line, model);
                 } catch (ObjReaderException e) {
                     System.err.println("Error at line " + lineNumber + ": " + e.getMessage());
                     throw e;
@@ -43,7 +43,7 @@ public class ObjReader {
         return model;
     }
 
-    private static void processLine(String line, Model model, int lineNumber) throws ObjReaderException {
+    private static void processLine(String line, Model model) throws ObjReaderException {
         String[] tokens = line.split("\\s+");
         if (tokens.length == 0) return;
 
@@ -52,23 +52,23 @@ public class ObjReader {
 
         switch (keyword) {
             case "v":
-                parseVertex(arguments, model, lineNumber);
+                parseVertex(arguments, model);
                 break;
             case "vt":
-                parseTextureVertex(arguments, model, lineNumber);
+                parseTextureVertex(arguments, model);
                 break;
             case "vn":
-                parseNormal(arguments, model, lineNumber);
+                parseNormal(arguments, model);
                 break;
             case "f":
-                parseFace(arguments, model, lineNumber);
+                parseFace(arguments, model);
                 break;
             default:
                 break;
         }
     }
 
-    private static void parseVertex(String[] args, Model model, int lineNumber) throws ObjReaderException {
+    private static void parseVertex(String[] args, Model model) throws ObjReaderException {
         if (args.length < 3) {
             throw new ObjReaderException("Too few vertex coordinates");
         }
@@ -83,7 +83,7 @@ public class ObjReader {
         }
     }
 
-    private static void parseTextureVertex(String[] args, Model model, int lineNumber) throws ObjReaderException {
+    private static void parseTextureVertex(String[] args, Model model) throws ObjReaderException {
         if (args.length < 2) {
             throw new ObjReaderException("Too few texture vertex coordinates");
         }
@@ -97,7 +97,7 @@ public class ObjReader {
         }
     }
 
-    private static void parseNormal(String[] args, Model model, int lineNumber) throws ObjReaderException {
+    private static void parseNormal(String[] args, Model model) throws ObjReaderException {
         if (args.length < 3) {
             throw new ObjReaderException("Too few normal coordinates");
         }
@@ -112,7 +112,7 @@ public class ObjReader {
         }
     }
 
-    private static void parseFace(String[] args, Model model, int lineNumber) throws ObjReaderException {
+    private static void parseFace(String[] args, Model model) throws ObjReaderException {
         if (args.length < 3) {
             throw new ObjReaderException("Face has too few vertices: " + args.length);
         }
