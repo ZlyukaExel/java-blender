@@ -127,6 +127,7 @@ public class BlenderController {
     @FXML
     private void deleteObject() {
         scene.deleteObject();
+        updateObjectLabel();
     }
 
     @FXML
