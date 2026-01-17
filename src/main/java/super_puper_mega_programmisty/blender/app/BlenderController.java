@@ -181,8 +181,8 @@ public class BlenderController {
             objectLabel.setText("Освещение");
         }
 
-        posX.setText(object.X());
-        posY.setText(object.Y());
-        posZ.setText(object.Z());
+        posX.setText(String.valueOf(object.X()));
+        posY.setText(String.valueOf(object.Y()));
+        posZ.setText(String.valueOf(object.Z()));
     }
 }
