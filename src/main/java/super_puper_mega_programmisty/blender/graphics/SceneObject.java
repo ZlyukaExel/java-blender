@@ -4,7 +4,7 @@ import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
 import super_puper_mega_programmisty.blender.math.transform.Transform;
 
 public class SceneObject {
-    Transform transform;
+    protected Transform transform;
 
     public SceneObject(Transform transform) {
         this.transform = transform;

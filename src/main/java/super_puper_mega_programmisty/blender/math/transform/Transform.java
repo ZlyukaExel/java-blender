@@ -8,6 +8,11 @@ public class Transform {
     private Vector3d rotation = new Vector3d(0, 0, 0);
     private Vector3d scale = new Vector3d(1, 1, 1);
 
+    // TODO: iliak|17.01.2026|тут true флаги, задумка сделать TransformBuilder
+    private boolean doScale = true;
+    private boolean doRotate = true;
+    private boolean doTranslate = true;
+
     public Transform() {}
 
     public Transform(Vector3d position, Vector3d rotation, Vector3d scale) {
@@ -29,15 +34,15 @@ public class Transform {
     }
 
     public void setPosition(Vector3d position) {
-        this.position = position;
+        if (doTranslate) this.position = position;
     }
 
     public void setRotation(Vector3d rotation) {
-        this.rotation = rotation;
+        if (doRotate) this.rotation = rotation;
     }
 
     public void setScale(Vector3d scale) {
-        this.scale = scale;
+        if (doScale) this.scale = scale;
     }
 
     public void translate(float dx, float dy, float dz) {
