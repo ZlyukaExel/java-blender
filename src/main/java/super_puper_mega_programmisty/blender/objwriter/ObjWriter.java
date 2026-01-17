@@ -5,8 +5,10 @@ import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
-import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class ObjWriter {
 
@@ -15,9 +17,9 @@ public class ObjWriter {
     private static final String OBJ_NORMAL_TOKEN = "vn";
     private static final String OBJ_FACE_TOKEN = "f";
 
-    public static void write(Model model, String outputPath) {
+    public static void write(Model model, Path path) {
 
-        try (FileWriter writer = new FileWriter(outputPath)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
             int counter = 0;
             // Запись вершин
             for (Vector3d vertex : model.getVertices()) {
@@ -94,7 +96,7 @@ public class ObjWriter {
                 writer.write("# " + counter + " polygons - " + trianglesCounter + " triangles\n\n");
             }
 
-            System.out.println("Модель успешно сохранена в " + outputPath);
+            System.out.println("Модель успешно сохранена в " + path);
 
         } catch (IOException e) {
             System.out.println("Возникла ошибка при сохранении модели: " + e.getMessage());;

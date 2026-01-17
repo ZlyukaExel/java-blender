@@ -1,5 +1,6 @@
 package super_puper_mega_programmisty.blender.scene;
 
+import super_puper_mega_programmisty.blender.graphics.SceneObject;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.camera.engine.RenderPanel;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
@@ -13,6 +14,8 @@ import java.util.List;
 public class Scene {
     private final List<SceneObject> objects = new ArrayList<>();
     private final List<Camera> cameras = new ArrayList<>();
+    private final List<Model> models = new ArrayList<>();
+    private final List<LightSource> lightSources = new ArrayList<>();
     private SceneObject currentObject;
     private Camera currentCamera;
 
@@ -26,12 +29,14 @@ public class Scene {
 
     public void addModel(Model model) {
         objects.add(model);
+        models.add(model);
         currentObject = model;
     }
 
     public void addLight() {
         LightSource light = new LightSource();
         objects.add(light);
+        lightSources.add(light);
         currentObject = light;
     }
 
@@ -51,6 +56,12 @@ public class Scene {
             deleteCamera((Camera) currentObject);
         } else {
             objects.remove(currentObject);
+
+            if (currentObject instanceof Model) {
+                models.remove(currentObject);
+            } else if (currentObject instanceof LightSource) {
+                lightSources.remove(currentObject);
+            }
         }
     }
 
@@ -127,5 +138,13 @@ public class Scene {
 
     public Camera getCurrentCamera() {
         return currentCamera;
+    }
+
+    public List<Model> getModels() {
+        return models;
+    }
+
+    public List<LightSource> getLightSources() {
+        return lightSources;
     }
 }
