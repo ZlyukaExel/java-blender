@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import super_puper_mega_programmisty.blender.graphics.RenderEngine;
@@ -23,10 +24,19 @@ public class BlenderController {
     private Timeline timeline;
 
     @FXML
-    public Canvas canvas;
+    private Canvas canvas;
 
     @FXML
-    public void initialize() {
+    private TextField posX, posY, posZ;
+
+    @FXML
+    private TextField rotX, rotY, rotZ;
+
+    @FXML
+    private TextField sizeX, sizeY, sizeZ;
+
+    @FXML
+    private void initialize() {
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
 
@@ -37,7 +47,7 @@ public class BlenderController {
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             scene.getCurrentCamera().setAspectRatio((float) (width / height));
 
-            RenderEngine.renderScene(canvas.getGraphicsContext2D(), scene.getCurrentCamera(), scene, (int) width, (int) height);
+            RenderEngine.render(canvas.getGraphicsContext2D(), scene);
         });
 
         timeline.getKeyFrames().add(frame);
@@ -45,7 +55,7 @@ public class BlenderController {
     }
 
     @FXML
-    public void loadModel() {
+    private void loadModel() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Загрузка модели");
@@ -70,7 +80,7 @@ public class BlenderController {
     }
 
     @FXML
-    public void saveModel() {
+    private void saveModel() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront OBJ (*.obj)", "*.obj"));
         fileChooser.setTitle("Сохранение модели");
@@ -88,37 +98,37 @@ public class BlenderController {
     }
 
     @FXML
-    public void addLumination() {
+    private void addLumination() {
         scene.addLight();
     }
 
     @FXML
-    public void addCamera() {
+    private void addCamera() {
         scene.addCamera();
     }
 
     @FXML
-    public void deleteObject() {
+    private void deleteObject() {
         scene.deleteObject();
     }
 
     @FXML
-    public void nextCamera() {
+    private void nextCamera() {
         scene.nextCamera();
     }
 
     @FXML
-    public void prevCamera() {
+    private void prevCamera() {
         scene.prevCamera();
     }
 
     @FXML
-    public void selectNext() {
+    private void selectNext() {
         scene.selectNext();
     }
 
     @FXML
-    public void selectPrev() {
+    private void selectPrev() {
         scene.selectPrev();
     }
 }

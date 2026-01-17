@@ -4,42 +4,87 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="super_puper_mega_programmisty.blender.app.BlenderController">
-    <center>
-        <AnchorPane prefHeight="400.0" prefWidth="600.0">
-         <children>
-            <Canvas height="400.0" width="600.0" fx:id="canvas" />
-         </children></AnchorPane>
-    </center>
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="super_puper_mega_programmisty.blender.app.BlenderController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="Файл">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#loadModel" text="Открыть" />
-                        <MenuItem mnemonicParsing="false" onAction="#saveModel" text="Сохранить" />
+                        <MenuItem mnemonicParsing="false" onAction="#loadModel" text="Открыть"/>
+                        <MenuItem mnemonicParsing="false" onAction="#saveModel" text="Сохранить"/>
                     </items>
                 </Menu>
-            <Menu mnemonicParsing="false" text="Объект">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#selectNext" text="Выбрать следующий" />
-                  <MenuItem mnemonicParsing="false" onAction="#selectPrev" text="Выбрать предыдущий" />
-                  <Menu mnemonicParsing="false" text="Добавить">
+                <Menu mnemonicParsing="false" text="Объект">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#addCamera" text="Камера" />
-                        <MenuItem mnemonicParsing="false" onAction="#addLumination" text="Освещение" />
+                        <MenuItem mnemonicParsing="false" onAction="#selectNext" text="Выбрать следующий"/>
+                        <MenuItem mnemonicParsing="false" onAction="#selectPrev" text="Выбрать предыдущий"/>
+                        <Menu mnemonicParsing="false" text="Добавить">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#addCamera" text="Камера"/>
+                                <MenuItem mnemonicParsing="false" onAction="#addLumination" text="Освещение"/>
+                            </items>
+                        </Menu>
+                        <MenuItem mnemonicParsing="false" onAction="#deleteObject" text="Удалить"/>
                     </items>
-                  </Menu>
-                  <MenuItem mnemonicParsing="false" onAction="#deleteObject" text="Удалить" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Камера">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#nextCamera" text="Следующая" />
-                  <MenuItem mnemonicParsing="false" onAction="#prevCamera" text="Предыдущая" />
-               </items>
-            </Menu>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Камера">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#nextCamera" text="Следующая"/>
+                        <MenuItem mnemonicParsing="false" onAction="#prevCamera" text="Предыдущая"/>
+                    </items>
+                </Menu>
             </menus>
         </MenuBar>
     </top>
+    <right>
+        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Позиция" textAlignment="CENTER"/>
+                <HBox prefHeight="50.0" prefWidth="200.0">
+                    <children>
+                        <Label text="X"/>
+                        <TextField fx:id="posX" text="0"/>
+                        <Separator orientation="VERTICAL" prefWidth="5"/>
+                        <Label text="Y"/>
+                        <TextField fx:id="posY" text="0"/>
+                        <Separator orientation="VERTICAL" prefWidth="5"/>
+                        <Label text="Z"/>
+                        <TextField fx:id="posZ" text="0"/>
+                    </children>
+                </HBox>
+                <Separator prefHeight="10.0"/>
+                <Label text="Вращение" textAlignment="CENTER"/>
+                <HBox prefHeight="50.0" prefWidth="200.0">
+                    <children>
+                        <Label text="X"/>
+                        <TextField fx:id="rotX" text="0"/>
+                        <Separator orientation="VERTICAL" prefWidth="5"/>
+                        <Label text="Y"/>
+                        <TextField fx:id="rotY" text="0"/>
+                        <Separator orientation="VERTICAL" prefWidth="5"/>
+                        <Label text="Z"/>
+                        <TextField fx:id="rotZ" text="0"/>
+                    </children>
+                </HBox>
+                <Separator prefHeight="10.0"/>
+                <Label text="Размер" textAlignment="CENTER"/>
+                <HBox prefHeight="50.0" prefWidth="200.0">
+                    <children>
+                        <Label text="X"/>
+                        <TextField fx:id="sizeX" text="1"/>
+                        <Separator orientation="VERTICAL" prefWidth="5"/>
+                        <Label text="Y"/>
+                        <TextField fx:id="sizeY" text="1"/>
+                        <Separator orientation="VERTICAL" prefWidth="5"/>
+                        <Label text="Z"/>
+                        <TextField fx:id="sizeZ" text="1"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </right>
+    <center>
+        <Canvas fx:id="canvas" height="400.0" width="600.0" BorderPane.alignment="CENTER"/>
+    </center>
 </BorderPane>
