@@ -23,6 +23,12 @@ public class Vector3d extends AbstractVector {
         this.z = array[2];
     }
 
+    public Vector3d(Vector3d other) {
+        this.x = other.X();
+        this.y = other.Y();
+        this.z = other.Z();
+    }
+
     @Override
     public IVector addVector(IVector v) {
         if (this.haveDifferentDimensions(v)) {

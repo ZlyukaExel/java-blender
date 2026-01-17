@@ -50,8 +50,8 @@ public class RenderEngine {
         Matrix4d modelViewProjectionMatrix = new Matrix4d();
 
         modelViewProjectionMatrix.multiply(modelMatrix)
-                .multiply(viewMatrix)
-                .multiply(projectionMatrix)
+//                .multiply(viewMatrix)
+//                .multiply(projectionMatrix)
         ;
         Matrix4d normalMatrix = model.getNormalMatrix();
 
@@ -79,12 +79,12 @@ public class RenderEngine {
             for (Integer index : polygon.getVertexIndices()) {
                 vertices.add(
                         MVPMatrix.transform(
-                        model.getVertices().get(index)
+                        new Vector3d(model.getVertices().get(index))
                 )
                 );
             }
             for (Integer index : polygon.getNormalIndices()) {
-                normalVertices.add(normalMatrix.transform(model.getNormals().get(index)));
+                normalVertices.add(normalMatrix.transform(new Vector3d(model.getNormals().get(index))));
             }
 
             Color color = model.getMaterial().getColor();
