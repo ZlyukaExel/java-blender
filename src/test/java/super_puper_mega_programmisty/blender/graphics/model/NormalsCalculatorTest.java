@@ -3,8 +3,8 @@ package super_puper_mega_programmisty.blender.graphics.model;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import super_puper_mega_programmisty.blender.filer.ObjReader;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
+import super_puper_mega_programmisty.blender.objreader.ObjReader;
 
 import java.io.IOException;
 
