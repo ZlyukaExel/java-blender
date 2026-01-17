@@ -1,9 +1,11 @@
 package super_puper_mega_programmisty.blender.graphics.camera;
 
+import super_puper_mega_programmisty.blender.graphics.SceneObject;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
+import super_puper_mega_programmisty.blender.math.transform.Transform;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
-public class Camera {
+public class Camera extends SceneObject {
     private Vector3d position;
     private Vector3d target;
     private Vector3d up;
@@ -17,6 +19,7 @@ public class Camera {
     private Matrix4d projectionMatrix;
 
     public Camera() {
+        super(new Transform());
         this.position = new Vector3d(0.0, 0.0, 5.0);
         this.target = new Vector3d(0.0, 0.0, 0.0);
         this.up = new Vector3d(0.0, 1.0, 0.0);
