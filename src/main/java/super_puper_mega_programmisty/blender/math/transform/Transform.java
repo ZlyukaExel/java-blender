@@ -59,22 +59,36 @@ public class Transform {
     }
 
     public Matrix4d getTransformationMatrix() {
-        Matrix4d scaleMat = Matrix4d.scaling(scale.X(), scale.Y(), scale.Z());
-        Matrix4d rotXMat = Matrix4d.rotationX(rotation.X());
-        Matrix4d rotYMat = Matrix4d.rotationY(rotation.Y());
-        Matrix4d rotZMat = Matrix4d.rotationZ(rotation.Z());
-        Matrix4d transMat = Matrix4d.translation(position.X(), position.Y(), position.Z());
+        Scaling scaling = new Scaling(this.scale);
+        Rotation rotationX = new Rotation(Rotation.Axis.X, this.rotation.X());
+        Rotation rotationY = new Rotation(Rotation.Axis.Y, this.rotation.Y());
+        Rotation rotationZ = new Rotation(Rotation.Axis.Z, this.rotation.Z());
+        Translation translation = new Translation(this.position);
 
-        Matrix4d rotationMat = rotZMat.multiply(rotYMat).multiply(rotXMat);
-        return scaleMat.multiply(rotationMat).multiply(transMat);
+
+        Matrix4d scaleMat = scaling.getTransformationMatrix();
+        Matrix4d rotationMat = (Matrix4d) rotationX.getTransformationMatrix()
+                .multiply(rotationY.getTransformationMatrix())
+                .multiply(rotationZ.getTransformationMatrix());
+        Matrix4d transMat = translation.getTransformationMatrix();
+
+        return (Matrix4d) scaleMat.multiply(rotationMat).multiply(transMat);
     }
 
     public Matrix4d getNormalMatrix() {
-        Matrix4d rotXMat = Matrix4d.rotationX(rotation.X());
-        Matrix4d rotYMat = Matrix4d.rotationY(rotation.Y());
-        Matrix4d rotZMat = Matrix4d.rotationZ(rotation.Z());
+        Scaling scaling = new Scaling(this.scale);
+        Rotation rotationX = new Rotation(Rotation.Axis.X, this.rotation.X());
+        Rotation rotationY = new Rotation(Rotation.Axis.Y, this.rotation.Y());
+        Rotation rotationZ = new Rotation(Rotation.Axis.Z, this.rotation.Z());
+        Translation translation = new Translation(this.position);
 
-        return rotZMat.multiply(rotYMat).multiply(rotXMat);
+
+        Matrix4d scaleMat = scaling.getTransformationMatrix();
+        Matrix4d rotationMat = (Matrix4d) rotationX.getTransformationMatrix()
+                .multiply(rotationY.getTransformationMatrix())
+                .multiply(rotationZ.getTransformationMatrix());
+
+        return (Matrix4d)  scaleMat.multiply(rotationMat);
     }
 
     @Override

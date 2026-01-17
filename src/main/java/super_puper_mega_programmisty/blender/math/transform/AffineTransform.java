@@ -15,7 +15,9 @@ public abstract class AffineTransform {
         return transformationMatrix;
     }
 
-    public abstract void applyTransform();
+    public void applyTransform() {
+
+    };
 
     public Vector3d transformPoint(Vector3d point) {
         return transformationMatrix.transform(point);
