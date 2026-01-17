@@ -133,4 +133,8 @@ public class Model extends SceneObject implements Transformable{
     public void clearPolygons() {
         polygons.clear();
     }
+
+    public Matrix4d getNormalMatrix() {
+        return this.transform.getNormalMatrix();
+    }
 }
