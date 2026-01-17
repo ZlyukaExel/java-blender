@@ -6,11 +6,12 @@ import super_puper_mega_programmisty.blender.math.transform.Translation;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
+import super_puper_mega_programmisty.blender.scene.SceneObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Model implements Transformable {
+public class Model extends SceneObject {
     private List<Vector3d> vertices;
     private List<Vector2d> textureVertices;
     private List<Vector3d> normals;

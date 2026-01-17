@@ -1,9 +1,11 @@
 package super_puper_mega_programmisty.blender.graphics.camera;
 
 import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
+import super_puper_mega_programmisty.blender.math.transform.AffineTransform;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
+import super_puper_mega_programmisty.blender.scene.SceneObject;
 
-public class Camera {
+public class Camera extends SceneObject {
     private Vector3d position;
     private Vector3d target;
     private Vector3d up;
@@ -130,17 +132,41 @@ public class Camera {
         updateViewMatrix();
     }
 
-    public Vector3d getPosition() { return position; }
-    public Vector3d getTarget() { return target; }
-    public Vector3d getUp() { return up; }
+    public Vector3d getPosition() {
+        return position;
+    }
 
-    public Matrix4d getViewMatrix() { return viewMatrix; }
-    public Matrix4d getProjectionMatrix() { return projectionMatrix; }
+    public Vector3d getTarget() {
+        return target;
+    }
 
-    public double getFOV() { return fov; }
-    public double getAspectRatio() { return aspectRatio; }
-    public double getNearClip() { return nearClip; }
-    public double getFarClip() { return farClip; }
+    public Vector3d getUp() {
+        return up;
+    }
+
+    public Matrix4d getViewMatrix() {
+        return viewMatrix;
+    }
+
+    public Matrix4d getProjectionMatrix() {
+        return projectionMatrix;
+    }
+
+    public double getFOV() {
+        return fov;
+    }
+
+    public double getAspectRatio() {
+        return aspectRatio;
+    }
+
+    public double getNearClip() {
+        return nearClip;
+    }
+
+    public double getFarClip() {
+        return farClip;
+    }
 
     public void setAspectRatio(double aspectRatio) {
         this.aspectRatio = aspectRatio;
@@ -165,5 +191,30 @@ public class Camera {
     public void setFarClip(double farClip) {
         this.farClip = farClip;
         updateProjectionMatrix();
+    }
+
+    @Override
+    public void applyTransformation(Matrix4d transformation) {
+
+    }
+
+    @Override
+    public void applyTransformation(AffineTransform transform) {
+
+    }
+
+    @Override
+    public void translate(Vector3d translation) {
+
+    }
+
+    @Override
+    public void rotate(Vector3d angles) {
+
+    }
+
+    @Override
+    public void scale(Vector3d factors) {
+
     }
 }

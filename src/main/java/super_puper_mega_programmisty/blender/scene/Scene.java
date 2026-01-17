@@ -1,80 +1,131 @@
 package super_puper_mega_programmisty.blender.scene;
 
-import super_puper_mega_programmisty.blender.graphics.RenderEngine;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.camera.engine.RenderPanel;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
+import super_puper_mega_programmisty.blender.objwriter.ObjWriter;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Scene {
-    private final Set<Model> models = new HashSet<>();
-    private final RenderEngine renderEngine;
-    private final RenderPanel renderPanel;
-    private final Set<LightSource> lightSources = new HashSet<>();
+    private final List<SceneObject> objects = new ArrayList<>();
     private final List<Camera> cameras = new ArrayList<>();
+    private SceneObject currentObject;
     private Camera currentCamera;
+
+    private final RenderPanel renderPanel;
 
     public Scene() {
         addCamera();
         currentCamera = cameras.getFirst();
         renderPanel = new RenderPanel(currentCamera);
-        renderEngine = new RenderEngine();
     }
 
     public void addModel(Model model) {
-        models.add(model);
-    }
-
-    public void removeModel(Model model) {
-        models.remove(model);
+        objects.add(model);
+        currentObject = model;
     }
 
     public void addLight() {
-        lightSources.add(new LightSource());
-    }
-
-    public void removeLight(LightSource lightSource) {
-        lightSources.remove(lightSource);
+        LightSource light = new LightSource();
+        objects.add(light);
+        currentObject = light;
     }
 
     public void addCamera() {
-        cameras.add(new Camera());
+        Camera camera = new Camera();
+        cameras.add(camera);
+        objects.add(camera);
+        currentObject = camera;
     }
 
-    public void removeCamera() {
+    public void deleteObject() {
+        if (currentObject == null) {
+            return;
+        }
+
+        if (currentObject instanceof Camera) {
+            deleteCamera((Camera) currentObject);
+        } else {
+            objects.remove(currentObject);
+        }
+    }
+
+    private void deleteCamera(Camera camera) {
         // Должна быть хотя бы одна камера
         if (cameras.size() <= 1) {
             return;
         }
 
-        // Переключаемся на предыдущую камеру и удаляем текущую
-        int currentIndex = cameras.indexOf(currentCamera);
-        switchToPrevCamera();
-        cameras.remove(currentIndex);
+        // Если удаляем активную камеру, переключаемся на другую
+        if (camera == currentCamera) {
+            prevCamera();
+        }
+
+        cameras.remove(camera);
+        objects.remove(camera);
     }
 
-    public void switchToNextCamera() {
-        int currentIndex = cameras.indexOf(currentCamera);
+    public void selectNext() {
+        if (currentObject == null) {
+            // Если объекты есть, выбираем первый
+            if (!objects.isEmpty()) {
+                currentObject = objects.getFirst();
+            }
+            return;
+        }
 
+        // Переключаемся на следующий объект (циклически)
+        int currentIndex = objects.indexOf(currentObject);
+        int nextIndex = (currentIndex + 1) % objects.size();
+        currentObject = objects.get(nextIndex);
+    }
+
+    public void selectPrev() {
+        if (currentObject == null) {
+            // Если объекты есть, выбираем первый
+            if (!objects.isEmpty()) {
+                currentObject = objects.getFirst();
+            }
+            return;
+        }
+
+        // Переключаемся на предыдущий объект (циклически)
+        int currentIndex = objects.indexOf(currentObject);
+        int prevIndex = (currentIndex - 1 + objects.size()) % objects.size();
+        currentObject = objects.get(prevIndex);
+    }
+
+    public void nextCamera() {
         // Переключаемся на следующую камеру (циклически)
+        int currentIndex = cameras.indexOf(currentCamera);
         int nextIndex = (currentIndex + 1) % cameras.size();
         currentCamera = cameras.get(nextIndex);
 
         renderPanel.setCamera(currentCamera);
     }
 
-    public void switchToPrevCamera() {
-        int currentIndex = cameras.indexOf(currentCamera);
-
+    public void prevCamera() {
         // Переключаемся на предыдущую камеру (циклически)
+        int currentIndex = cameras.indexOf(currentCamera);
         int prevIndex = (currentIndex - 1 + cameras.size()) % cameras.size();
         currentCamera = cameras.get(prevIndex);
 
         renderPanel.setCamera(currentCamera);
+    }
+
+    public void saveModel(Path path) {
+        if (!(currentObject instanceof Model model)) {
+            return;
+        }
+
+        ObjWriter.write(model, path);
+    }
+
+    public Camera getCurrentCamera() {
+        return currentCamera;
     }
 }

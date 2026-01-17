@@ -1,32 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="super_puper_mega_programmisty.blender.app.BlenderController">
     <center>
         <AnchorPane prefHeight="400.0" prefWidth="600.0">
-
-        </AnchorPane>
+         <children>
+            <Canvas height="400.0" width="600.0" fx:id="canvas" />
+         </children></AnchorPane>
     </center>
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="Файл">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Открыть" />
-                        <MenuItem mnemonicParsing="false" text="Сохранить" />
-                        <MenuItem mnemonicParsing="false" text="Сохранить как" />
+                        <MenuItem mnemonicParsing="false" onAction="#loadModel" text="Открыть" />
+                        <MenuItem mnemonicParsing="false" onAction="#saveModel" text="Сохранить" />
                     </items>
                 </Menu>
-            <Menu mnemonicParsing="false" text="Объекты">
+            <Menu mnemonicParsing="false" text="Объект">
                <items>
-                  <Menu mnemonicParsing="false" text="Создать">
+                  <MenuItem mnemonicParsing="false" onAction="#selectNext" text="Выбрать следующий" />
+                  <MenuItem mnemonicParsing="false" onAction="#selectPrev" text="Выбрать предыдущий" />
+                  <Menu mnemonicParsing="false" text="Добавить">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Камера" />
+                        <MenuItem mnemonicParsing="false" onAction="#addCamera" text="Камера" />
+                        <MenuItem mnemonicParsing="false" onAction="#addLumination" text="Освещение" />
                     </items>
                   </Menu>
-                  <MenuItem mnemonicParsing="false" text="Удалить" />
+                  <MenuItem mnemonicParsing="false" onAction="#deleteObject" text="Удалить" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Камера">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#nextCamera" text="Следующая" />
+                  <MenuItem mnemonicParsing="false" onAction="#prevCamera" text="Предыдущая" />
                </items>
             </Menu>
             </menus>
