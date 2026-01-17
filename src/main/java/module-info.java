@@ -2,6 +2,7 @@ module company.name.blender {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires javafx.graphics;
 
 
     exports super_puper_mega_programmisty.blender.app;

@@ -99,6 +99,8 @@ public class RenderPanel extends JPanel implements MouseListener, MouseMotionLis
     }
 
     private void drawScene(Graphics g) {
+        System.out.println("scene drawed");
+
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 

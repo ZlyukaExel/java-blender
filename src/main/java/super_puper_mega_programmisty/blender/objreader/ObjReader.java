@@ -38,7 +38,11 @@ public class ObjReader {
             }
         }
 
-        NormalsCalculator.recalculateNormals(model);
+        //NormalsCalculator.recalculateNormals(model);
+
+        for (var polygon : model.getPolygons()) {
+            System.out.println(polygon.getVertexIndices());
+        }
 
         return model;
     }
