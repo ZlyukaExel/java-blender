@@ -138,6 +138,7 @@ public class Scene {
     }
 
     public void move(double x, double y, double z) {
+        System.out.println(x + " " + y + " " + z);
         currentObject.move(x, y, z);
     }
 

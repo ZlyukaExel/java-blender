@@ -66,6 +66,8 @@ public class BlenderController {
     @FXML
     private void loadModel() {
         FileChooser fileChooser = new FileChooser();
+        File defaultDirectory = new File(".");
+        fileChooser.setInitialDirectory(defaultDirectory);
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Загрузка модели");
 
@@ -86,11 +88,15 @@ public class BlenderController {
             alert.setContentText("Проверьте файл и попробуйте снова.\n" + e.getMessage());
             alert.showAndWait();
         }
+
+        updateObjectLabel();
     }
 
     @FXML
     private void saveModel() {
         FileChooser fileChooser = new FileChooser();
+        File defaultDirectory = new File(".");
+        fileChooser.setInitialDirectory(defaultDirectory);
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront OBJ (*.obj)", "*.obj"));
         fileChooser.setTitle("Сохранение модели");
 
@@ -109,11 +115,13 @@ public class BlenderController {
     @FXML
     private void addLumination() {
         scene.addLight();
+        updateObjectLabel();
     }
 
     @FXML
     private void addCamera() {
         scene.addCamera();
+        updateObjectLabel();
     }
 
     @FXML
