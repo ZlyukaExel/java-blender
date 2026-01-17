@@ -47,7 +47,7 @@ public class BlenderController {
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             scene.getCurrentCamera().setAspectRatio((float) (width / height));
 
-            RenderEngine.render(canvas.getGraphicsContext2D(), scene);
+            RenderEngine.renderScene(canvas.getGraphicsContext2D(), scene.getCurrentCamera(), scene, (int) width, (int) height);
         });
 
         timeline.getKeyFrames().add(frame);
