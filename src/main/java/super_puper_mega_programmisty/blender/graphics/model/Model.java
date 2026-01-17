@@ -1,6 +1,7 @@
 package super_puper_mega_programmisty.blender.graphics.model;
 
 
+import javafx.scene.paint.Color;
 import super_puper_mega_programmisty.blender.graphics.SceneObject;
 import super_puper_mega_programmisty.blender.math.transform.AffineTransform;
 import super_puper_mega_programmisty.blender.math.transform.Transform;
@@ -11,19 +12,26 @@ import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Manifest;
 
 public class Model extends SceneObject implements Transformable{
     private List<Vector3d> vertices;
     private List<Vector2d> textureVertices;
     private List<Vector3d> normals;
     private List<Polygon> polygons;
+    private final Material material;
 
     public Model() {
+        this(new Material(Color.GRAY, null));
+    }
+
+    public Model(Material material) {
         super(new Transform());
         vertices = new ArrayList<>();
         textureVertices = new ArrayList<>();
         normals = new ArrayList<>();
         polygons = new ArrayList<>();
+        this.material = material;
     }
 
     public Model(Model other) {
@@ -35,12 +43,16 @@ public class Model extends SceneObject implements Transformable{
         for (Polygon poly : other.polygons) {
             this.polygons.add(new Polygon(poly));
         }
+        this.material = other.material;
     }
 
     public List<Vector3d> getVertices() { return vertices; }
     public List<Vector2d> getTextureVertices() { return textureVertices; }
     public List<Vector3d> getNormals() { return normals; }
     public List<Polygon> getPolygons() { return polygons; }
+    public Material getMaterial() {
+        return material;
+    }
 
     public void applyTransformation() {
         this.applyTransformation(this.getTransformMatrix());

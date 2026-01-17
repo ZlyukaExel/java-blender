@@ -1,6 +1,7 @@
 package super_puper_mega_programmisty.blender.graphics;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
@@ -8,13 +9,18 @@ import super_puper_mega_programmisty.blender.graphics.model.Polygon;
 import super_puper_mega_programmisty.blender.graphics.rasterization.PolygonRasterization;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
+import super_puper_mega_programmisty.blender.scene.Scene;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RenderEngine {
+    public static void render(GraphicsContext gc, Scene scene) {
+
+    }
+
     public static void renderModel(
-            final GraphicsContext graphicsContext,
+            final GraphicsContext gc,
             final Camera camera,
             final Model model,
             ZBuffer buffer,
@@ -30,18 +36,40 @@ public class RenderEngine {
 
         modelViewProjectionMatrix.multiply(modelMatrix).multiply(viewMatrix).multiply(projectionMatrix);
 
+        if (model.getMaterial().getTexture() == null) {
+            renderWithoutTexture(model, modelViewProjectionMatrix, gc, buffer, width, height);
+        } else {
+
+        }
+
+
+    }
+
+    private static void renderWithoutTexture(Model model, Matrix4d matrix,
+                                      GraphicsContext gc, ZBuffer buffer, int width, int height) {
         for (Polygon polygon : model.getPolygons()) {
             List<Vector3d> vertices = new ArrayList<>();
             for (Integer index : polygon.getVertexIndices()) {
-                vertices.add(modelViewProjectionMatrix.transform(model.getVertices().get(index)));
+                vertices.add(matrix.transform(model.getVertices().get(index)));
             }
-            // TODO: iliak|16.01.2026|захардкожены цвета, нужно продумывать освещение
-            List<Color> colors = new ArrayList<>();
-            colors.add(Color.BLUE);
-            colors.add(Color.LIGHTBLUE);
-            colors.add(Color.DARKBLUE);
 
-            PolygonRasterization.drawPolygon(graphicsContext, vertices, colors, buffer);
+            Color color = model.getMaterial().getColor();
+
+            PolygonRasterization.drawPolygon(gc, vertices, color, buffer, width, height);
+        }
+    }
+
+    private static void renderWithTexture(Model model, Matrix4d matrix,
+                                             GraphicsContext gc, ZBuffer buffer, int width, int height) {
+        for (Polygon polygon : model.getPolygons()) {
+            List<Vector3d> vertices = new ArrayList<>();
+            for (Integer index : polygon.getVertexIndices()) {
+                vertices.add(matrix.transform(model.getVertices().get(index)));
+            }
+
+            Image texture = model.getMaterial().getTexture();
+
+            PolygonRasterization.drawPolygon(gc, vertices, color, buffer, width, height);
         }
     }
 }
