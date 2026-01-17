@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.jar.Manifest;
 
 public class Model extends SceneObject implements Transformable{
-    private List<Vector3d> vertices;
-    private List<Vector2d> textureVertices;
-    private List<Vector3d> normals;
-    private List<Polygon> polygons;
+    private final List<Vector3d> vertices;
+    private final List<Vector2d> textureVertices;
+    private final List<Vector3d> normals;
+    private final List<Polygon> polygons;
     private final Material material;
 
     public Model() {
