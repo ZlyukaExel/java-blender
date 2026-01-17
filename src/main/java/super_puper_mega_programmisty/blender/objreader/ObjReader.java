@@ -6,16 +6,17 @@ import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 
 public class ObjReader {
 
-    public static Model read(String filename) throws IOException {
+    public static Model read(Path path) throws IOException {
         Model model = new Model();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
             String line;
             int lineNumber = 0;
 
