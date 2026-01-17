@@ -6,10 +6,14 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import super_puper_mega_programmisty.blender.graphics.RenderEngine;
+import super_puper_mega_programmisty.blender.graphics.SceneObject;
+import super_puper_mega_programmisty.blender.graphics.camera.Camera;
+import super_puper_mega_programmisty.blender.graphics.light.LightSource;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.objreader.ObjReader;
 import super_puper_mega_programmisty.blender.scene.Scene;
@@ -25,6 +29,9 @@ public class BlenderController {
 
     @FXML
     private Canvas canvas;
+
+    @FXML
+    private Label objectLabel;
 
     @FXML
     private TextField posX, posY, posZ;
@@ -52,6 +59,8 @@ public class BlenderController {
 
         timeline.getKeyFrames().add(frame);
         timeline.play();
+
+        updateObjectLabel();
     }
 
     @FXML
@@ -125,10 +134,55 @@ public class BlenderController {
     @FXML
     private void selectNext() {
         scene.selectNext();
+        updateObjectLabel();
     }
 
     @FXML
     private void selectPrev() {
         scene.selectPrev();
+        updateObjectLabel();
+    }
+
+    @FXML
+    private void updatePos() {
+        double x, y, z;
+
+        try {
+            x = Double.parseDouble(posX.getText());
+        } catch (NumberFormatException e) {
+            posX.setText("0");
+            x = 0;
+        }
+
+        try {
+            y = Double.parseDouble(posY.getText());
+        } catch (NumberFormatException e) {
+            posY.setText("0");
+            y = 0;
+        }
+
+        try {
+            z = Double.parseDouble(posZ.getText());
+        } catch (NumberFormatException e) {
+            posZ.setText("0");
+            z = 0;
+        }
+
+        scene.move(x, y, z);
+    }
+
+    private void updateObjectLabel() {
+        SceneObject object = scene.getObject();
+        if (object instanceof Model) {
+            objectLabel.setText("Модель");
+        } else if (object instanceof Camera) {
+            objectLabel.setText("Камера");
+        } else if (object instanceof LightSource) {
+            objectLabel.setText("Освещение");
+        }
+
+        posX.setText(object.X());
+        posY.setText(object.Y());
+        posZ.setText(object.Z());
     }
 }

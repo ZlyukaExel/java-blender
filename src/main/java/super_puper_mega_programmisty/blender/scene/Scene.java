@@ -136,12 +136,20 @@ public class Scene {
         ObjWriter.write(model, path);
     }
 
+    public void move(double x, double y, double z) {
+        currentObject.move(x, y, z);
+    }
+
     public Camera getCurrentCamera() {
         return currentCamera;
     }
 
     public List<Model> getModels() {
         return models;
+    }
+
+    public SceneObject getObject() {
+        return currentObject;
     }
 
     public List<LightSource> getLightSources() {

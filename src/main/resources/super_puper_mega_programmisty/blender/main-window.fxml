@@ -40,17 +40,19 @@
     <right>
         <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <children>
+                <Label text="Null" textAlignment="CENTER" fx:id="objectLabel"/>
+                <Separator prefHeight="20.0"/>
                 <Label text="Позиция" textAlignment="CENTER"/>
                 <HBox prefHeight="50.0" prefWidth="200.0">
                     <children>
                         <Label text="X"/>
-                        <TextField fx:id="posX" text="0"/>
+                        <TextField fx:id="posX" text="0" onAction="#updatePos"/>
                         <Separator orientation="VERTICAL" prefWidth="5"/>
                         <Label text="Y"/>
-                        <TextField fx:id="posY" text="0"/>
+                        <TextField fx:id="posY" text="0" onAction="#updatePos"/>
                         <Separator orientation="VERTICAL" prefWidth="5"/>
                         <Label text="Z"/>
-                        <TextField fx:id="posZ" text="0"/>
+                        <TextField fx:id="posZ" text="0" onAction="#updatePos"/>
                     </children>
                 </HBox>
                 <Separator prefHeight="10.0"/>
