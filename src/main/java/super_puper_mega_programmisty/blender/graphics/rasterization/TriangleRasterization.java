@@ -271,7 +271,7 @@ public class TriangleRasterization {
                 Color c = interpolationColor(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getColor(), pointArray[1].getColor(), pointArray[2].getColor());
 
-                double l = 0;
+                double l = k;
                 for (LightSource light : lightSources) {
                     // TODO: iliak|17.01.2026|дописать логику освещения
                 }
