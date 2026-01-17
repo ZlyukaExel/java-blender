@@ -13,4 +13,20 @@ public class SceneObject {
     public Matrix4d getTransformMatrix() {
         return this.transform.getTransformationMatrix();
     }
+
+    public void move(double x, double y, double z) {
+        transform.translate(x, y, z);
+    }
+
+    public double X() {
+        return transform.getPosition().X();
+    }
+
+    public double Y() {
+        return transform.getPosition().Y();
+    }
+
+    public double Z() {
+        return transform.getPosition().Z();
+    }
 }
