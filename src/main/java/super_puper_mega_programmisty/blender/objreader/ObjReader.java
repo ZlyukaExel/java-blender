@@ -1,145 +1,161 @@
 package super_puper_mega_programmisty.blender.objreader;
 
-
 import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.graphics.model.Polygon;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class ObjReader {
 
-    private static final String OBJ_VERTEX_TOKEN = "v";
-    private static final String OBJ_TEXTURE_TOKEN = "vt";
-    private static final String OBJ_NORMAL_TOKEN = "vn";
-    private static final String OBJ_FACE_TOKEN = "f";
+    public static Model read(String filename) throws IOException {
+        Model model = new Model();
 
-    public static Model read(String fileContent) {
-        System.out.println("Loading model ...");
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            int lineNumber = 0;
 
-        Model result = new Model();
+            while ((line = reader.readLine()) != null) {
+                lineNumber++;
+                line = line.trim();
 
-        int lineInd = 0;
-        Scanner scanner = new Scanner(fileContent);
-        while (scanner.hasNextLine()) {
-            final String line = scanner.nextLine();
-            ArrayList<String> wordsInLine = new ArrayList<String>(Arrays.asList(line.split("\\s+")));
-            if (wordsInLine.isEmpty()) {
-                continue;
-            }
+                if (line.isEmpty() || line.startsWith("#")) {
+                    continue;
+                }
 
-            final String token = wordsInLine.getFirst();
-            wordsInLine.removeFirst();
-
-            ++lineInd;
-            switch (token) {
-                case OBJ_VERTEX_TOKEN -> result.getVertices().add(parseVertex(wordsInLine, lineInd));
-                case OBJ_TEXTURE_TOKEN -> result.getTextureVertices().add(parseTextureVertex(wordsInLine, lineInd));
-                case OBJ_NORMAL_TOKEN -> result.getNormals().add(parseNormal(wordsInLine, lineInd));
-                case OBJ_FACE_TOKEN -> result.getPolygons().add(parseFace(wordsInLine, lineInd));
-                default -> {}
+                try {
+                    processLine(line, model, lineNumber);
+                } catch (ObjReaderException e) {
+                    System.err.println("Error at line " + lineNumber + ": " + e.getMessage());
+                    throw e;
+                }
             }
         }
 
-        return result;
+        return model;
     }
 
-    protected static Vector3d parseVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
-        try {
-            return new Vector3d(
-                    Float.parseFloat(wordsInLineWithoutToken.get(0)),
-                    Float.parseFloat(wordsInLineWithoutToken.get(1)),
-                    Float.parseFloat(wordsInLineWithoutToken.get(2)));
+    private static void processLine(String line, Model model, int lineNumber) throws ObjReaderException {
+        String[] tokens = line.split("\\s+");
+        if (tokens.length == 0) return;
 
-        } catch(NumberFormatException e) {
-            throw new ObjReaderException("Failed to parse float value.", lineInd);
+        String keyword = tokens[0];
+        String[] arguments = Arrays.copyOfRange(tokens, 1, tokens.length);
 
-        } catch(IndexOutOfBoundsException e) {
-            throw new ObjReaderException("Too few vertex arguments.", lineInd);
+        switch (keyword) {
+            case "v":
+                parseVertex(arguments, model, lineNumber);
+                break;
+            case "vt":
+                parseTextureVertex(arguments, model, lineNumber);
+                break;
+            case "vn":
+                parseNormal(arguments, model, lineNumber);
+                break;
+            case "f":
+                parseFace(arguments, model, lineNumber);
+                break;
+            default:
+                break;
         }
     }
 
-    protected static Vector2d parseTextureVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+    private static void parseVertex(String[] args, Model model, int lineNumber) throws ObjReaderException {
+        if (args.length < 3) {
+            throw new ObjReaderException("Too few vertex coordinates");
+        }
+
         try {
-            return new Vector2d(
-                    Float.parseFloat(wordsInLineWithoutToken.get(0)),
-                    Float.parseFloat(wordsInLineWithoutToken.get(1)));
-
-        } catch(NumberFormatException e) {
-            throw new ObjReaderException("Failed to parse float value.", lineInd);
-
-        } catch(IndexOutOfBoundsException e) {
-            throw new ObjReaderException("Too few texture vertex arguments.", lineInd);
+            float x = Float.parseFloat(args[0]);
+            float y = Float.parseFloat(args[1]);
+            float z = Float.parseFloat(args[2]);
+            model.addVertex(new Vector3d(x, y, z));
+        } catch (NumberFormatException e) {
+            throw new ObjReaderException("Invalid vertex coordinates: " + Arrays.toString(args));
         }
     }
 
-    protected static Vector3d parseNormal(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+    private static void parseTextureVertex(String[] args, Model model, int lineNumber) throws ObjReaderException {
+        if (args.length < 2) {
+            throw new ObjReaderException("Too few texture vertex coordinates");
+        }
+
         try {
-            return new Vector3d(
-                    Float.parseFloat(wordsInLineWithoutToken.get(0)),
-                    Float.parseFloat(wordsInLineWithoutToken.get(1)),
-                    Float.parseFloat(wordsInLineWithoutToken.get(2)));
-
-        } catch(NumberFormatException e) {
-            throw new ObjReaderException("Failed to parse float value.", lineInd);
-
-        } catch(IndexOutOfBoundsException e) {
-            throw new ObjReaderException("Too few normal arguments.", lineInd);
+            float u = Float.parseFloat(args[0]);
+            float v = args.length >= 2 ? Float.parseFloat(args[1]) : 0.0f;
+            model.addTextureVertex(new Vector2d(u, v));
+        } catch (NumberFormatException e) {
+            throw new ObjReaderException("Invalid texture vertex coordinates: " + Arrays.toString(args));
         }
     }
 
-    protected static Polygon parseFace(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
-        ArrayList<Integer> onePolygonVertexIndices = new ArrayList<Integer>();
-        ArrayList<Integer> onePolygonTextureVertexIndices = new ArrayList<Integer>();
-        ArrayList<Integer> onePolygonNormalIndices = new ArrayList<Integer>();
-
-        for (String s : wordsInLineWithoutToken) {
-            parseFaceWord(s, onePolygonVertexIndices, onePolygonTextureVertexIndices, onePolygonNormalIndices, lineInd);
+    private static void parseNormal(String[] args, Model model, int lineNumber) throws ObjReaderException {
+        if (args.length < 3) {
+            throw new ObjReaderException("Too few normal coordinates");
         }
 
-        Polygon result = new Polygon();
-        result.setVertexIndices(onePolygonVertexIndices);
-        result.setTextureVertexIndices(onePolygonTextureVertexIndices);
-        result.setNormalIndices(onePolygonNormalIndices);
-        return result;
+        try {
+            float x = Float.parseFloat(args[0]);
+            float y = Float.parseFloat(args[1]);
+            float z = Float.parseFloat(args[2]);
+            model.addNormal(new Vector3d(x, y, z));
+        } catch (NumberFormatException e) {
+            throw new ObjReaderException("Invalid normal coordinates: " + Arrays.toString(args));
+        }
     }
 
-    protected static void parseFaceWord(
-            String wordInLine,
-            ArrayList<Integer> onePolygonVertexIndices,
-            ArrayList<Integer> onePolygonTextureVertexIndices,
-            ArrayList<Integer> onePolygonNormalIndices,
-            int lineInd) {
-        try {
-            String[] wordIndices = wordInLine.split("/");
-            switch (wordIndices.length) {
-                case 1 -> {
-                    onePolygonVertexIndices.add(Integer.parseInt(wordIndices[0]) - 1);
+    private static void parseFace(String[] args, Model model, int lineNumber) throws ObjReaderException {
+        if (args.length < 3) {
+            throw new ObjReaderException("Face has too few vertices: " + args.length);
+        }
+
+        Polygon polygon = new Polygon();
+
+        for (String arg : args) {
+            String[] indices = arg.split("/");
+
+            if (indices.length == 0) {
+                throw new ObjReaderException("Invalid face element: " + arg);
+            }
+
+            try {
+                int vertexIndex = Integer.parseInt(indices[0]) - 1;
+                if (vertexIndex < 0 || vertexIndex >= model.getVertices().size()) {
+                    throw new ObjReaderException("Invalid vertex index: " + (vertexIndex + 1));
                 }
-                case 2 -> {
-                    onePolygonVertexIndices.add(Integer.parseInt(wordIndices[0]) - 1);
-                    onePolygonTextureVertexIndices.add(Integer.parseInt(wordIndices[1]) - 1);
-                }
-                case 3 -> {
-                    onePolygonVertexIndices.add(Integer.parseInt(wordIndices[0]) - 1);
-                    onePolygonNormalIndices.add(Integer.parseInt(wordIndices[2]) - 1);
-                    if (!wordIndices[1].equals("")) {
-                        onePolygonTextureVertexIndices.add(Integer.parseInt(wordIndices[1]) - 1);
+                polygon.addVertex(vertexIndex);
+
+                if (indices.length > 1 && !indices[1].isEmpty()) {
+                    int textureIndex = Integer.parseInt(indices[1]) - 1;
+                    if (textureIndex < 0 || textureIndex >= model.getTextureVertices().size()) {
+                        throw new ObjReaderException("Invalid texture vertex index: " + (textureIndex + 1));
                     }
+                    polygon.addTextureVertex(textureIndex);
                 }
-                default -> {
-                    throw new ObjReaderException("Invalid element size.", lineInd);
+
+                if (indices.length > 2 && !indices[2].isEmpty()) {
+                    int normalIndex = Integer.parseInt(indices[2]) - 1;
+                    if (normalIndex < 0 || normalIndex >= model.getNormals().size()) {
+                        throw new ObjReaderException("Invalid normal index: " + (normalIndex + 1));
+                    }
+                    polygon.addNormal(normalIndex);
                 }
+
+            } catch (NumberFormatException e) {
+                throw new ObjReaderException("Invalid face index format: " + arg);
             }
+        }
 
-        } catch(NumberFormatException e) {
-            throw new ObjReaderException("Failed to parse int value.", lineInd);
+        model.addPolygon(polygon);
+    }
 
-        } catch(IndexOutOfBoundsException e) {
-            throw new ObjReaderException("Too few arguments.", lineInd);
+    public static class ObjReaderException extends IOException {
+        public ObjReaderException(String message) {
+            super(message);
         }
     }
 }

@@ -1,23 +1,25 @@
 package super_puper_mega_programmisty.blender.graphics.model;
 
 
+import super_puper_mega_programmisty.blender.graphics.SceneObject;
 import super_puper_mega_programmisty.blender.math.transform.AffineTransform;
+import super_puper_mega_programmisty.blender.math.transform.Transform;
 import super_puper_mega_programmisty.blender.math.transform.Translation;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
-import super_puper_mega_programmisty.blender.scene.SceneObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Model extends SceneObject {
+public class Model extends SceneObject implements Transformable{
     private List<Vector3d> vertices;
     private List<Vector2d> textureVertices;
     private List<Vector3d> normals;
     private List<Polygon> polygons;
 
     public Model() {
+        super(new Transform());
         vertices = new ArrayList<>();
         textureVertices = new ArrayList<>();
         normals = new ArrayList<>();
@@ -25,6 +27,7 @@ public class Model extends SceneObject {
     }
 
     public Model(Model other) {
+        super(new Transform());
         this.vertices = new ArrayList<>(other.vertices);
         this.textureVertices = new ArrayList<>(other.textureVertices);
         this.normals = new ArrayList<>(other.normals);
@@ -38,6 +41,10 @@ public class Model extends SceneObject {
     public List<Vector2d> getTextureVertices() { return textureVertices; }
     public List<Vector3d> getNormals() { return normals; }
     public List<Polygon> getPolygons() { return polygons; }
+
+    public void applyTransformation() {
+        this.applyTransformation(this.getTransformMatrix());
+    }
 
     @Override
     public void applyTransformation(Matrix4d transformation) {

@@ -75,6 +75,7 @@ public class Matrix4d extends AbstractMatrix{
         double x = point.X();
         double y = point.Y();
         double z = point.Z();
+        // TODO: iliak|17.01.2026|возможно еще надо умножать на w
         double newX = elementsData[0][0] * x + elementsData[0][1] * y + elementsData[0][2] * z + elementsData[0][3];
         double newY = elementsData[1][0] * x + elementsData[1][1] * y + elementsData[1][2] * z + elementsData[1][3];
         double newZ = elementsData[2][0] * x + elementsData[2][1] * y + elementsData[2][2] * z + elementsData[2][3];

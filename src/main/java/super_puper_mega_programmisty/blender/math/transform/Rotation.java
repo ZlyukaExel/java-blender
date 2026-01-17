@@ -6,8 +6,8 @@ public class Rotation extends AffineTransform {
     public enum Axis { X, Y, Z }
 
     private Axis axis;
-    private float angle;
-    public Rotation(Axis axis, float angleRadians) {
+    private double angle;
+    public Rotation(Axis axis, double angleRadians) {
         super();
         this.axis = axis;
         this.angle = angleRadians;
@@ -17,8 +17,8 @@ public class Rotation extends AffineTransform {
     @Override
     public void applyTransform() {
         transformationMatrix = Matrix4d.crateIdentity();
-        float cos = (float) Math.cos(angle);
-        float sin = (float) Math.sin(angle);
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
 
         switch (axis) {
             case X:
@@ -42,7 +42,7 @@ public class Rotation extends AffineTransform {
         }
     }
 
-    public float getAngle() {
+    public double getAngle() {
         return angle;
     }
 
