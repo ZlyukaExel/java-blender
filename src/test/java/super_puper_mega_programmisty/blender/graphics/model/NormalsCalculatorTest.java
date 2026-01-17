@@ -7,6 +7,7 @@ import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 import super_puper_mega_programmisty.blender.objreader.ObjReader;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 // Простой тест для проверки пересчёта нормалей на плоском квадрате.
 public class NormalsCalculatorTest {
@@ -52,8 +53,9 @@ public class NormalsCalculatorTest {
     @Test
     public void testForModel() throws IOException {
     // TODO: iliak|29.12.2025| НАЙТИ МОДЕЛЬ С ЗАДАННЫМИ НОРМАЛЯМИ В ФАЙЛЕ, ЧТОБЫ ПРОВЕРИТЬ РАБОТУ КАЛЬКУЛЯТОРА НОРМАЛЕЙ
-        Model modelNormalsFromFile = ObjReader.read("E:\\Java projects\\SuperPuperBlenderJava\\src\\main\\java\\super_puper_mega_programmisty\\models\\WrapHead.obj");
-        Model modelNormalsFromAlgorithm = ObjReader.read("E:\\Java projects\\SuperPuperBlenderJava\\src\\main\\java\\super_puper_mega_programmisty\\models\\WrapHead.obj");
+        Path path = Path.of("E:\\Java projects\\SuperPuperBlenderJava\\src\\main\\java\\super_puper_mega_programmisty\\models\\WrapHead.obj");
+        Model modelNormalsFromFile = ObjReader.read(path);
+        Model modelNormalsFromAlgorithm = ObjReader.read(path);
 
         NormalsCalculator.recalculateNormals(modelNormalsFromAlgorithm);
 
