@@ -11,9 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import super_puper_mega_programmisty.blender.graphics.RenderEngine;
-import super_puper_mega_programmisty.blender.graphics.SceneObject;
-import super_puper_mega_programmisty.blender.graphics.camera.Camera;
-import super_puper_mega_programmisty.blender.graphics.light.LightSource;
+import super_puper_mega_programmisty.blender.scene.SceneObject;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 import super_puper_mega_programmisty.blender.objreader.ObjReader;
@@ -202,13 +200,7 @@ public class BlenderController {
 
     private void updateObjectInfo() {
         SceneObject object = scene.getObject();
-        if (object instanceof Model) {
-            objectLabel.setText("Модель");
-        } else if (object instanceof Camera) {
-            objectLabel.setText("Камера");
-        } else if (object instanceof LightSource) {
-            objectLabel.setText("Освещение");
-        }
+        objectLabel.setText(object.toString());
 
         Vector3d position = object.getPosition();
         posX.setText(String.valueOf(position.X()));

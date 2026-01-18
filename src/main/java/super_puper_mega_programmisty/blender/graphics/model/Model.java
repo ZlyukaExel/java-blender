@@ -2,7 +2,7 @@ package super_puper_mega_programmisty.blender.graphics.model;
 
 
 import javafx.scene.paint.Color;
-import super_puper_mega_programmisty.blender.graphics.SceneObject;
+import super_puper_mega_programmisty.blender.scene.SceneObject;
 import super_puper_mega_programmisty.blender.math.transform.AffineTransform;
 import super_puper_mega_programmisty.blender.math.transform.Transform;
 import super_puper_mega_programmisty.blender.math.transform.Translation;
@@ -12,7 +12,6 @@ import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.Manifest;
 
 public class Model extends SceneObject implements Transformable{
     private final List<Vector3d> vertices;
@@ -26,7 +25,7 @@ public class Model extends SceneObject implements Transformable{
     }
 
     public Model(Material material) {
-        super(new Transform());
+        super("Модель");
         vertices = new ArrayList<>();
         textureVertices = new ArrayList<>();
         normals = new ArrayList<>();
@@ -35,7 +34,7 @@ public class Model extends SceneObject implements Transformable{
     }
 
     public Model(Model other) {
-        super(new Transform());
+        super("Модель");
         this.vertices = new ArrayList<>(other.vertices);
         this.textureVertices = new ArrayList<>(other.textureVertices);
         this.normals = new ArrayList<>(other.normals);

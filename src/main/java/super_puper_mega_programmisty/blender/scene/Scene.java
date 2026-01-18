@@ -1,6 +1,5 @@
 package super_puper_mega_programmisty.blender.scene;
 
-import super_puper_mega_programmisty.blender.graphics.SceneObject;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.camera.engine.RenderPanel;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
@@ -29,23 +28,42 @@ public class Scene {
     }
 
     public void addModel(Model model) {
-        objects.add(model);
         models.add(model);
-        currentObject = model;
+        addObject(model);
     }
 
     public void addLight() {
         LightSource light = new LightSource();
-        objects.add(light);
         lightSources.add(light);
-        currentObject = light;
+        addObject(light);
     }
 
     public void addCamera() {
         Camera camera = new Camera();
         cameras.add(camera);
-        objects.add(camera);
-        currentObject = camera;
+        addObject(camera);
+    }
+
+    private void addObject(SceneObject newObject) {
+        int id = 1;
+        String uniqueName = "";
+        boolean keepSearching = true;
+        while (keepSearching) {
+            keepSearching = false;
+            uniqueName = newObject.toString() + " " + id;
+            for (var object : objects) {
+                if (object.toString().equals(uniqueName)) {
+                    id++;
+                    keepSearching = true;
+                    break;
+                }
+            }
+        }
+
+        newObject.setName(uniqueName);
+
+        objects.add(newObject);
+        currentObject = newObject;
     }
 
     public void deleteObject() {
