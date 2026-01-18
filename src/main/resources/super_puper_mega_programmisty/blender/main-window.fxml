@@ -60,13 +60,13 @@
                 <HBox prefHeight="50.0" prefWidth="200.0">
                     <children>
                         <Label text="X"/>
-                        <TextField fx:id="rotX" text="0"/>
+                        <TextField fx:id="rotX" text="0" onAction="#updateRotation"/>
                         <Separator orientation="VERTICAL" prefWidth="5"/>
                         <Label text="Y"/>
-                        <TextField fx:id="rotY" text="0"/>
+                        <TextField fx:id="rotY" text="0" onAction="#updateRotation"/>
                         <Separator orientation="VERTICAL" prefWidth="5"/>
                         <Label text="Z"/>
-                        <TextField fx:id="rotZ" text="0"/>
+                        <TextField fx:id="rotZ" text="0" onAction="#updateRotation"/>
                     </children>
                 </HBox>
                 <Separator prefHeight="10.0"/>
@@ -74,13 +74,13 @@
                 <HBox prefHeight="50.0" prefWidth="200.0">
                     <children>
                         <Label text="X"/>
-                        <TextField fx:id="sizeX" text="1"/>
+                        <TextField fx:id="scaleX" text="1" onAction="#updateScale"/>
                         <Separator orientation="VERTICAL" prefWidth="5"/>
                         <Label text="Y"/>
-                        <TextField fx:id="sizeY" text="1"/>
+                        <TextField fx:id="scaleY" text="1" onAction="#updateScale"/>
                         <Separator orientation="VERTICAL" prefWidth="5"/>
                         <Label text="Z"/>
-                        <TextField fx:id="sizeZ" text="1"/>
+                        <TextField fx:id="scaleZ" text="1" onAction="#updateScale"/>
                     </children>
                 </HBox>
             </children>
