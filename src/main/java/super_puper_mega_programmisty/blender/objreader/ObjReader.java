@@ -38,7 +38,7 @@ public class ObjReader {
             }
         }
 
-        //NormalsCalculator.recalculateNormals(model);
+        NormalsCalculator.recalculateNormals(model);
 
         return model;
     }
