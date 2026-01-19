@@ -77,7 +77,7 @@ public class Transform {
                 .multiply(rotationZ.getTransformationMatrix());
         Matrix4d transMat = translation.getTransformationMatrix();
 
-        return (Matrix4d) scaleMat.multiply(rotationMat).multiply(transMat);
+        return (Matrix4d) transMat.multiply(rotationMat).multiply(scaleMat);
     }
 
     public Matrix4d getNormalMatrix() {

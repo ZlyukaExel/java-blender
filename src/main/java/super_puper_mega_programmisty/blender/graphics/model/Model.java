@@ -1,6 +1,7 @@
 package super_puper_mega_programmisty.blender.graphics.model;
 
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import super_puper_mega_programmisty.blender.scene.SceneObject;
 import super_puper_mega_programmisty.blender.math.transform.AffineTransform;

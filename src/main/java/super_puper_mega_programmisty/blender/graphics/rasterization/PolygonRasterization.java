@@ -27,10 +27,10 @@ public class PolygonRasterization extends TriangleRasterization {
                                    double k,
                                    ZBuffer buffer, int width, int height) {
         for (int i = 1; i < vertices.size() - 1; i++) {
-            Vector3d v1 = vertices.get(i - 1);
+            Vector3d v1 = vertices.getFirst();
             Vector3d v2 = vertices.get(i);
             Vector3d v3 = vertices.get(i + 1);
-            Vector3d vn1 = normals.get(i - 1);
+            Vector3d vn1 = normals.getFirst();
             Vector3d vn2 = normals.get(i);
             Vector3d vn3 = normals.get(i + 1);
             fillTriangle(
@@ -66,13 +66,13 @@ public class PolygonRasterization extends TriangleRasterization {
                                    double k,
                                    Image texture, ZBuffer buffer, int width, int height) {
         for (int i = 1; i < vertices.size() - 1; i++) {
-            Vector3d v1 = vertices.get(i - 1);
+            Vector3d v1 = vertices.getFirst();
             Vector3d v2 = vertices.get(i);
             Vector3d v3 = vertices.get(i + 1);
-            Vector3d vn1 = normals.get(i - 1);
+            Vector3d vn1 = normals.getFirst();
             Vector3d vn2 = normals.get(i);
             Vector3d vn3 = normals.get(i + 1);
-            Vector2d vt1 = textures.get(i - 1);
+            Vector2d vt1 = textures.getFirst();
             Vector2d vt2 = textures.get(i);
             Vector2d vt3 = textures.get(i + 1);
             fillTriangle(
