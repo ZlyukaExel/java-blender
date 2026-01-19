@@ -50,8 +50,8 @@ public class RenderEngine {
         Matrix4d modelViewProjectionMatrix = new Matrix4d();
 
         modelViewProjectionMatrix.multiply(modelMatrix)
-//                .multiply(viewMatrix)
-//                .multiply(projectionMatrix)
+                .multiply(viewMatrix)
+                .multiply(projectionMatrix)
         ;
         Matrix4d normalMatrix = model.getNormalMatrix();
 

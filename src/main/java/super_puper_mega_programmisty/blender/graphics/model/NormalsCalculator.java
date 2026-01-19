@@ -15,8 +15,8 @@ public class NormalsCalculator {
      */
     public static Vector3d computeFaceNormal(Vector3d v0, Vector3d v1, Vector3d v2) {
         // Два ребра треугольника
-        Vector3d edge1 = (Vector3d) v1.subVector(v0);
-        Vector3d edge2 = (Vector3d) v2.subVector(v0);
+        Vector3d edge1 = (Vector3d) new Vector3d(v1).subVector(v0);
+        Vector3d edge2 = (Vector3d) new Vector3d(v2).subVector(v0);
 
         // Ненормированная нормаль — векторное произведение ребер
         Vector3d n = (Vector3d) edge1.cross(edge2);
