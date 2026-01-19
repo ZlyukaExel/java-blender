@@ -1,5 +1,6 @@
 package super_puper_mega_programmisty.blender.scene;
 
+import javafx.scene.control.Alert;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.camera.engine.RenderPanel;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
@@ -87,6 +88,11 @@ public class Scene {
     private void deleteCamera(Camera camera) {
         // Должна быть хотя бы одна камера
         if (cameras.size() <= 1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка удаления");
+            alert.setHeaderText("Не удалось удалить камеру");
+            alert.setContentText("На сцене должна остаться хотя бы одна камера");
+            alert.showAndWait();
             return;
         }
 
@@ -149,6 +155,11 @@ public class Scene {
 
     public void saveModel(Path path) {
         if (!(currentObject instanceof Model model)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка сохранения");
+            alert.setHeaderText("Не удалось сохранить объект");
+            alert.setContentText("Сохранить можно только модель");
+            alert.showAndWait();
             return;
         }
 

@@ -3,90 +3,95 @@
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="super_puper_mega_programmisty.blender.app.BlenderController">
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="super_puper_mega_programmisty.blender.app.BlenderController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="Файл">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#loadModel" text="Открыть"/>
-                        <MenuItem mnemonicParsing="false" onAction="#saveModel" text="Сохранить"/>
+                        <MenuItem mnemonicParsing="false" onAction="#loadModel" text="Открыть" />
+                        <MenuItem mnemonicParsing="false" onAction="#saveModel" text="Сохранить" />
+                        <MenuItem mnemonicParsing="false" onAction="#clearScene" text="Очистить сцену" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Объект">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#selectNext" text="Выбрать следующий"/>
-                        <MenuItem mnemonicParsing="false" onAction="#selectPrev" text="Выбрать предыдущий"/>
+                        <MenuItem mnemonicParsing="false" onAction="#selectNext" text="Выбрать следующий" />
+                        <MenuItem mnemonicParsing="false" onAction="#selectPrev" text="Выбрать предыдущий" />
                         <Menu mnemonicParsing="false" text="Добавить">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#addCamera" text="Камера"/>
-                                <MenuItem mnemonicParsing="false" onAction="#addLumination" text="Освещение"/>
+                                <MenuItem mnemonicParsing="false" onAction="#addCamera" text="Камера" />
+                                <MenuItem mnemonicParsing="false" onAction="#addLumination" text="Освещение" />
                             </items>
                         </Menu>
-                        <MenuItem mnemonicParsing="false" onAction="#deleteObject" text="Удалить"/>
+                        <MenuItem mnemonicParsing="false" onAction="#deleteObject" text="Удалить" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Камера">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#nextCamera" text="Следующая"/>
-                        <MenuItem mnemonicParsing="false" onAction="#prevCamera" text="Предыдущая"/>
+                        <MenuItem mnemonicParsing="false" onAction="#nextCamera" text="Следующая" />
+                        <MenuItem mnemonicParsing="false" onAction="#prevCamera" text="Предыдущая" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
     </top>
     <right>
-        <VBox prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
             <children>
-                <Label text="Null" textAlignment="CENTER" fx:id="objectLabel"/>
-                <Separator prefHeight="20.0"/>
-                <Label text="Позиция" textAlignment="CENTER"/>
-                <HBox prefHeight="50.0" prefWidth="200.0">
+                <Label fx:id="objectLabel" prefHeight="30" text="Null" textAlignment="CENTER">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Separator prefHeight="5" />
+                <Label prefHeight="30" text="Позиция" textAlignment="CENTER" />
+                <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0">
                     <children>
-                        <Label text="X"/>
-                        <TextField fx:id="posX" text="0" onAction="#updatePos"/>
-                        <Separator orientation="VERTICAL" prefWidth="5"/>
-                        <Label text="Y"/>
-                        <TextField fx:id="posY" text="0" onAction="#updatePos"/>
-                        <Separator orientation="VERTICAL" prefWidth="5"/>
-                        <Label text="Z"/>
-                        <TextField fx:id="posZ" text="0" onAction="#updatePos"/>
+                        <Label prefWidth="15" text="X" />
+                        <TextField fx:id="posX" alignment="CENTER" onAction="#updatePos" prefWidth="40" text="0" />
+                        <Separator orientation="VERTICAL" prefWidth="10" visible="false" />
+                        <Label prefWidth="15" text="Y" />
+                        <TextField fx:id="posY" alignment="CENTER" onAction="#updatePos" prefWidth="40" text="0" />
+                        <Separator orientation="VERTICAL" prefWidth="10" visible="false" />
+                        <Label prefWidth="15" text="Z" />
+                        <TextField fx:id="posZ" alignment="CENTER" onAction="#updatePos" prefWidth="40" text="0" />
                     </children>
                 </HBox>
-                <Separator prefHeight="10.0"/>
-                <Label text="Вращение" textAlignment="CENTER"/>
-                <HBox prefHeight="50.0" prefWidth="200.0">
+            <Separator prefHeight="5" visible="false" />
+                <Label prefHeight="30" text="Вращение" textAlignment="CENTER" />
+                <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0">
                     <children>
-                        <Label text="X"/>
-                        <TextField fx:id="rotX" text="0" onAction="#updateRotation"/>
-                        <Separator orientation="VERTICAL" prefWidth="5"/>
-                        <Label text="Y"/>
-                        <TextField fx:id="rotY" text="0" onAction="#updateRotation"/>
-                        <Separator orientation="VERTICAL" prefWidth="5"/>
-                        <Label text="Z"/>
-                        <TextField fx:id="rotZ" text="0" onAction="#updateRotation"/>
+                        <Label prefWidth="15" text="X" />
+                        <TextField fx:id="rotX" alignment="CENTER" onAction="#updateRotation" prefWidth="40" text="0" />
+                        <Separator orientation="VERTICAL" prefWidth="10" visible="false" />
+                        <Label prefWidth="15" text="Y" />
+                        <TextField fx:id="rotY" alignment="CENTER" onAction="#updateRotation" prefWidth="40" text="0" />
+                        <Separator orientation="VERTICAL" prefWidth="10" visible="false" />
+                        <Label prefWidth="15" text="Z" />
+                        <TextField fx:id="rotZ" alignment="CENTER" onAction="#updateRotation" prefWidth="40" text="0" />
                     </children>
                 </HBox>
-                <Separator prefHeight="10.0"/>
-                <Label text="Размер" textAlignment="CENTER"/>
-                <HBox prefHeight="50.0" prefWidth="200.0">
+            <Separator layoutX="10.0" layoutY="75.0" prefHeight="5" visible="false" />
+                <Label prefHeight="30" text="Размер" textAlignment="CENTER" />
+                <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0">
                     <children>
-                        <Label text="X"/>
-                        <TextField fx:id="scaleX" text="1" onAction="#updateScale"/>
-                        <Separator orientation="VERTICAL" prefWidth="5"/>
-                        <Label text="Y"/>
-                        <TextField fx:id="scaleY" text="1" onAction="#updateScale"/>
-                        <Separator orientation="VERTICAL" prefWidth="5"/>
-                        <Label text="Z"/>
-                        <TextField fx:id="scaleZ" text="1" onAction="#updateScale"/>
+                        <Label prefWidth="15" text="X" />
+                        <TextField fx:id="scaleX" alignment="CENTER" onAction="#updateScale" prefWidth="40" text="1" />
+                        <Separator orientation="VERTICAL" prefWidth="10" visible="false" />
+                        <Label prefWidth="15" text="Y" />
+                        <TextField fx:id="scaleY" alignment="CENTER" onAction="#updateScale" prefWidth="40" text="1" />
+                        <Separator orientation="VERTICAL" prefWidth="10" visible="false" />
+                        <Label prefWidth="15" text="Z" />
+                        <TextField fx:id="scaleZ" alignment="CENTER" onAction="#updateScale" prefWidth="40" text="1" />
                     </children>
                 </HBox>
             </children>
         </VBox>
     </right>
     <center>
-        <Canvas fx:id="canvas" height="400.0" width="600.0" BorderPane.alignment="CENTER"/>
+        <Canvas fx:id="canvas" height="400.0" width="600.0" BorderPane.alignment="CENTER" />
     </center>
 </BorderPane>

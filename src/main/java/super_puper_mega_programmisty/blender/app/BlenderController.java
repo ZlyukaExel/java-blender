@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class BlenderController {
-    private final Scene scene = new Scene();
+    private Scene scene = new Scene();
 
     private Timeline timeline;
 
@@ -182,6 +182,12 @@ public class BlenderController {
         Vector3d scale = new Vector3d(x, y, z);
 
         scene.setObjectScale(scale);
+    }
+
+    @FXML
+    private void clearScene() {
+        scene = new Scene();
+        updateObjectInfo();
     }
 
     private double formatDoubleInput(TextField textField) {
