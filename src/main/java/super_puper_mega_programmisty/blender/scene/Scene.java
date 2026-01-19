@@ -1,6 +1,7 @@
 package super_puper_mega_programmisty.blender.scene;
 
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.camera.engine.RenderPanel;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
@@ -19,6 +20,7 @@ public class Scene {
     private final List<LightSource> lightSources = new ArrayList<>();
     private SceneObject currentObject;
     private Camera currentCamera;
+    private boolean luminationOn = false;
 
     private final RenderPanel renderPanel;
 
@@ -166,6 +168,45 @@ public class Scene {
         ObjWriter.write(model, path);
     }
 
+    public void recalculateNormals() {
+        if (!(currentObject instanceof Model model)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка при пересчете нормалей");
+            alert.setHeaderText("Не удалось пересчитать нормали");
+            alert.setContentText("Пересчитать нормали можно только у модели");
+            alert.showAndWait();
+            return;
+        }
+
+        //model.recalculateNormals();
+    }
+
+    public void triangulate() {
+        if (!(currentObject instanceof Model model)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка триангуляции");
+            alert.setHeaderText("Не удалось триангулировать модель");
+            alert.setContentText("Триангулировать можно только модель");
+            alert.showAndWait();
+            return;
+        }
+
+        //model.triangulate();
+    }
+
+    public void applyTexture(Image texture) {
+        if (!(currentObject instanceof Model model)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка при применении текстуры");
+            alert.setHeaderText("Не удалось применить текстуру");
+            alert.setContentText("Применить текстуру можно только к модели");
+            alert.showAndWait();
+            return;
+        }
+
+        //model.applyTexture(texture);
+    }
+
     public void setObjectPosition(Vector3d position) {
         currentObject.setPosition(position);
     }
@@ -176,6 +217,10 @@ public class Scene {
 
     public void setObjectScale(Vector3d scale) {
         currentObject.setScale(scale);
+    }
+
+    public void setLuminationOn(boolean isOn) {
+        luminationOn = isOn;
     }
 
     public Camera getCurrentCamera() {
@@ -192,5 +237,9 @@ public class Scene {
 
     public List<LightSource> getLightSources() {
         return lightSources;
+    }
+
+    public boolean getLuminationOn() {
+        return luminationOn;
     }
 }

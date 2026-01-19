@@ -6,8 +6,10 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import super_puper_mega_programmisty.blender.graphics.RenderEngine;
@@ -18,6 +20,7 @@ import super_puper_mega_programmisty.blender.objreader.ObjReader;
 import super_puper_mega_programmisty.blender.scene.Scene;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -42,6 +45,9 @@ public class BlenderController {
     private TextField scaleX, scaleY, scaleZ;
 
     @FXML
+    private CheckBox luminationSwitch;
+
+    @FXML
     private void initialize() {
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -59,7 +65,7 @@ public class BlenderController {
         timeline.getKeyFrames().add(frame);
         timeline.play();
 
-        updateObjectInfo();
+        updateInfo();
     }
 
     @FXML
@@ -88,7 +94,7 @@ public class BlenderController {
             alert.showAndWait();
         }
 
-        updateObjectInfo();
+        updateInfo();
     }
 
     @FXML
@@ -114,19 +120,19 @@ public class BlenderController {
     @FXML
     private void addLumination() {
         scene.addLight();
-        updateObjectInfo();
+        updateInfo();
     }
 
     @FXML
     private void addCamera() {
         scene.addCamera();
-        updateObjectInfo();
+        updateInfo();
     }
 
     @FXML
     private void deleteObject() {
         scene.deleteObject();
-        updateObjectInfo();
+        updateInfo();
     }
 
     @FXML
@@ -142,13 +148,13 @@ public class BlenderController {
     @FXML
     private void selectNext() {
         scene.selectNext();
-        updateObjectInfo();
+        updateInfo();
     }
 
     @FXML
     private void selectPrev() {
         scene.selectPrev();
-        updateObjectInfo();
+        updateInfo();
     }
 
     @FXML
@@ -187,7 +193,63 @@ public class BlenderController {
     @FXML
     private void clearScene() {
         scene = new Scene();
-        updateObjectInfo();
+        updateInfo();
+    }
+
+    @FXML
+    private void recalculateNormals() {
+        scene.recalculateNormals();
+    }
+
+    @FXML
+    private void triangulate() {
+        scene.triangulate();
+    }
+
+    @FXML
+    private void applyTexture() {
+        FileChooser fileChooser = new FileChooser();
+        File defaultDirectory = new File(".");
+        fileChooser.setInitialDirectory(defaultDirectory);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Texture (*.jpg/*.png)", "*.jpg", "*.png"));
+        fileChooser.setTitle("Выбор текстуры");
+
+        File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
+        if (file == null) {
+            return;
+        }
+
+        String fileName = file.getName().toLowerCase();
+        boolean isSupportedFile = fileName.endsWith(".jpg") || fileName.endsWith(".png") || fileName.endsWith(".jpeg");
+        if (!isSupportedFile) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка при выборе текстуры");
+            alert.setHeaderText("Выбранный файл не поддерживается");
+            alert.setContentText("Текстура должны быть в формате PNG или JPG");
+            alert.showAndWait();
+            return;
+        }
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+            Image texture = new Image(fis);
+
+            if (texture.isError()) {
+                throw new IOException("Error reading texture file");
+            }
+
+            scene.applyTexture(texture);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка при чтении файла");
+            alert.setHeaderText("Ошибка при чтении файла");
+            alert.setContentText("Выбранный файл поврежден или не поддерживается:\n" + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void switchLumination() {
+        scene.setLuminationOn(luminationSwitch.isSelected());
     }
 
     private double formatDoubleInput(TextField textField) {
@@ -204,7 +266,7 @@ public class BlenderController {
         return doubleInput;
     }
 
-    private void updateObjectInfo() {
+    private void updateInfo() {
         SceneObject object = scene.getObject();
         objectLabel.setText(object.toString());
 
@@ -222,5 +284,7 @@ public class BlenderController {
         scaleX.setText(String.valueOf(scale.X()));
         scaleY.setText(String.valueOf(scale.Y()));
         scaleZ.setText(String.valueOf(scale.Z()));
+
+        luminationSwitch.setSelected(scene.getLuminationOn());
     }
 }
