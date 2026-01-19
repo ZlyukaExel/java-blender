@@ -71,11 +71,11 @@ public class ObjWriter {
 
                 for (int i = 0; i < vertexCount; i++) {
                     // Пишем ID вертекса
-                    writer.write( " " + polygon.getVertexIndices().get(i));
+                    writer.write( " " + (polygon.getVertexIndices().get(i) + 1));
 
                     // Пишем ID текстуры
                     if (hasTextures){
-                        writer.write("/" + polygon.getTextureVertexIndices().get(i));
+                        writer.write("/" + (polygon.getTextureVertexIndices().get(i) + 1));
                     }
 
                     // Пишем ID нормали
@@ -83,7 +83,7 @@ public class ObjWriter {
                         if (!hasTextures) {
                             writer.write("/");
                         }
-                        writer.write("/" + polygon.getNormalIndices().get(i));
+                        writer.write("/" + (polygon.getNormalIndices().get(i) + 1));
                     }
                 }
 

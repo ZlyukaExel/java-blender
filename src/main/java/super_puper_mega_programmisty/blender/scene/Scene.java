@@ -1,11 +1,11 @@
 package super_puper_mega_programmisty.blender.scene;
 
-import super_puper_mega_programmisty.blender.graphics.SceneObject;
+import javafx.scene.control.Alert;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.camera.engine.RenderPanel;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
-import super_puper_mega_programmisty.blender.objreader.ObjReader;
+import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 import super_puper_mega_programmisty.blender.objwriter.ObjWriter;
 
 import java.nio.file.Path;
@@ -29,23 +29,42 @@ public class Scene {
     }
 
     public void addModel(Model model) {
-        objects.add(model);
         models.add(model);
-        currentObject = model;
+        addObject(model);
     }
 
     public void addLight() {
         LightSource light = new LightSource();
-        objects.add(light);
         lightSources.add(light);
-        currentObject = light;
+        addObject(light);
     }
 
     public void addCamera() {
         Camera camera = new Camera();
         cameras.add(camera);
-        objects.add(camera);
-        currentObject = camera;
+        addObject(camera);
+    }
+
+    private void addObject(SceneObject newObject) {
+        int id = 1;
+        String uniqueName = "";
+        boolean keepSearching = true;
+        while (keepSearching) {
+            keepSearching = false;
+            uniqueName = newObject.toString() + " " + id;
+            for (var object : objects) {
+                if (object.toString().equals(uniqueName)) {
+                    id++;
+                    keepSearching = true;
+                    break;
+                }
+            }
+        }
+
+        newObject.setName(uniqueName);
+
+        objects.add(newObject);
+        currentObject = newObject;
     }
 
     public void deleteObject() {
@@ -69,6 +88,11 @@ public class Scene {
     private void deleteCamera(Camera camera) {
         // Должна быть хотя бы одна камера
         if (cameras.size() <= 1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка удаления");
+            alert.setHeaderText("Не удалось удалить камеру");
+            alert.setContentText("На сцене должна остаться хотя бы одна камера");
+            alert.showAndWait();
             return;
         }
 
@@ -131,14 +155,27 @@ public class Scene {
 
     public void saveModel(Path path) {
         if (!(currentObject instanceof Model model)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка сохранения");
+            alert.setHeaderText("Не удалось сохранить объект");
+            alert.setContentText("Сохранить можно только модель");
+            alert.showAndWait();
             return;
         }
 
         ObjWriter.write(model, path);
     }
 
-    public void move(double x, double y, double z) {
-        currentObject.move(x, y, z);
+    public void setObjectPosition(Vector3d position) {
+        currentObject.setPosition(position);
+    }
+
+    public void setObjectRotation(Vector3d rotation) {
+        currentObject.setRotation(rotation);
+    }
+
+    public void setObjectScale(Vector3d scale) {
+        currentObject.setScale(scale);
     }
 
     public Camera getCurrentCamera() {

@@ -1,0 +1,51 @@
+package super_puper_mega_programmisty.blender.scene;
+
+import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
+import super_puper_mega_programmisty.blender.math.transform.Transform;
+import super_puper_mega_programmisty.blender.math.vector.Vector3d;
+
+public abstract class SceneObject {
+    protected final Transform transform = new Transform();
+    private String name;
+
+    public SceneObject(String objectName) {
+        name = objectName;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Matrix4d getTransformMatrix() {
+        return this.transform.getTransformationMatrix();
+    }
+
+    public void setPosition(Vector3d position) {
+        transform.setPosition(position);
+    }
+
+    public void setRotation(Vector3d rotation) {
+        transform.setRotation(rotation);
+    }
+
+    public void setScale(Vector3d scale) {
+        transform.setScale(scale);
+    }
+
+    public Vector3d getPosition() {
+        return transform.getPosition();
+    }
+
+    public Vector3d getRotation() {
+        return transform.getRotation();
+    }
+
+    public Vector3d getScale() {
+        return transform.getScale();
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+}

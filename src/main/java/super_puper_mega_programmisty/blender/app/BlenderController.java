@@ -11,10 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import super_puper_mega_programmisty.blender.graphics.RenderEngine;
-import super_puper_mega_programmisty.blender.graphics.SceneObject;
-import super_puper_mega_programmisty.blender.graphics.camera.Camera;
-import super_puper_mega_programmisty.blender.graphics.light.LightSource;
+import super_puper_mega_programmisty.blender.scene.SceneObject;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
+import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 import super_puper_mega_programmisty.blender.objreader.ObjReader;
 import super_puper_mega_programmisty.blender.scene.Scene;
 
@@ -23,7 +22,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class BlenderController {
-    private final Scene scene = new Scene();
+    private Scene scene = new Scene();
 
     private Timeline timeline;
 
@@ -40,7 +39,7 @@ public class BlenderController {
     private TextField rotX, rotY, rotZ;
 
     @FXML
-    private TextField sizeX, sizeY, sizeZ;
+    private TextField scaleX, scaleY, scaleZ;
 
     @FXML
     private void initialize() {
@@ -60,7 +59,7 @@ public class BlenderController {
         timeline.getKeyFrames().add(frame);
         timeline.play();
 
-        updateObjectLabel();
+        updateObjectInfo();
     }
 
     @FXML
@@ -89,7 +88,7 @@ public class BlenderController {
             alert.showAndWait();
         }
 
-        updateObjectLabel();
+        updateObjectInfo();
     }
 
     @FXML
@@ -115,19 +114,19 @@ public class BlenderController {
     @FXML
     private void addLumination() {
         scene.addLight();
-        updateObjectLabel();
+        updateObjectInfo();
     }
 
     @FXML
     private void addCamera() {
         scene.addCamera();
-        updateObjectLabel();
+        updateObjectInfo();
     }
 
     @FXML
     private void deleteObject() {
         scene.deleteObject();
-        updateObjectLabel();
+        updateObjectInfo();
     }
 
     @FXML
@@ -143,55 +142,85 @@ public class BlenderController {
     @FXML
     private void selectNext() {
         scene.selectNext();
-        updateObjectLabel();
+        updateObjectInfo();
     }
 
     @FXML
     private void selectPrev() {
         scene.selectPrev();
-        updateObjectLabel();
+        updateObjectInfo();
     }
 
     @FXML
     private void updatePos() {
-        double x, y, z;
+        double x = formatDoubleInput(posX);
+        double y = formatDoubleInput(posY);
+        double z = formatDoubleInput(posZ);
 
-        try {
-            x = Double.parseDouble(posX.getText());
-        } catch (NumberFormatException e) {
-            posX.setText("0");
-            x = 0;
-        }
+        Vector3d position = new Vector3d(x, y, z);
 
-        try {
-            y = Double.parseDouble(posY.getText());
-        } catch (NumberFormatException e) {
-            posY.setText("0");
-            y = 0;
-        }
-
-        try {
-            z = Double.parseDouble(posZ.getText());
-        } catch (NumberFormatException e) {
-            posZ.setText("0");
-            z = 0;
-        }
-
-        scene.move(x, y, z);
+        scene.setObjectPosition(position);
     }
 
-    private void updateObjectLabel() {
-        SceneObject object = scene.getObject();
-        if (object instanceof Model) {
-            objectLabel.setText("Модель");
-        } else if (object instanceof Camera) {
-            objectLabel.setText("Камера");
-        } else if (object instanceof LightSource) {
-            objectLabel.setText("Освещение");
-        }
+    @FXML
+    private void updateRotation() {
+        double x = formatDoubleInput(rotX);
+        double y = formatDoubleInput(rotY);
+        double z = formatDoubleInput(rotZ);
 
-        posX.setText(String.valueOf(object.X()));
-        posY.setText(String.valueOf(object.Y()));
-        posZ.setText(String.valueOf(object.Z()));
+        Vector3d rotation = new Vector3d(x, y, z);
+
+        scene.setObjectRotation(rotation);
+    }
+
+    @FXML
+    private void updateScale() {
+        double x = formatDoubleInput(scaleX, 1);
+        double y = formatDoubleInput(scaleY, 1);
+        double z = formatDoubleInput(scaleZ, 1);
+
+        Vector3d scale = new Vector3d(x, y, z);
+
+        scene.setObjectScale(scale);
+    }
+
+    @FXML
+    private void clearScene() {
+        scene = new Scene();
+        updateObjectInfo();
+    }
+
+    private double formatDoubleInput(TextField textField) {
+        return formatDoubleInput(textField, 0);
+    }
+
+    private double formatDoubleInput(TextField textField, double defaultValue) {
+        double doubleInput = defaultValue;
+        try {
+            doubleInput = Double.parseDouble(textField.getText());
+        } catch (NumberFormatException e) {
+            textField.setText(String.valueOf(defaultValue));
+        }
+        return doubleInput;
+    }
+
+    private void updateObjectInfo() {
+        SceneObject object = scene.getObject();
+        objectLabel.setText(object.toString());
+
+        Vector3d position = object.getPosition();
+        posX.setText(String.valueOf(position.X()));
+        posY.setText(String.valueOf(position.Y()));
+        posZ.setText(String.valueOf(position.Z()));
+
+        Vector3d rotation = object.getRotation();
+        rotX.setText(String.valueOf(rotation.X()));
+        rotY.setText(String.valueOf(rotation.Y()));
+        rotZ.setText(String.valueOf(rotation.Z()));
+
+        Vector3d scale = object.getScale();
+        scaleX.setText(String.valueOf(scale.X()));
+        scaleY.setText(String.valueOf(scale.Y()));
+        scaleZ.setText(String.valueOf(scale.Z()));
     }
 }
