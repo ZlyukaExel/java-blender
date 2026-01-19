@@ -97,8 +97,8 @@ public class TriangleRasterization {
         double x3 = pointArray[2].getX(), y3 = pointArray[2].getY(), z3 = pointArray[2].getZ();
 
         for (double y = clamp(pointArray[0].getY(), 0, height) ; y < clamp(pointArray[1].getY(), 0, height); y++) {
-            double xBoundary1 = clamp(eq01.getX(y), 0, width);
-            double xBoundary2 = clamp(eq02.getX(y), 0, width);
+            double xBoundary1 = eq01.getX(y);
+            double xBoundary2 = eq02.getX(y);
 
             if (xBoundary1 > xBoundary2) {
                 double temp = xBoundary1;
@@ -106,7 +106,7 @@ public class TriangleRasterization {
                 xBoundary2 = temp;
             }
 
-            for (double x = xBoundary1; x <= xBoundary2; x++) {
+            for (double x = clamp(xBoundary1, 0, width); x < clamp(xBoundary2, 0, width); x++) {
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
                 double z = z1 * bCoords[0] + z2 * bCoords[1] + z3 * bCoords[2];
                 if (buffer.getZ((int) Math.round(x), (int) Math.round(y)) <= z) {
@@ -115,9 +115,12 @@ public class TriangleRasterization {
 
                 Vector3d vn = interpolationVector3d(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getNormal(), pointArray[1].getNormal(), pointArray[2].getNormal());
+                vn.normalize();
 
-                Color c = interpolationColor(bCoords[0], bCoords[1], bCoords[2],
-                        pointArray[0].getColor(), pointArray[1].getColor(), pointArray[2].getColor());
+                Vector2d vt = interpolationVector2d(bCoords[0], bCoords[1], bCoords[2],
+                        pointArray[0].getTexture(), pointArray[1].getTexture(), pointArray[2].getTexture());
+
+                Color c = texture.getPixelReader().getColor((int) Math.round(vt.X()), (int) Math.round(vt.Y()));
 
                 double l = 0;
                 for (LightSource light : lightSources) {
@@ -131,8 +134,8 @@ public class TriangleRasterization {
             }
         }
         for (double y = clamp(pointArray[1].getY(), 0, height); y < clamp(pointArray[2].getY(), 0, height); y++) {
-            double xBoundary1 = clamp(eq12.getX(y), 0, width);
-            double xBoundary2 = clamp(eq02.getX(y), 0, width);
+            double xBoundary1 = eq12.getX(y);
+            double xBoundary2 = eq02.getX(y);
 
             if (xBoundary1 > xBoundary2) {
                 double temp = xBoundary1;
@@ -140,7 +143,7 @@ public class TriangleRasterization {
                 xBoundary2 = temp;
             }
 
-            for (double x = xBoundary1; x <= xBoundary2; x++) {
+            for (double x = clamp(xBoundary1, 0, width); x < clamp(xBoundary2, 0, width); x++) {
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
                 double z = z1 * bCoords[0] + z2 * bCoords[1] + z3 * bCoords[2];
                 if (buffer.getZ((int) Math.round(x), (int) Math.round(y)) <= z) {
@@ -148,6 +151,8 @@ public class TriangleRasterization {
                 }
                 Vector3d vn = interpolationVector3d(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getNormal(), pointArray[1].getNormal(), pointArray[2].getNormal());
+
+                vn.normalize();
 
                 Vector2d vt = interpolationVector2d(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getTexture(), pointArray[1].getTexture(), pointArray[2].getTexture());
@@ -249,8 +254,8 @@ public class TriangleRasterization {
         double x3 = pointArray[2].getX(), y3 = pointArray[2].getY(), z3 = pointArray[2].getZ();
 
         for (double y = clamp(pointArray[0].getY(), 0, height) ; y < clamp(pointArray[1].getY(), 0, height); y++) {
-            double xBoundary1 = clamp(eq01.getX(y), 0, width);
-            double xBoundary2 = clamp(eq02.getX(y), 0, width);
+            double xBoundary1 = eq01.getX(y);
+            double xBoundary2 = eq02.getX(y);
 
             if (xBoundary1 > xBoundary2) {
                 double temp = xBoundary1;
@@ -258,7 +263,7 @@ public class TriangleRasterization {
                 xBoundary2 = temp;
             }
 
-            for (double x = xBoundary1; x <= xBoundary2; x++) {
+            for (double x = clamp(xBoundary1, 0, width); x < clamp(xBoundary2, 0, width); x++) {
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
                 double z = z1 * bCoords[0] + z2 * bCoords[1] + z3 * bCoords[2];
                 if (buffer.getZ((int) Math.round(x), (int) Math.round(y)) <= z) {
@@ -267,6 +272,8 @@ public class TriangleRasterization {
 
                 Vector3d vn = interpolationVector3d(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getNormal(), pointArray[1].getNormal(), pointArray[2].getNormal());
+
+                vn.normalize();
 
                 Color c = interpolationColor(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getColor(), pointArray[1].getColor(), pointArray[2].getColor());
@@ -283,8 +290,8 @@ public class TriangleRasterization {
             }
         }
         for (double y = clamp(pointArray[1].getY(), 0, height); y < clamp(pointArray[2].getY(), 0, height); y++) {
-            double xBoundary1 = clamp(eq12.getX(y), 0, width);
-            double xBoundary2 = clamp(eq02.getX(y), 0, width);
+            double xBoundary1 = eq12.getX(y);
+            double xBoundary2 = eq02.getX(y);
 
             if (xBoundary1 > xBoundary2) {
                 double temp = xBoundary1;
@@ -292,7 +299,7 @@ public class TriangleRasterization {
                 xBoundary2 = temp;
             }
 
-            for (double x = xBoundary1; x <= xBoundary2; x++) {
+            for (double x = clamp(xBoundary1, 0, width); x < clamp(xBoundary2, 0, width); x++) {
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
                 double z = z1 * bCoords[0] + z2 * bCoords[1] + z3 * bCoords[2];
                 if (buffer.getZ((int) Math.round(x), (int) Math.round(y)) <= z) {
@@ -300,6 +307,8 @@ public class TriangleRasterization {
                 }
                 Vector3d vn = interpolationVector3d(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getNormal(), pointArray[1].getNormal(), pointArray[2].getNormal());
+
+                vn.normalize();
 
                 Color c = interpolationColor(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getColor(), pointArray[1].getColor(), pointArray[2].getColor());
@@ -352,25 +361,19 @@ public class TriangleRasterization {
 
     private static Vector3d interpolationVector3d(double alpha, double beta, double gamma,
                                                                Vector3d v1, Vector3d v2, Vector3d v3) {
-        double vnX = alpha * v1.X() + beta * v2.X() + gamma * v3.X();
-        double vnY = alpha * v1.Y() + beta * v2.Y() + gamma * v3.Y();
-        double vnZ = alpha * v1.Z() + beta * v2.Z() + gamma * v3.Z();
+        double vX = alpha * v1.X() + beta * v2.X() + gamma * v3.X();
+        double vY = alpha * v1.Y() + beta * v2.Y() + gamma * v3.Y();
+        double vZ = alpha * v1.Z() + beta * v2.Z() + gamma * v3.Z();
 
-        Vector3d vn = new Vector3d(vnX, vnY, vnZ);
-        vn.normalize();
-
-        return vn;
+        return new Vector3d(vX, vY, vZ);
     }
 
     private static Vector2d interpolationVector2d(double alpha, double beta, double gamma,
                                                   Vector2d v1, Vector2d v2, Vector2d v3) {
-        double vnX = alpha * v1.X() + beta * v2.X() + gamma * v3.X();
-        double vnY = alpha * v1.Y() + beta * v2.Y() + gamma * v3.Y();
+        double vX = alpha * v1.X() + beta * v2.X() + gamma * v3.X();
+        double vY = alpha * v1.Y() + beta * v2.Y() + gamma * v3.Y();
 
-        Vector2d vn = new Vector2d(vnX, vnY);
-        vn.normalize();
-
-        return vn;
+        return new Vector2d(vX, vY);
     }
 
     private static double clamp(double a, double min, double max) {
@@ -388,7 +391,7 @@ public class TriangleRasterization {
         double gamma = (x1 * y2 - x1 * y - x2 * y1 + x2 * y + x * y1 - x * y2) / det;
         double beta = (x1 * y - x1 * y3 - x * y1 + x * y3 + x3 * y1 - x3 * y) / det;
         double alpha = 1 - beta - gamma;
-        return new double[]{alpha, beta, gamma};
+        return new double[]{clamp(alpha, 0, 1), clamp(beta, 0, 1), clamp(gamma, 0, 1)};
     }
 
     static class Point {

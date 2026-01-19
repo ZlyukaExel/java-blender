@@ -72,24 +72,24 @@ public class Camera extends SceneObject {
 
         double[][] projData = new double[4][4];
 
-        projData[0][0] = f / aspectRatio;
+        projData[0][0] = f;
         projData[1][0] = 0;
         projData[2][0] = 0;
         projData[3][0] = 0;
 
         projData[0][1] = 0;
-        projData[1][1] = f;
+        projData[1][1] = f / aspectRatio;
         projData[2][1] = 0;
         projData[3][1] = 0;
 
         projData[0][2] = 0;
         projData[1][2] = 0;
-        projData[2][2] = (nearClip + farClip) * (farClip - nearClip);
+        projData[2][2] = (nearClip + farClip) / (farClip - nearClip);
         projData[3][2] = 1;
 
         projData[0][3] = 0;
         projData[1][3] = 0;
-        projData[2][3] = nearClip * farClip * (nearClip - farClip) * 2;
+        projData[2][3] = nearClip * farClip * 2 / (nearClip - farClip);
         projData[3][3] = 0;
 
         projectionMatrix = new Matrix4d(projData);
