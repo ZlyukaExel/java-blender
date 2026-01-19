@@ -21,8 +21,7 @@ public class RenderEngine {
         ZBuffer buffer = new ZBuffer(width, height);
         // TODO: iliak|17.01.2026|коэф-т k брать из сцены
         double k = 0;
-        // TODO: iliak|17.01.2026|использовать флаг из сцены
-        boolean useLight = true;
+        boolean useLight = scene.getLuminationOn();
         List<LightSource> lightSources = new ArrayList<>();
         if (useLight) {
             lightSources = scene.getLightSources();
@@ -52,11 +51,11 @@ public class RenderEngine {
         modelViewProjectionMatrix
                 .multiply(modelMatrix)
                 .multiply(viewMatrix)
-                .multiply(projectionMatrix)
+//                .multiply(projectionMatrix)
         ;
         Matrix4d normalMatrix = model.getNormalMatrix();
 
-        if (model.getMaterial().getTexture() == null) {
+        if (model.getMaterial().getTexture() == null || model.getTextureVertices().isEmpty()) {
             renderWithoutTexture(model, modelViewProjectionMatrix, normalMatrix, lightSources, k, gc, buffer, width, height);
         } else {
             renderWithTexture(model, modelViewProjectionMatrix, normalMatrix, lightSources, k, gc, buffer, width, height);

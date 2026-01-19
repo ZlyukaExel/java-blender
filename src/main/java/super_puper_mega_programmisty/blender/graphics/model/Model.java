@@ -19,7 +19,7 @@ public class Model extends SceneObject implements Transformable{
     private final List<Vector2d> textureVertices;
     private final List<Vector3d> normals;
     private final List<Polygon> polygons;
-    private final Material material;
+    private Material material;
 
     public Model() {
         this(new Material(Color.GRAY, null));
@@ -121,6 +121,10 @@ public class Model extends SceneObject implements Transformable{
 
     public void addPolygon(Polygon polygon) {
         polygons.add(polygon);
+    }
+
+    public void applyTexture(Image texture) {
+        this.material = new Material(this.getMaterial().getColor(), texture);
     }
 
     public void clear() {

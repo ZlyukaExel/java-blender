@@ -6,6 +6,8 @@ import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.camera.engine.RenderPanel;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
+import super_puper_mega_programmisty.blender.graphics.model.NormalsCalculator;
+import super_puper_mega_programmisty.blender.graphics.model.Triangulator;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 import super_puper_mega_programmisty.blender.objwriter.ObjWriter;
 
@@ -178,7 +180,7 @@ public class Scene {
             return;
         }
 
-        //model.recalculateNormals();
+        NormalsCalculator.recalculateNormals(model);
     }
 
     public void triangulate() {
@@ -191,7 +193,7 @@ public class Scene {
             return;
         }
 
-        //model.triangulate();
+        Triangulator.triangulate(model);
     }
 
     public void applyTexture(Image texture) {
@@ -204,7 +206,7 @@ public class Scene {
             return;
         }
 
-        //model.applyTexture(texture);
+        model.applyTexture(texture);
     }
 
     public void setObjectPosition(Vector3d position) {
