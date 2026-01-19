@@ -20,7 +20,7 @@ public class RenderEngine {
     public static void renderScene(GraphicsContext gc, Camera curCamera, Scene scene, int width, int height) {
         ZBuffer buffer = new ZBuffer(width, height);
         // TODO: iliak|17.01.2026|коэф-т k брать из сцены
-        double k = 0.8;
+        double k = 0;
         // TODO: iliak|17.01.2026|использовать флаг из сцены
         boolean useLight = true;
         List<LightSource> lightSources = new ArrayList<>();
@@ -49,7 +49,8 @@ public class RenderEngine {
 
         Matrix4d modelViewProjectionMatrix = new Matrix4d();
 
-        modelViewProjectionMatrix.multiply(modelMatrix)
+        modelViewProjectionMatrix
+                .multiply(modelMatrix)
                 .multiply(viewMatrix)
                 .multiply(projectionMatrix)
         ;
