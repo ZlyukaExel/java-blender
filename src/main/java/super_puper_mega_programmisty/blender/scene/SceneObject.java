@@ -7,6 +7,7 @@ import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 public abstract class SceneObject {
     protected final Transform transform = new Transform();
     private String name;
+    private boolean isActive = true;
 
     public SceneObject(String objectName) {
         name = objectName;
@@ -14,6 +15,14 @@ public abstract class SceneObject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public boolean isActive() {
+        return isActive;
     }
 
     public Matrix4d getTransformMatrix() {

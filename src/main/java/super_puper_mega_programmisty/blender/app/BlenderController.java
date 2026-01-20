@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -43,6 +44,9 @@ public class BlenderController {
 
     @FXML
     private CheckMenuItem polygonGridSwitch;
+
+    @FXML
+    private CheckBox activeSwitch;
 
     @FXML
     private void initialize() {
@@ -188,6 +192,11 @@ public class BlenderController {
         scene.setPolygonGridOn(polygonGridSwitch.isSelected());
     }
 
+    @FXML
+    private void switchActive() {
+        scene.getObject().setActive(activeSwitch.isSelected());
+    }
+
     private double formatDoubleInput(TextField textField) {
         return formatDoubleInput(textField, 0);
     }
@@ -220,6 +229,8 @@ public class BlenderController {
         scaleX.setText(String.valueOf(scale.X()));
         scaleY.setText(String.valueOf(scale.Y()));
         scaleZ.setText(String.valueOf(scale.Z()));
+
+        activeSwitch.setSelected(scene.getObject().isActive());
 
         luminationSwitch.setSelected(scene.getLuminationOn());
         polygonGridSwitch.setSelected(scene.getPolygonGridOn());
