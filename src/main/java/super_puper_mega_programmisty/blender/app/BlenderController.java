@@ -5,14 +5,13 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
-import super_puper_mega_programmisty.blender.filer.objreader.ImageReader;
+import super_puper_mega_programmisty.blender.filer.imagereader.ImageReader;
 import super_puper_mega_programmisty.blender.graphics.RenderEngine;
 import super_puper_mega_programmisty.blender.scene.SceneObject;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
@@ -21,8 +20,6 @@ import super_puper_mega_programmisty.blender.filer.objreader.ObjReader;
 import super_puper_mega_programmisty.blender.scene.Scene;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 public class BlenderController {
     private Scene scene = new Scene();
@@ -80,22 +77,7 @@ public class BlenderController {
 
     @FXML
     private void saveModel() {
-        FileChooser fileChooser = new FileChooser();
-        File defaultDirectory = new File(".");
-        fileChooser.setInitialDirectory(defaultDirectory);
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront OBJ (*.obj)", "*.obj"));
-        fileChooser.setTitle("Сохранение модели");
-
-        File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
-        if (file == null) {
-            return;
-        }
-
-        if (!file.getName().toLowerCase().endsWith(".obj")) {
-            file = new File(file.getAbsolutePath() + ".obj");
-        }
-
-        scene.saveModel(file.toPath());
+        scene.saveModel(canvas.getScene().getWindow());
     }
 
     @FXML

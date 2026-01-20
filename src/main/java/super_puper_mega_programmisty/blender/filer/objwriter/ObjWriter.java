@@ -1,11 +1,14 @@
 package super_puper_mega_programmisty.blender.filer.objwriter;
 
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import super_puper_mega_programmisty.blender.graphics.model.Polygon;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,8 +20,27 @@ public class ObjWriter {
     private static final String OBJ_NORMAL_TOKEN = "vn";
     private static final String OBJ_FACE_TOKEN = "f";
 
-    public static void write(Model model, Path path) {
+    public static void write(Model model, Window window) {
+        FileChooser fileChooser = new FileChooser();
+        File defaultDirectory = new File(".");
+        fileChooser.setInitialFileName(model.toString() + ".obj");
+        fileChooser.setInitialDirectory(defaultDirectory);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront OBJ (*.obj)", "*.obj"));
+        fileChooser.setTitle("Сохранение модели");
 
+        File file = fileChooser.showSaveDialog(window);
+        if (file == null) {
+            return;
+        }
+
+        if (!file.getName().toLowerCase().endsWith(".obj")) {
+            file = new File(file.getAbsolutePath() + ".obj");
+        }
+
+        write(model, file.toPath());
+    }
+
+    public static void write(Model model, Path path) {
         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
             int counter = 0;
             // Запись вершин

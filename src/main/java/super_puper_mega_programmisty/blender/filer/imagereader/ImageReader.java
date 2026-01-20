@@ -1,4 +1,4 @@
-package super_puper_mega_programmisty.blender.filer.objreader;
+package super_puper_mega_programmisty.blender.filer.imagereader;
 
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;

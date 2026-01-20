@@ -2,6 +2,7 @@ package super_puper_mega_programmisty.blender.scene;
 
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.stage.Window;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.camera.engine.RenderPanel;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
@@ -157,7 +158,7 @@ public class Scene {
         renderPanel.setCamera(currentCamera);
     }
 
-    public void saveModel(Path path) {
+    public void saveModel(Window window) {
         if (!(currentObject instanceof Model model)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка сохранения");
@@ -167,7 +168,7 @@ public class Scene {
             return;
         }
 
-        ObjWriter.write(model, path);
+        ObjWriter.write(model, window);
     }
 
     public void recalculateNormals() {
