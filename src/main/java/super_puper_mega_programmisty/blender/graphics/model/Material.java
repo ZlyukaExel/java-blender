@@ -6,10 +6,12 @@ import javafx.scene.paint.Color;
 public class Material {
     private final Color color;
     private final Image texture;
+    private boolean useTexture;
 
     public Material(Color color, Image texture) {
         this.color = color;
         this.texture = texture;
+        this.useTexture = texture != null;
     }
 
     public Color getColor() {
@@ -18,5 +20,13 @@ public class Material {
 
     public Image getTexture() {
         return texture;
+    }
+
+    public void setUseTexture(boolean useTexture) {
+        this.useTexture = this.texture != null && useTexture;
+    }
+
+    public boolean isUseTexture() {
+        return useTexture;
     }
 }

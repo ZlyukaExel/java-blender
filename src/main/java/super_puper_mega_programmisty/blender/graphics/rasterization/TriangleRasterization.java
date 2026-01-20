@@ -23,63 +23,6 @@ public class TriangleRasterization {
                              Image texture,
                              ZBuffer buffer,
                              int width, int height) {
-//        class LinearEquation {
-//            private final Double k;
-//            private final Double b;
-//            private static final double DELTA = 1E-6;
-//
-//            public LinearEquation(double x1, double y1, double x2, double y2) {
-//                if (Math.abs(x1 - x2) <= DELTA && Math.abs(y1 - y2) <= DELTA) {
-//                    k = null;
-//                    b = null;
-//                    return;
-//                }
-//                if (Math.abs(x1 - x2) <= DELTA) {
-//                    k = Double.MAX_VALUE;
-//                    b = x1;
-//                    return;
-//                }
-//                if (Math.abs(y1 - y2) <= DELTA) {
-//                    k = (double) 0;
-//                    b = y1;
-//                    return;
-//                }
-//
-//                if (Math.abs(x1) <= DELTA) {
-//                    b = y1;
-//                } else if (Math.abs(x2) <= DELTA) {
-//                    b = y2;
-//                } else if (Math.abs(y1) <= DELTA) {
-//                    b = (double) 0;
-//                    k = (y2 - b) / x2;
-//                    return;
-//                } else if (Math.abs(y2) <= DELTA) {
-//                    b = (double) 0;
-//                    k = (y1 - b) / x1;
-//                    return;
-//                } else {
-//                    b = (y2 * x1 - y1 * x2) / (x1 - x2);
-//                }
-//                if (Math.abs(x1) > DELTA) {
-//                    k = (y1 - b) / x1;
-//                } else {
-//                    k = (y2 - b) / x2;
-//                }
-//            }
-//
-//            public double getX(double y, double def) {
-//                if (b == null || k == null) {
-//                    return def;
-//                }
-//                if (k < DELTA) {
-//                    return b;
-//                }
-//                if (k.equals(Double.MAX_VALUE)) {
-//                    return b;
-//                }
-//                return (y - b) / k;
-//            }
-//        }
 
         int imageWidth = (int) texture.getWidth();
         int imageHeight = (int) texture.getHeight();
@@ -90,10 +33,6 @@ public class TriangleRasterization {
         Point p3 = new Point(v3, vn3, vt3, imageWidth, imageHeight);
         Point[] pointArray = new Point[]{p1, p2, p3};
         sortByY(pointArray);
-
-//        LinearEquation eq01 = new LinearEquation(pointArray[0].getX(), pointArray[0].getY(), pointArray[1].getX(), pointArray[1].getY());
-//        LinearEquation eq12 = new LinearEquation(pointArray[1].getX(), pointArray[1].getY(), pointArray[2].getX(), pointArray[2].getY());
-//        LinearEquation eq02 = new LinearEquation(pointArray[0].getX(), pointArray[0].getY(), pointArray[2].getX(), pointArray[2].getY());
 
         double x1 = pointArray[0].getX(), y1 = pointArray[0].getY(), z1 = pointArray[0].getZ();
         double x2 = pointArray[1].getX(), y2 = pointArray[1].getY(), z2 = pointArray[1].getZ();
@@ -108,15 +47,6 @@ public class TriangleRasterization {
         }
 
         for (double y = (int) clamp(pointArray[0].getY(), 0, height) ; y < clamp(pointArray[1].getY(), 0, height); y++) {
-//            double xBoundary1 = eq01.getX(y, Double.MIN_VALUE);
-//            double xBoundary2 = eq02.getX(y, Double.MIN_VALUE);
-//
-//            if (xBoundary1 > xBoundary2) {
-//                double temp = xBoundary1;
-//                xBoundary1 = xBoundary2;
-//                xBoundary2 = temp;
-//            }
-
             for (double x = (int) minX; x < maxX; x++) {
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
                 double z = z1 * bCoords[0] + z2 * bCoords[1] + z3 * bCoords[2];
@@ -127,31 +57,23 @@ public class TriangleRasterization {
                     continue;
                 }
 
-                Vector3d vn = interpolationVector3d(bCoords[0], bCoords[1], bCoords[2],
-                        pointArray[0].getNormal(), pointArray[1].getNormal(), pointArray[2].getNormal());
-                vn.normalize();
-
                 Vector2d vt = interpolationVector2d(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getTexture(), pointArray[1].getTexture(), pointArray[2].getTexture());
 
                 Color c = texture.getPixelReader().getColor((int) Math.round(vt.X()), (int) Math.round(vt.Y()));
 
-                c = applyLight(c, lightSources, new Vector3d(x, y, z), vn);
+                if (!lightSources.isEmpty()) {
+                    Vector3d vn = interpolationVector3d(bCoords[0], bCoords[1], bCoords[2],
+                            pointArray[0].getNormal(), pointArray[1].getNormal(), pointArray[2].getNormal());
+                    vn.normalize();
+                    c = applyLight(c, lightSources, new Vector3d(x, y, z), vn);
+                }
 
                 pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
                 buffer.setZ((int) Math.round(x), (int) Math.round(y), z);
             }
         }
         for (double y = (int) clamp(pointArray[1].getY(), 0, height) ; y < clamp(pointArray[2].getY(), 0, height); y++) {
-//            double xBoundary1 = eq12.getX(y, Double.MIN_VALUE);
-//            double xBoundary2 = eq02.getX(y, Double.MIN_VALUE);
-//
-//            if (xBoundary1 > xBoundary2) {
-//                double temp = xBoundary1;
-//                xBoundary1 = xBoundary2;
-//                xBoundary2 = temp;
-//            }
-
             for (double x = (int) minX; x < maxX; x++) {
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
                 if ((bCoords[0] + bCoords[1] + bCoords[2]) - 1 > 1E-4) {
@@ -161,18 +83,18 @@ public class TriangleRasterization {
                 if (buffer.getZ((int) Math.round(x), (int) Math.round(y)) <= z) {
                     continue;
                 }
-                Vector3d vn = interpolationVector3d(bCoords[0], bCoords[1], bCoords[2],
-                        pointArray[0].getNormal(), pointArray[1].getNormal(), pointArray[2].getNormal());
-
-                vn.normalize();
 
                 Vector2d vt = interpolationVector2d(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getTexture(), pointArray[1].getTexture(), pointArray[2].getTexture());
 
                 Color c = texture.getPixelReader().getColor((int) Math.round(vt.X()), (int) Math.round(vt.Y()));
 
-                c = applyLight(c, lightSources, new Vector3d(x, y, z), vn);
-
+                if (!lightSources.isEmpty()) {
+                    Vector3d vn = interpolationVector3d(bCoords[0], bCoords[1], bCoords[2],
+                            pointArray[0].getNormal(), pointArray[1].getNormal(), pointArray[2].getNormal());
+                    vn.normalize();
+                    c = applyLight(c, lightSources, new Vector3d(x, y, z), vn);
+                }
                 pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
                 buffer.setZ((int) Math.round(x), (int) Math.round(y), z);
             }
@@ -188,64 +110,6 @@ public class TriangleRasterization {
                              javafx.scene.paint.Color c3,
                              ZBuffer buffer,
                              int width, int height) {
-//        class LinearEquation {
-//            private final Double k;
-//            private final Double b;
-//            private static final double DELTA = 1E-4;
-//
-//            public LinearEquation(double x1, double y1, double x2, double y2) {
-//                if (Math.abs(x1 - x2) <= DELTA && Math.abs(y1 - y2) <= DELTA) {
-//                    k = null;
-//                    b = null;
-//                    return;
-//                }
-//                if (Math.abs(x1 - x2) <= DELTA) {
-//                    k = Double.MAX_VALUE;
-//                    b = x1;
-//                    return;
-//                }
-//                if (Math.abs(y1 - y2) <= DELTA) {
-//                    k = (double) 0;
-//                    b = y1;
-//                    return;
-//                }
-//
-//                if (Math.abs(x1) <= DELTA) {
-//                    b = y1;
-//                } else if (Math.abs(x2) <= DELTA) {
-//                    b = y2;
-//                } else if (Math.abs(y1) <= DELTA) {
-//                    b = (double) 0;
-//                    k = (y2 - b) / x2;
-//                    return;
-//                } else if (Math.abs(y2) <= DELTA) {
-//                    b = (double) 0;
-//                    k = (y1 - b) / x1;
-//                    return;
-//                } else {
-//                    b = (y2 * x1 - y1 * x2) / (x1 - x2);
-//                }
-//                if (Math.abs(x1) > DELTA) {
-//                    k = (y1 - b) / x1;
-//                } else {
-//                    k = (y2 - b) / x2;
-//                }
-//            }
-//
-//            public double getX(double y) {
-//                if (k < DELTA) {
-//                    return b;
-//                }
-//                if (k.equals(Double.MAX_VALUE)) {
-//                    return b;
-//                }
-//                return (y - b) / k;
-//            }
-//
-//            public boolean doesExist() {
-//                return b != null && k != null;
-//            }
-//        }
 
         PixelWriter pixelWriter = gc.getPixelWriter();
         Point p1 = new Point(v1, vn1, c1);
@@ -253,15 +117,6 @@ public class TriangleRasterization {
         Point p3 = new Point(v3, vn3, c3);
         Point[] pointArray = new Point[]{p1, p2, p3};
         sortByY(pointArray);
-
-//        LinearEquation eq01 = new LinearEquation(pointArray[0].getX(), pointArray[0].getY(), pointArray[1].getX(), pointArray[1].getY());
-//        LinearEquation eq12 = new LinearEquation(pointArray[1].getX(), pointArray[1].getY(), pointArray[2].getX(), pointArray[2].getY());
-//        LinearEquation eq02 = new LinearEquation(pointArray[0].getX(), pointArray[0].getY(), pointArray[2].getX(), pointArray[2].getY());
-
-        // когда 2 точки равны
-//        if (!eq01.doesExist() || !eq02.doesExist() || !eq12.doesExist()) {
-//            return;
-//        }
 
         double x1 = pointArray[0].getX(), y1 = pointArray[0].getY(), z1 = pointArray[0].getZ();
         double x2 = pointArray[1].getX(), y2 = pointArray[1].getY(), z2 = pointArray[1].getZ();
@@ -278,23 +133,6 @@ public class TriangleRasterization {
         }
 
         for (double y = (int) clamp(pointArray[0].getY(), 0, height) ; y < clamp(pointArray[1].getY(), 0, height); y++) {
-//            double xBoundary1 = minX;
-//            double xBoundary2 = maxX;
-
-//            if (eq02.k.equals(Double.MAX_VALUE)) {
-//                return;
-//            }
-//
-//            if (eq01.k.equals(Double.MAX_VALUE)) {
-//                break;
-//            }
-
-//            if (xBoundary1 > xBoundary2) {
-//                double temp = xBoundary1;
-//                xBoundary1 = xBoundary2;
-//                xBoundary2 = temp;
-//            }
-
             for (double x = (int) minX; x < maxX; x++) {
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
                 if ((bCoords[0] + bCoords[1] + bCoords[2]) - 1 > 1E-4) {
@@ -305,30 +143,21 @@ public class TriangleRasterization {
                     continue;
                 }
 
-                Vector3d vn = interpolationVector3d(bCoords[0], bCoords[1], bCoords[2],
-                        pointArray[0].getNormal(), pointArray[1].getNormal(), pointArray[2].getNormal());
-
-                vn.normalize();
-
                 Color c = interpolationColor(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getColor(), pointArray[1].getColor(), pointArray[2].getColor());
 
-                c = applyLight(c, lightSources, new Vector3d(x, y, z), vn);
+                if (!lightSources.isEmpty()) {
+                    Vector3d vn = interpolationVector3d(bCoords[0], bCoords[1], bCoords[2],
+                            pointArray[0].getNormal(), pointArray[1].getNormal(), pointArray[2].getNormal());
+                    vn.normalize();
+                    c = applyLight(c, lightSources, new Vector3d(x, y, z), vn);
+                }
 
                 pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
                 buffer.setZ((int) Math.round(x), (int) Math.round(y), z);
             }
         }
         for (double y = (int) clamp(pointArray[1].getY(), 0, height); y < clamp(pointArray[2].getY(), 0, height); y++) {
-//            double xBoundary1 = eq12.getX(y);
-//            double xBoundary2 = eq02.getX(y);
-//
-//            if (xBoundary1 > xBoundary2) {
-//                double temp = xBoundary1;
-//                xBoundary1 = xBoundary2;
-//                xBoundary2 = temp;
-//            }
-
             for (double x = (int) minX; x <= maxX; x++) {
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
                 if ((bCoords[0] + bCoords[1] + bCoords[2]) - 1 > 1E-4) {
@@ -338,15 +167,16 @@ public class TriangleRasterization {
                 if (buffer.getZ((int) Math.round(x), (int) Math.round(y)) <= z) {
                     continue;
                 }
-                Vector3d vn = interpolationVector3d(bCoords[0], bCoords[1], bCoords[2],
-                        pointArray[0].getNormal(), pointArray[1].getNormal(), pointArray[2].getNormal());
-
-                vn.normalize();
-
                 Color c = interpolationColor(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getColor(), pointArray[1].getColor(), pointArray[2].getColor());
 
-                c = applyLight(c, lightSources, new Vector3d(x, y, z), vn);
+                if (!lightSources.isEmpty()) {
+                    Vector3d vn = interpolationVector3d(bCoords[0], bCoords[1], bCoords[2],
+                            pointArray[0].getNormal(), pointArray[1].getNormal(), pointArray[2].getNormal());
+                    vn.normalize();
+                    c = applyLight(c, lightSources, new Vector3d(x, y, z), vn);
+                }
+
                 pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
                 buffer.setZ((int) Math.round(x), (int) Math.round(y), z);
             }
@@ -437,16 +267,6 @@ public class TriangleRasterization {
                                     double x1, double y1,
                                     double x2, double y2,
                                     double x3, double y3) {
-//        double det = (x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3);
-//        double gamma = 1;
-//        double beta = 1;
-//        double alpha = 1;
-//        if (det >= 1E-4) {
-//            gamma = (x1 * y2 - x1 * y - x2 * y1 + x2 * y + x * y1 - x * y2) / det;
-//            beta = (x1 * y - x1 * y3 - x * y1 + x * y3 + x3 * y1 - x3 * y) / det;
-//            alpha = 1 - beta - gamma;
-//        }
-
         double areaABC = Math.abs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2;
         double areaPBC = Math.abs(x * (y2 - y3) + x2 * (y3 - y) + x3 * (y - y2)) / 2;
         double areaAPC = Math.abs(x1 * (y - y3) + x * (y3 - y1) + x3 * (y1 - y)) / 2;

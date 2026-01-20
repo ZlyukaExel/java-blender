@@ -20,7 +20,7 @@ public class Camera extends SceneObject {
 
     public Camera() {
         super("Камера");
-        this.position = new Vector3d(0.0, 0.0, 5.0);
+        this.position = new Vector3d(0.0, 0.0, 500.0);
         this.target = new Vector3d(0.0, 0.0, 0.0);
         this.up = new Vector3d(0.0, 1.0, 0.0);
 
@@ -34,9 +34,10 @@ public class Camera extends SceneObject {
     }
 
     private void updateViewMatrix() {
-        Vector3d zAxis = (Vector3d) position.subVector(target).normalize();
+        Vector3d zAxis = new Vector3d(position);
+        zAxis.subVector(target).normalize();
         Vector3d xAxis = (Vector3d) up.cross(zAxis).normalize();
-        Vector3d yAxis = (Vector3d) zAxis.cross(xAxis).normalize();
+        Vector3d yAxis = (Vector3d) zAxis.cross(xAxis);
 
         double[][] viewData = new double[4][4];
 
@@ -72,20 +73,20 @@ public class Camera extends SceneObject {
 
         double[][] projData = new double[4][4];
 
-        projData[0][0] = f;
+        projData[0][0] = f / aspectRatio;
         projData[1][0] = 0;
         projData[2][0] = 0;
         projData[3][0] = 0;
 
         projData[0][1] = 0;
-        projData[1][1] = f / aspectRatio;
+        projData[1][1] = f;
         projData[2][1] = 0;
         projData[3][1] = 0;
 
         projData[0][2] = 0;
         projData[1][2] = 0;
         projData[2][2] = (nearClip + farClip) / (farClip - nearClip);
-        projData[3][2] = 1;
+        projData[3][2] = -1;
 
         projData[0][3] = 0;
         projData[1][3] = 0;
