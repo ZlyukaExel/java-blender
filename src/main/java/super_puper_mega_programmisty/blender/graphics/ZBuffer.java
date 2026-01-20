@@ -4,7 +4,7 @@ public class ZBuffer {
     private final double [][] elementsData;
 
     public ZBuffer(int width, int height) {
-        elementsData = new double[height][width];
+        elementsData = new double[width][height];
         clearBuffer();
     }
 
