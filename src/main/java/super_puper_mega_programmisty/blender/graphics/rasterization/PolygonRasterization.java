@@ -24,7 +24,6 @@ public class PolygonRasterization extends TriangleRasterization {
     public static void drawPolygon(GraphicsContext gc, List<Vector3d> vertices, List<Vector3d> normals,
                                    Color color,
                                    List<LightSource> lightSources,
-                                   double k,
                                    ZBuffer buffer, int width, int height) {
         for (int i = 1; i < vertices.size() - 1; i++) {
             Vector3d v1 = vertices.getFirst();
@@ -39,7 +38,6 @@ public class PolygonRasterization extends TriangleRasterization {
                     vn1, vn2, vn3,
                     lightSources,
                     color, color, color,
-                    k,
                     buffer,
                     width, height
             );
@@ -53,7 +51,6 @@ public class PolygonRasterization extends TriangleRasterization {
      * @param normals нормали
      * @param textures текстуры
      * @param lightSources источники света
-     * @param k коэфициент освещенности
      * @param texture текстура
      * @param buffer Z-буффер
      * @param width ширина экрана
@@ -63,7 +60,6 @@ public class PolygonRasterization extends TriangleRasterization {
                                    List<Vector3d> normals,
                                    List<Vector2d> textures,
                                    List<LightSource> lightSources,
-                                   double k,
                                    Image texture, ZBuffer buffer, int width, int height) {
         for (int i = 1; i < vertices.size() - 1; i++) {
             Vector3d v1 = vertices.getFirst();
@@ -82,7 +78,6 @@ public class PolygonRasterization extends TriangleRasterization {
                     vt1, vt2, vt3,
                     lightSources,
                     texture,
-                    k,
                     buffer,
                     width, height
             );

@@ -19,15 +19,13 @@ import java.util.List;
 public class RenderEngine {
     public static void renderScene(GraphicsContext gc, Camera curCamera, Scene scene, int width, int height) {
         ZBuffer buffer = new ZBuffer(width, height);
-        // TODO: iliak|17.01.2026|коэф-т k брать из сцены
-        double k = 0;
         boolean useLight = scene.getLuminationOn();
         List<LightSource> lightSources = new ArrayList<>();
         if (useLight) {
             lightSources = scene.getLightSources();
         }
         for (Model model : scene.getModels()) {
-            renderModel(gc, curCamera, model, lightSources, buffer, k, width, height);
+            renderModel(gc, curCamera, model, lightSources, buffer, width, height);
         }
     }
 
@@ -37,7 +35,6 @@ public class RenderEngine {
             final Model model,
             List<LightSource> lightSources,
             ZBuffer buffer,
-            double k,
             final int width,
             final int height) {
         // TODO: iliak|16.01.2026|информацию о матрицах нужно будет брать из объектов модели и камеры, пока невозможно
@@ -56,9 +53,9 @@ public class RenderEngine {
         Matrix4d normalMatrix = model.getNormalMatrix();
 
         if (model.getMaterial().getTexture() == null || model.getTextureVertices().isEmpty()) {
-            renderWithoutTexture(model, modelViewProjectionMatrix, normalMatrix, lightSources, k, gc, buffer, width, height);
+            renderWithoutTexture(model, modelViewProjectionMatrix, normalMatrix, lightSources, gc, buffer, width, height);
         } else {
-            renderWithTexture(model, modelViewProjectionMatrix, normalMatrix, lightSources, k, gc, buffer, width, height);
+            renderWithTexture(model, modelViewProjectionMatrix, normalMatrix, lightSources, gc, buffer, width, height);
         }
 
 
@@ -68,7 +65,6 @@ public class RenderEngine {
                                              Matrix4d MVPMatrix,
                                              Matrix4d normalMatrix,
                                              List<LightSource> lightSources,
-                                             double k,
                                              GraphicsContext gc,
                                              ZBuffer buffer,
                                              int width,
@@ -89,7 +85,7 @@ public class RenderEngine {
 
             Color color = model.getMaterial().getColor();
 
-            PolygonRasterization.drawPolygon(gc, vertices, normalVertices, color, lightSources, k, buffer, width, height);
+            PolygonRasterization.drawPolygon(gc, vertices, normalVertices, color, lightSources, buffer, width, height);
         }
     }
 
@@ -97,7 +93,6 @@ public class RenderEngine {
                                           Matrix4d MVPMatrix,
                                           Matrix4d normalMatrix,
                                           List<LightSource> lightSources,
-                                          double k,
                                           GraphicsContext gc,
                                           ZBuffer buffer,
                                           int width,
@@ -119,7 +114,7 @@ public class RenderEngine {
 
             Image texture = model.getMaterial().getTexture();
 
-            PolygonRasterization.drawPolygon(gc, vertices, normals, textureVertices, lightSources, k, texture, buffer, width, height);
+            PolygonRasterization.drawPolygon(gc, vertices, normals, textureVertices, lightSources, texture, buffer, width, height);
         }
     }
 }

@@ -20,7 +20,6 @@ public class TriangleRasterization {
                              Vector2d vt1, Vector2d vt2, Vector2d vt3,
                              List<LightSource> lightSources,
                              Image texture,
-                             double k,
                              ZBuffer buffer,
                              int width, int height) {
 //        class LinearEquation {
@@ -136,12 +135,7 @@ public class TriangleRasterization {
 
                 Color c = texture.getPixelReader().getColor((int) Math.round(vt.X()), (int) Math.round(vt.Y()));
 
-                double l = 0;
-                for (LightSource light : lightSources) {
-                    // TODO: iliak|17.01.2026|дописать логику освещения
-                }
-
-                c = addLight(c, l, k);
+                c = applyLight(c, lightSources, new Vector3d(x, y, z), vn);
 
                 pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
                 buffer.setZ((int) Math.round(x), (int) Math.round(y), z);
@@ -176,12 +170,9 @@ public class TriangleRasterization {
 
                 Color c = texture.getPixelReader().getColor((int) Math.round(vt.X()), (int) Math.round(vt.Y()));
 
-                double l = 0;
-                for (LightSource light : lightSources) {
-                    // TODO: iliak|17.01.2026|дописать логику освещения
-                }
+                c = applyLight(c, lightSources, new Vector3d(x, y, z), vn);
 
-                c = addLight(c, l, k);pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
+                pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
                 buffer.setZ((int) Math.round(x), (int) Math.round(y), z);
             }
         }
@@ -194,7 +185,6 @@ public class TriangleRasterization {
                              javafx.scene.paint.Color c1,
                              javafx.scene.paint.Color c2,
                              javafx.scene.paint.Color c3,
-                             double k,
                              ZBuffer buffer,
                              int width, int height) {
 //        class LinearEquation {
@@ -286,7 +276,7 @@ public class TriangleRasterization {
             return;
         }
 
-        for (double y = clamp(pointArray[0].getY(), 0, height) ; y < clamp(pointArray[1].getY(), 0, height); y++) {
+        for (double y = (int) clamp(pointArray[0].getY(), 0, height) ; y < clamp(pointArray[1].getY(), 0, height); y++) {
 //            double xBoundary1 = minX;
 //            double xBoundary2 = maxX;
 
@@ -304,7 +294,7 @@ public class TriangleRasterization {
 //                xBoundary2 = temp;
 //            }
 
-            for (double x = minX; x < maxX; x++) {
+            for (double x = (int) minX; x < maxX; x++) {
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
                 if ((bCoords[0] + bCoords[1] + bCoords[2]) - 1 > 1E-4) {
                     continue;
@@ -322,18 +312,13 @@ public class TriangleRasterization {
                 Color c = interpolationColor(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getColor(), pointArray[1].getColor(), pointArray[2].getColor());
 
-                double l = 0;
-                for (LightSource light : lightSources) {
-                    // TODO: iliak|17.01.2026|дописать логику освещения
-                }
-
-                c = addLight(c, l, k);
+                c = applyLight(c, lightSources, new Vector3d(x, y, z), vn);
 
                 pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
                 buffer.setZ((int) Math.round(x), (int) Math.round(y), z);
             }
         }
-        for (double y = clamp(pointArray[1].getY(), 0, height); y < clamp(pointArray[2].getY(), 0, height); y++) {
+        for (double y = (int) clamp(pointArray[1].getY(), 0, height); y < clamp(pointArray[2].getY(), 0, height); y++) {
 //            double xBoundary1 = eq12.getX(y);
 //            double xBoundary2 = eq02.getX(y);
 //
@@ -343,7 +328,7 @@ public class TriangleRasterization {
 //                xBoundary2 = temp;
 //            }
 
-            for (double x = minX; x <= maxX; x++) {
+            for (double x = (int) minX; x <= maxX; x++) {
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
                 if ((bCoords[0] + bCoords[1] + bCoords[2]) - 1 > 1E-4) {
                     continue;
@@ -360,23 +345,31 @@ public class TriangleRasterization {
                 Color c = interpolationColor(bCoords[0], bCoords[1], bCoords[2],
                         pointArray[0].getColor(), pointArray[1].getColor(), pointArray[2].getColor());
 
-                double l = 0;
-                for (LightSource light : lightSources) {
-                    // TODO: iliak|17.01.2026|дописать логику освещения
-                }
-
-                c = addLight(c, l, k);pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
+                c = applyLight(c, lightSources, new Vector3d(x, y, z), vn);
+                pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
                 buffer.setZ((int) Math.round(x), (int) Math.round(y), z);
             }
         }
     }
 
-    private static Color addLight(Color c, double l, double k) {
-        double red = c.getRed() * (1 - k) + c.getRed() * k * l;
-        double blue = c.getBlue() * (1 - k) + c.getBlue() * k * l;
-        double green = c.getGreen() * (1 - k) + c.getGreen() * k * l;
+    private static Color applyLight(Color c, List<LightSource> lightSources, Vector3d point, Vector3d vn) {
+        Vector3d color = new Vector3d(c.getRed(), c.getGreen(), c.getBlue());
+        double ambient = 0.1;  // TODO: iliak|20.01.2026|магическое число - эмбиент
+        for (LightSource light : lightSources) {
+            double diffuse = calculateDiffuse(light.getPosition(), point, vn);
+            double result = ambient + diffuse;
 
-        return new Color(red, green, blue, 1);
+            color.multiplyByScalar(result);
+        }
+
+        return new Color(color.X(), color.Y(), color.Z(), 1);
+    }
+
+    private static double calculateDiffuse(Vector3d light, Vector3d point, Vector3d normal) {
+        Vector3d lightVector = new Vector3d((Vector3d) light.subVector(point));
+        lightVector.normalize();
+
+        return Math.max(normal.dot(lightVector), 0);
     }
 
     private static void sortByY(Point[] array) {
