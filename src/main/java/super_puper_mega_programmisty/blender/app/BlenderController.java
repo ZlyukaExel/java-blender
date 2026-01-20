@@ -5,11 +5,10 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import super_puper_mega_programmisty.blender.filer.imagereader.ImageReader;
 import super_puper_mega_programmisty.blender.graphics.RenderEngine;
@@ -18,8 +17,6 @@ import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 import super_puper_mega_programmisty.blender.filer.objreader.ObjReader;
 import super_puper_mega_programmisty.blender.scene.Scene;
-
-import java.io.File;
 
 public class BlenderController {
     private Scene scene = new Scene();
@@ -42,7 +39,10 @@ public class BlenderController {
     private TextField scaleX, scaleY, scaleZ;
 
     @FXML
-    private CheckBox luminationSwitch;
+    private CheckMenuItem luminationSwitch;
+
+    @FXML
+    private CheckMenuItem polygonGridSwitch;
 
     @FXML
     private void initialize() {
@@ -183,6 +183,11 @@ public class BlenderController {
         scene.setLuminationOn(luminationSwitch.isSelected());
     }
 
+    @FXML
+    private void switchPolygonGrid() {
+        scene.setPolygonGridOn(polygonGridSwitch.isSelected());
+    }
+
     private double formatDoubleInput(TextField textField) {
         return formatDoubleInput(textField, 0);
     }
@@ -217,5 +222,6 @@ public class BlenderController {
         scaleZ.setText(String.valueOf(scale.Z()));
 
         luminationSwitch.setSelected(scene.getLuminationOn());
+        polygonGridSwitch.setSelected(scene.getPolygonGridOn());
     }
 }

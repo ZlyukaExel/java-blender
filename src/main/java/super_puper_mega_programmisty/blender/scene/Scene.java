@@ -23,6 +23,7 @@ public class Scene {
     private SceneObject currentObject;
     private Camera currentCamera;
     private boolean luminationOn = false;
+    private boolean polygonGridOn = false;
 
     private final RenderPanel renderPanel;
 
@@ -225,6 +226,10 @@ public class Scene {
         luminationOn = isOn;
     }
 
+    public void setPolygonGridOn(boolean isOn) {
+        polygonGridOn = isOn;
+    }
+
     public Camera getCurrentCamera() {
         return currentCamera;
     }
@@ -244,4 +249,9 @@ public class Scene {
     public boolean getLuminationOn() {
         return luminationOn;
     }
+
+    public boolean getPolygonGridOn() {
+        return polygonGridOn;
+    }
 }
+

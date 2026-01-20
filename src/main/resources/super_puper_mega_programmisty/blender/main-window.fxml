@@ -4,8 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import super_puper_mega_programmisty.blender.app.*?>
 
-<?import super_puper_mega_programmisty.blender.app.ScrollableDoubleField?>
 <BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="super_puper_mega_programmisty.blender.app.BlenderController">
     <top>
@@ -40,6 +40,14 @@
                         <MenuItem mnemonicParsing="false" onAction="#prevCamera" text="Предыдущая"/>
                     </items>
                 </Menu>
+                <Menu mnemonicParsing="false" text="Сцена">
+                    <items>
+                        <CheckMenuItem fx:id="luminationSwitch" mnemonicParsing="false" onAction="#switchLumination"
+                                       text="Применять освещение"/>
+                        <CheckMenuItem fx:id="polygonGridSwitch" mnemonicParsing="false" onAction="#switchPolygonGrid"
+                                       text="Показывать полигональную сетку"/>
+                    </items>
+                </Menu>
             </menus>
         </MenuBar>
     </top>
@@ -70,13 +78,16 @@
                 <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0">
                     <children>
                         <Label prefWidth="15" text="X"/>
-                        <ScrollableDoubleField fx:id="rotX" alignment="CENTER" onAction="#updateRotation" prefWidth="40"/>
+                        <ScrollableDoubleField fx:id="rotX" alignment="CENTER" onAction="#updateRotation"
+                                               prefWidth="40"/>
                         <Separator orientation="VERTICAL" prefWidth="10" visible="false"/>
                         <Label prefWidth="15" text="Y"/>
-                        <ScrollableDoubleField fx:id="rotY" alignment="CENTER" onAction="#updateRotation" prefWidth="40"/>
+                        <ScrollableDoubleField fx:id="rotY" alignment="CENTER" onAction="#updateRotation"
+                                               prefWidth="40"/>
                         <Separator orientation="VERTICAL" prefWidth="10" visible="false"/>
                         <Label prefWidth="15" text="Z"/>
-                        <ScrollableDoubleField fx:id="rotZ" alignment="CENTER" onAction="#updateRotation" prefWidth="40"/>
+                        <ScrollableDoubleField fx:id="rotZ" alignment="CENTER" onAction="#updateRotation"
+                                               prefWidth="40"/>
                     </children>
                 </HBox>
                 <Separator layoutX="10.0" layoutY="75.0" prefHeight="5" visible="false"/>
@@ -84,17 +95,18 @@
                 <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0">
                     <children>
                         <Label prefWidth="15" text="X"/>
-                        <ScrollableDoubleField fx:id="scaleX" alignment="CENTER" onAction="#updateScale" prefWidth="40" text="1"/>
+                        <ScrollableDoubleField fx:id="scaleX" alignment="CENTER" onAction="#updateScale" prefWidth="40"
+                                               text="1"/>
                         <Separator orientation="VERTICAL" prefWidth="10" visible="false"/>
                         <Label prefWidth="15" text="Y"/>
-                        <ScrollableDoubleField fx:id="scaleY" alignment="CENTER" onAction="#updateScale" prefWidth="40" text="1"/>
+                        <ScrollableDoubleField fx:id="scaleY" alignment="CENTER" onAction="#updateScale" prefWidth="40"
+                                               text="1"/>
                         <Separator orientation="VERTICAL" prefWidth="10" visible="false"/>
                         <Label prefWidth="15" text="Z"/>
-                        <ScrollableDoubleField fx:id="scaleZ" alignment="CENTER" onAction="#updateScale" prefWidth="40" text="1"/>
+                        <ScrollableDoubleField fx:id="scaleZ" alignment="CENTER" onAction="#updateScale" prefWidth="40"
+                                               text="1"/>
                     </children>
                 </HBox>
-                <Separator prefHeight="20" visible="false"/>
-                <CheckBox mnemonicParsing="false" text="Применять освещение" underline="true" onAction="#switchLumination" fx:id="luminationSwitch"/>
             </children>
         </VBox>
     </right>
