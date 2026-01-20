@@ -7,12 +7,11 @@ import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.camera.engine.RenderPanel;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
-import super_puper_mega_programmisty.blender.graphics.model.NormalsCalculator;
-import super_puper_mega_programmisty.blender.graphics.model.Triangulator;
+import super_puper_mega_programmisty.blender.graphics.model.utils.NormalsCalculator;
+import super_puper_mega_programmisty.blender.graphics.model.utils.Triangulator;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 import super_puper_mega_programmisty.blender.filer.objwriter.ObjWriter;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 

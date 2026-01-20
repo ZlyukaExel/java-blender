@@ -4,7 +4,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
-import super_puper_mega_programmisty.blender.graphics.model.NormalsCalculator;
+import super_puper_mega_programmisty.blender.graphics.model.utils.NormalsCalculator;
 import super_puper_mega_programmisty.blender.graphics.model.Polygon;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;

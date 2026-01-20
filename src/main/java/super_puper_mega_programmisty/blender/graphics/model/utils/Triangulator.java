@@ -1,4 +1,7 @@
-package super_puper_mega_programmisty.blender.graphics.model;
+package super_puper_mega_programmisty.blender.graphics.model.utils;
+
+import super_puper_mega_programmisty.blender.graphics.model.Model;
+import super_puper_mega_programmisty.blender.graphics.model.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;

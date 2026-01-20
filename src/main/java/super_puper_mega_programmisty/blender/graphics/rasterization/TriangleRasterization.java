@@ -4,11 +4,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
-import org.w3c.dom.Text;
 import super_puper_mega_programmisty.blender.graphics.ZBuffer;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix3d;
-import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
@@ -17,6 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class TriangleRasterization {
+    // TODO: iliak|20.01.2026|МОЖНО ОПТИМИЗИРОВАТЬ, ПРИЧЕМ СИЛЬНО
     static void fillTriangle(GraphicsContext gc, Vector3d v1, Vector3d v2, Vector3d v3,
                              Vector3d vn1, Vector3d vn2, Vector3d vn3,
                              Vector2d vt1, Vector2d vt2, Vector2d vt3,
