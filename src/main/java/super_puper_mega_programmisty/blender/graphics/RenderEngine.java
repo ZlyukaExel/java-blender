@@ -37,7 +37,6 @@ public class RenderEngine {
             ZBuffer buffer,
             final int width,
             final int height) {
-        // TODO: iliak|16.01.2026|информацию о матрицах нужно будет брать из объектов модели и камеры, пока невозможно
         Matrix4d modelMatrix = model.getTransformMatrix();
         Matrix4d viewMatrix = camera.getViewMatrix();
         Matrix4d projectionMatrix = camera.getProjectionMatrix();

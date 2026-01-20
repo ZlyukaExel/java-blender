@@ -1,7 +1,7 @@
 package super_puper_mega_programmisty.blender.graphics;
 
 public class ZBuffer {
-    private final double [][] elementsData;
+    final double [][] elementsData;
 
     public ZBuffer(int width, int height) {
         elementsData = new double[width][height];

@@ -7,6 +7,8 @@ import javafx.scene.paint.Color;
 import org.w3c.dom.Text;
 import super_puper_mega_programmisty.blender.graphics.ZBuffer;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
+import super_puper_mega_programmisty.blender.math.matrix.Matrix3d;
+import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
@@ -358,11 +360,20 @@ public class TriangleRasterization {
         for (LightSource light : lightSources) {
             double diffuse = calculateDiffuse(light.getPosition(), point, vn);
             double result = ambient + diffuse;
-
-            color.multiplyByScalar(result);
+            Color lightColor = light.getLightColor();
+            Matrix3d matrixColor = new Matrix3d(new double[][] {
+                    {lightColor.getRed() * result, 0, 0},
+                    {0, lightColor.getGreen() * result, 0},
+                    {0, 0, lightColor.getBlue() * result}
+            });
+            color = (Vector3d) matrixColor.multiply(color);
         }
 
-        return new Color(color.X(), color.Y(), color.Z(), 1);
+        double red = clamp(color.X(), 0, 1);
+        double green = clamp(color.Y(), 0, 1);
+        double blue = clamp(color.Z(), 0, 1);
+
+        return new Color(red, green, blue, 1);
     }
 
     private static double calculateDiffuse(Vector3d light, Vector3d point, Vector3d normal) {
