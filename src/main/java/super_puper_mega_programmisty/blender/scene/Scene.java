@@ -9,7 +9,7 @@ import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.graphics.model.NormalsCalculator;
 import super_puper_mega_programmisty.blender.graphics.model.Triangulator;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
-import super_puper_mega_programmisty.blender.objwriter.ObjWriter;
+import super_puper_mega_programmisty.blender.filer.objwriter.ObjWriter;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

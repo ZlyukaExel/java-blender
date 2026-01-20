@@ -1,4 +1,4 @@
-package super_puper_mega_programmisty.blender.objwriter;
+package super_puper_mega_programmisty.blender.filer.objwriter;
 
 import super_puper_mega_programmisty.blender.graphics.model.Polygon;
 import super_puper_mega_programmisty.blender.graphics.model.Model;

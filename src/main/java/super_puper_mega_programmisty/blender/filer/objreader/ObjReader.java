@@ -1,5 +1,8 @@
-package super_puper_mega_programmisty.blender.objreader;
+package super_puper_mega_programmisty.blender.filer.objreader;
 
+import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.graphics.model.NormalsCalculator;
 import super_puper_mega_programmisty.blender.graphics.model.Polygon;
@@ -7,12 +10,41 @@ import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
 public class ObjReader {
+
+    public static Model getModel(Window window) {
+        FileChooser fileChooser = new FileChooser();
+        File defaultDirectory = new File(".");
+        fileChooser.setInitialDirectory(defaultDirectory);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
+        fileChooser.setTitle("Загрузка модели");
+
+        File file = fileChooser.showOpenDialog(window);
+        if (file == null) {
+            return null;
+        }
+
+        Path path = Path.of(file.getAbsolutePath());
+
+        try {
+            Model model = read(path);
+            model.setName(getFileNameWithoutExtension(path));
+            return model;
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка загрузки");
+            alert.setHeaderText("Не удалось загрузить модель");
+            alert.setContentText("Проверьте файл и попробуйте снова.\n" + e.getMessage());
+            alert.showAndWait();
+            return null;
+        }
+    }
 
     public static Model read(Path path) throws IOException {
         Model model = new Model();
@@ -161,5 +193,14 @@ public class ObjReader {
         public ObjReaderException(String message) {
             super(message);
         }
+    }
+
+    public static String getFileNameWithoutExtension(Path path) {
+        String fileName = path.getFileName().toString();
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(0, dotIndex);
+        }
+        return fileName;
     }
 }

@@ -44,7 +44,7 @@
         </MenuBar>
     </top>
     <right>
-        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0" BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="objectLabel" prefHeight="30" text="Null" textAlignment="CENTER">
                     <font>

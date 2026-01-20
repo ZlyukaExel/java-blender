@@ -4,7 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
-import super_puper_mega_programmisty.blender.objreader.ObjReader;
+import super_puper_mega_programmisty.blender.filer.objreader.ObjReader;
 
 import java.io.IOException;
 import java.nio.file.Path;

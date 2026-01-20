@@ -12,17 +12,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+import super_puper_mega_programmisty.blender.filer.objreader.ImageReader;
 import super_puper_mega_programmisty.blender.graphics.RenderEngine;
 import super_puper_mega_programmisty.blender.scene.SceneObject;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
-import super_puper_mega_programmisty.blender.objreader.ObjReader;
+import super_puper_mega_programmisty.blender.filer.objreader.ObjReader;
 import super_puper_mega_programmisty.blender.scene.Scene;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Path;
 
 public class BlenderController {
     private Scene scene = new Scene();
@@ -70,30 +70,11 @@ public class BlenderController {
 
     @FXML
     private void loadModel() {
-        FileChooser fileChooser = new FileChooser();
-        File defaultDirectory = new File(".");
-        fileChooser.setInitialDirectory(defaultDirectory);
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
-        fileChooser.setTitle("Загрузка модели");
-
-        File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
-        if (file == null) {
+        Model model = ObjReader.getModel(canvas.getScene().getWindow());
+        if (model == null) {
             return;
         }
-
-        Path path = Path.of(file.getAbsolutePath());
-
-        try {
-            Model model = ObjReader.read(path);
-            scene.addModel(model);
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка загрузки");
-            alert.setHeaderText("Не удалось загрузить модель");
-            alert.setContentText("Проверьте файл и попробуйте снова.\n" + e.getMessage());
-            alert.showAndWait();
-        }
-
+        scene.addModel(model);
         updateInfo();
     }
 
@@ -208,43 +189,11 @@ public class BlenderController {
 
     @FXML
     private void applyTexture() {
-        FileChooser fileChooser = new FileChooser();
-        File defaultDirectory = new File(".");
-        fileChooser.setInitialDirectory(defaultDirectory);
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Texture (*.jpg/*.png)", "*.jpg", "*.png"));
-        fileChooser.setTitle("Выбор текстуры");
-
-        File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
-        if (file == null) {
+        Image texture = ImageReader.getImage(canvas.getScene().getWindow());
+        if (texture == null) {
             return;
         }
-
-        String fileName = file.getName().toLowerCase();
-        boolean isSupportedFile = fileName.endsWith(".jpg") || fileName.endsWith(".png") || fileName.endsWith(".jpeg");
-        if (!isSupportedFile) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка при выборе текстуры");
-            alert.setHeaderText("Выбранный файл не поддерживается");
-            alert.setContentText("Текстура должны быть в формате PNG или JPG");
-            alert.showAndWait();
-            return;
-        }
-
-        try (FileInputStream fis = new FileInputStream(file)) {
-            Image texture = new Image(fis);
-
-            if (texture.isError()) {
-                throw new IOException("Error reading texture file");
-            }
-
-            scene.applyTexture(texture);
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка при чтении файла");
-            alert.setHeaderText("Ошибка при чтении файла");
-            alert.setContentText("Выбранный файл поврежден или не поддерживается:\n" + e.getMessage());
-            alert.showAndWait();
-        }
+        scene.applyTexture(texture);
     }
 
     @FXML
