@@ -8,7 +8,6 @@ public class Transform {
     private Vector3d rotation = new Vector3d(0, 0, 0);
     private Vector3d scale = new Vector3d(1, 1, 1);
 
-    // TODO: iliak|17.01.2026|тут true флаги, задумка сделать TransformBuilder
     private boolean doScale = true;
     private boolean doRotate = true;
     private boolean doTranslate = true;
