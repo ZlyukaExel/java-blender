@@ -7,10 +7,10 @@ public class Rotation extends AffineTransform {
 
     private Axis axis;
     private double angle;
-    public Rotation(Axis axis, double angleRadians) {
+    public Rotation(Axis axis, double angleDegrees) {
         super();
         this.axis = axis;
-        this.angle = angleRadians;
+        this.angle = Math.toRadians(angleDegrees);
         applyTransform();
     }
 
