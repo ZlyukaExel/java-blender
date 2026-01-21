@@ -19,7 +19,7 @@ import java.util.List;
 public class RenderEngine {
     public static void renderScene(GraphicsContext gc, Camera curCamera, Scene scene, int width, int height) {
         ZBuffer buffer = new ZBuffer(width, height);
-        boolean renderMesh = true;  // TODO: iliak|20.01.2026|брать флаг из сцены
+        boolean renderMesh = scene.getPolygonGridOn();  // TODO: iliak|20.01.2026|брать флаг из сцены
         boolean luminationOn = scene.getLuminationOn();
         List<LightSource> lightSources = new ArrayList<>();
         if (luminationOn) {
@@ -57,11 +57,12 @@ public class RenderEngine {
         ;
 
         if (renderMesh) {
-            renderMesh(model, modelViewProjectionMatrix, gc, buffer, width, height);
+            renderMesh(model, modelViewProjectionMatrix, gc, width, height);
             return;
         }
 
-        Matrix4d normalMatrix = model.getNormalMatrix();
+        Matrix4d normalMatrix = new Matrix4d();
+        normalMatrix.multiply(projectionMatrix).multiply(viewMatrix).multiply(model.getNormalMatrix());
 
         if (!model.getMaterial().isUseTexture() || model.getTextureVertices().isEmpty()) {
             renderWithoutTexture(model, modelViewProjectionMatrix, normalMatrix, lightSources, gc, buffer, width, height);
@@ -81,11 +82,19 @@ public class RenderEngine {
                                              int width,
                                              int height) {
         for (Polygon polygon : model.getPolygons()) {
+            boolean skipPolygon = false;
             List<Vector3d> vertices = new ArrayList<>();
             List<Vector3d> normalVertices = new ArrayList<>();
             for (Integer index : polygon.getVertexIndices()) {
                 Vector3d vertex = new Vector3d(MVPMatrix.transform(model.getVertices().get(index)));
+                if (-1 > vertex.X() || vertex.X() > 1 || -1 > vertex.Y() || vertex.Y() > 1) {
+                    skipPolygon = true;
+                    break;
+                }
                 vertices.add(new Vector3d(vertex.X() * width + width/2F, -vertex.Y()*height + height/2F, vertex.Z()));
+            }
+            if (skipPolygon) {
+                continue;
             }
             for (Integer index : polygon.getNormalIndices()) {
                 normalVertices.add(normalMatrix.transform(new Vector3d(model.getNormals().get(index))));
@@ -111,12 +120,12 @@ public class RenderEngine {
             List<Vector2d> textureVertices = new ArrayList<>();
             for (Integer index : polygon.getVertexIndices()) {
                 Vector3d vertex = new Vector3d(MVPMatrix.transform(model.getVertices().get(index)));
-                vertex = new Vector3d(vertex.X() * width + width/2F, -vertex.Y()*height + height/2F, vertex.Z());
+                vertices.add(new Vector3d(vertex.X() * width + width/2F, -vertex.Y()*height + height/2F, vertex.Z()));
             }
             for (Integer index : polygon.getNormalIndices()) {
                 normals.add(normalMatrix.transform(model.getNormals().get(index)));
             }
-            for (Integer index : polygon.getNormalIndices()) {
+            for (Integer index : polygon.getTextureVertexIndices()) {
                 textureVertices.add(model.getTextureVertices().get(index));
             }
 
@@ -130,7 +139,6 @@ public class RenderEngine {
     private static void renderMesh(Model model,
                                    Matrix4d MVPMatrix,
                                    GraphicsContext gc,
-                                   ZBuffer buffer,
                                    int width,
                                    int height) {
         final int nPolygons = model.getPolygons().size();
@@ -145,43 +153,19 @@ public class RenderEngine {
             }
 
             for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
-                Vector3d v1 = vertices.get(vertexInPolygonInd - 1);
-                Vector3d v2 = vertices.get(vertexInPolygonInd);
-
-                if (buffer.getZ((int) v1.X(), (int) v1.Y()) < v1.Z()) {
-                    continue;
-                }
-                if (buffer.getZ((int) v2.X(), (int) v2.Y()) < v2.Z()) {
-                    continue;
-                }
-
                 gc.strokeLine(
                         vertices.get(vertexInPolygonInd - 1).X(),
                         vertices.get(vertexInPolygonInd - 1).Y(),
                         vertices.get(vertexInPolygonInd).X(),
                         vertices.get(vertexInPolygonInd).Y());
-
-                buffer.setZ((int) v1.X(), (int) v1.Y(), v1.Z());
-                buffer.setZ((int) v2.X(), (int) v2.Y(), v2.Z());
             }
 
             if (nVerticesInPolygon > 0) {
-                Vector3d v1 = vertices.get(nVerticesInPolygon - 1);
-                Vector3d v2 = vertices.getFirst();
-
-                if (buffer.getZ((int) v1.X(), (int) v1.Y()) < v1.Z()) {
-                    continue;
-                }
-                if (buffer.getZ((int) v2.X(), (int) v2.Y()) < v2.Z()) {
-                    continue;
-                }
                 gc.strokeLine(
                         vertices.get(nVerticesInPolygon - 1).X(),
                         vertices.get(nVerticesInPolygon - 1).Y(),
                         vertices.getFirst().X(),
                         vertices.getFirst().Y());
-                buffer.setZ((int) v1.X(), (int) v1.Y(), v1.Z());
-                buffer.setZ((int) v2.X(), (int) v2.Y(), v2.Z());
             }
         }
     }

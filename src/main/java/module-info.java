@@ -7,4 +7,6 @@ module company.name.blender {
 
     exports super_puper_mega_programmisty.blender.app;
     opens super_puper_mega_programmisty.blender.app to javafx.fxml;
+    exports super_puper_mega_programmisty.blender.graphics.camera.engine;
+    opens super_puper_mega_programmisty.blender.graphics.camera.engine to javafx.fxml;
 }

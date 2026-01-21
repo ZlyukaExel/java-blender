@@ -5,12 +5,18 @@ import super_puper_mega_programmisty.blender.math.transform.Transform;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 public abstract class SceneObject {
-    protected final Transform transform = new Transform();
+    protected final Transform transform;
     private String name;
     private boolean isActive = true;
 
     public SceneObject(String objectName) {
         name = objectName;
+        this.transform = new Transform();
+    }
+
+    public SceneObject(String objectName, boolean doTranslate, boolean doRotate, boolean doScale) {
+        name = objectName;
+        this.transform = new Transform(doTranslate, doRotate, doScale);
     }
 
     public void setName(String name) {

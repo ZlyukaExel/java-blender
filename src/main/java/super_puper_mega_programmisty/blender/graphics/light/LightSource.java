@@ -10,7 +10,7 @@ public class LightSource extends SceneObject {
     // TODO: iliak|17.01.2026|продолжить реализацию освещения
     
     public LightSource() {
-        super("Источник Света");
+        super("Источник Света", true, false, false);
         turnedOn = true;
         lightColor = Color.WHITE;
     }

@@ -19,15 +19,23 @@ public class Camera extends SceneObject {
     private Matrix4d projectionMatrix;
 
     public Camera() {
-        super("Камера");
-        this.position = new Vector3d(0.0, 0.0, 500.0);
-        this.target = new Vector3d(0.0, 0.0, 0.0);
+        this(new Vector3d(0, 0, 5.0), new Vector3d(0, 0, 0));
+    }
+
+    public Camera(Vector3d target, Vector3d position) {
+        this(position, target, 1, 16f/9f, 0.1, 100.0);
+    }
+
+    public Camera(Vector3d position, Vector3d target, double FOV, double aspectRatio, double nearClip, double farClip) {
+        super("Камера", true, true, false);
+        this.position = position;
+        this.target = target;
         this.up = new Vector3d(0.0, 1.0, 0.0);
 
-        this.fov = 1;
-        this.aspectRatio = 16.0 / 9.0;
-        this.nearClip = 0.1;
-        this.farClip = 100.0;
+        this.fov = FOV;
+        this.aspectRatio = aspectRatio;
+        this.nearClip = nearClip;
+        this.farClip = farClip;
 
         updateViewMatrix();
         updateProjectionMatrix();
@@ -37,7 +45,7 @@ public class Camera extends SceneObject {
         Vector3d zAxis = new Vector3d(position);
         zAxis.subVector(target).normalize();
         Vector3d xAxis = (Vector3d) up.cross(zAxis).normalize();
-        Vector3d yAxis = (Vector3d) zAxis.cross(xAxis);
+        Vector3d yAxis = (Vector3d) zAxis.cross(xAxis).normalize();
 
         double[][] viewData = new double[4][4];
 
@@ -86,7 +94,7 @@ public class Camera extends SceneObject {
         projData[0][2] = 0;
         projData[1][2] = 0;
         projData[2][2] = (nearClip + farClip) / (farClip - nearClip);
-        projData[3][2] = -1;
+        projData[3][2] = 1;
 
         projData[0][3] = 0;
         projData[1][3] = 0;

@@ -21,6 +21,12 @@ public class Transform {
         this.scale = scale;
     }
 
+    public Transform(boolean doTranslate, boolean doRotate, boolean doScale) {
+        this.doTranslate = doTranslate;
+        this.doScale = doScale;
+        this.doRotate = doRotate;
+    }
+
     public Vector3d getPosition() {
         return position;
     }
