@@ -19,10 +19,10 @@ public class Camera extends SceneObject {
     private Matrix4d projectionMatrix;
 
     public Camera() {
-        this(new Vector3d(0, 0, 5.0), new Vector3d(0, 0, 0));
+        this(new Vector3d(0, 0, 200.0), new Vector3d(0, 0, 0));
     }
 
-    public Camera(Vector3d target, Vector3d position) {
+    public Camera(Vector3d position, Vector3d target) {
         this(position, target, 1, 16f/9f, 0.1, 100.0);
     }
 
@@ -52,25 +52,25 @@ public class Camera extends SceneObject {
         // First row
         viewData[0][0] = xAxis.X();
         viewData[1][0] = yAxis.X();
-        viewData[2][0] = zAxis.X();
+        viewData[2][0] = -zAxis.X();
         viewData[3][0] = 0;
 
         // Second row
         viewData[0][1] = xAxis.Y();
         viewData[1][1] = yAxis.Y();
-        viewData[2][1] = zAxis.Y();
+        viewData[2][1] = -zAxis.Y();
         viewData[3][1] = 0;
 
         // Third row
         viewData[0][2] = xAxis.Z();
         viewData[1][2] = yAxis.Z();
-        viewData[2][2] = zAxis.Z();
+        viewData[2][2] = -zAxis.Z();
         viewData[3][2] = 0;
 
         // Fourth row
         viewData[0][3] = -xAxis.dot(position);
         viewData[1][3] = -yAxis.dot(position);
-        viewData[2][3] = -zAxis.dot(position);
+        viewData[2][3] = zAxis.dot(position);
         viewData[3][3] = 1;
 
         viewMatrix = new Matrix4d(viewData);

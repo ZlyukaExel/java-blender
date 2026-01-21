@@ -73,10 +73,10 @@ public class RenderEngine {
             List<Vector3d> normalVertices = new ArrayList<>();
             List<Vector2d> textureVertices = new ArrayList<>();
             for (Integer index : polygon.getVertexIndices()) {
-                vertices.add(modelMatrix.transform(new Vector3d(model.getVertices().get(index))));
+                vertices.add(modelMatrix.transform(model.getVertices().get(index)));
             }
             for (Integer index : polygon.getNormalIndices()) {
-                normalVertices.add(normalMatrix.transform(new Vector3d(model.getNormals().get(index))));
+                normalVertices.add(normalMatrix.transform(model.getNormals().get(index)));
             }
             for (Integer index : polygon.getTextureVertexIndices()) {
                 textureVertices.add(model.getTextureVertices().get(index));
@@ -159,7 +159,7 @@ public class RenderEngine {
     }
 
     private static Vector3d toPoint(Vector3d v, int width, int height) {
-        return new Vector3d(v.X() * width + height/2d, -v.Y() * height + height/2d, v.Z());
+        return new Vector3d(v.X() * width + width/2d, -v.Y() * height + height/2d, v.Z());
     }
 
     private static Color getColorFromTexture(Image texture, Vector2d vt) {
