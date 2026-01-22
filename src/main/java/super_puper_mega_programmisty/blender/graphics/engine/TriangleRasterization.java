@@ -2,20 +2,17 @@ package super_puper_mega_programmisty.blender.graphics.engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
+import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
 import super_puper_mega_programmisty.blender.graphics.model.Material;
-import super_puper_mega_programmisty.blender.math.matrix.Matrix3d;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
-import static super_puper_mega_programmisty.blender.graphics.engine.LuminationEngine.applyLight;
 
 public class TriangleRasterization {
     // TODO: iliak|20.01.2026|МОЖНО ОПТИМИЗИРОВАТЬ, ПРИЧЕМ СИЛЬНО
@@ -25,6 +22,7 @@ public class TriangleRasterization {
                              boolean luminationOn,
                              boolean useTexture,
                              Material material,
+                             Camera camera,
                              ZBuffer buffer,
                              int width, int height) {
 
@@ -41,7 +39,8 @@ public class TriangleRasterization {
         double x2 = p2.getX(), y2 = p2.getY(), z2 = p2.getZ();
         double x3 = p3.getX(), y3 = p3.getY(), z3 = p3.getZ();
 
-        Color c = material.getColor();
+        Shader shader = new PhongShader(0.15, material.getBrilliance_factor());
+        // TODO: iliak|22.01.2026|захардкожен единственный шейдер
 
         double maxX = Math.max(Math.max(x1, x2), x3);
         double minX = Math.min(Math.min(x1, x2), x3);
@@ -53,6 +52,7 @@ public class TriangleRasterization {
 
         for (double y = (int) clamp(p1.getY(), 0, height) ; y < clamp(p2.getY(), 0, height); y++) {
             for (double x = (int) minX; x < maxX; x++) {
+                Color c = material.getColor();
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
                 double alpha = bCoords[0];
                 double beta = bCoords[1];
@@ -80,7 +80,7 @@ public class TriangleRasterization {
                             p1.getActualPosition(), p2.getActualPosition(), p3.getActualPosition());
                     Vector3d vn = interpolateVector3d(alpha, beta, gamma, 
                             p1.getNormal(), p2.getNormal(), p3.getNormal());
-                    c = applyLight(c, lightSources, v, vn);
+                    c = shader.applyLight(c, lightSources, v, vn, camera.getPosition());
                 }
 
                 pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
@@ -89,6 +89,7 @@ public class TriangleRasterization {
         }
         for (double y = (int) clamp(p2.getY(), 0, height); y < clamp(p3.getY(), 0, height); y++) {
             for (double x = (int) minX; x <= maxX; x++) {
+                Color c = material.getColor();
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
                 double alpha = bCoords[0];
                 double beta = bCoords[1];
@@ -116,7 +117,7 @@ public class TriangleRasterization {
                             p1.getActualPosition(), p2.getActualPosition(), p3.getActualPosition());
                     Vector3d vn = interpolateVector3d(alpha, beta, gamma,
                             p1.getNormal(), p2.getNormal(), p3.getNormal());
-                    c = applyLight(c, lightSources, v, vn);
+                    c = shader.applyLight(c, lightSources, v, vn, camera.getPosition());
                 }
 
                 pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);

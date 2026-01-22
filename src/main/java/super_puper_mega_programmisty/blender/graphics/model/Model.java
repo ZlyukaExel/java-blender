@@ -22,7 +22,7 @@ public class Model extends SceneObject implements Transformable{
     private Material material;
 
     public Model() {
-        this(new Material(Color.DARKGRAY, null));
+        this(new Material(Color.GRAY, null));
     }
 
     public Model(Material material) {

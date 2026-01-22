@@ -6,7 +6,7 @@ import super_puper_mega_programmisty.blender.scene.SceneObject;
 public class LightSource extends SceneObject {
     public static final double MAX_AMOUNT_OF_COLOR = 255;
     private static final double EPS = 1E-4;
-    private static final double BASE_INTENSITY = 3;
+    private static final double BASE_INTENSITY = 5;
     private static final Color BASE_COLOR = Color.WHITE;
 
     private boolean turnedOn;

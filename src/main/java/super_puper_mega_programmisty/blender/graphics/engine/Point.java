@@ -28,10 +28,6 @@ class Point {
         return pointPosition.Z();
     }
 
-    public boolean isUseTexture() {
-        return textureVector != null;
-    }
-
     public Vector3d getNormal() {
         return new Vector3d(normal);
     }

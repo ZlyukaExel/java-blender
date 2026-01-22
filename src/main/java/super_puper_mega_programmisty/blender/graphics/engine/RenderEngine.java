@@ -84,20 +84,20 @@ public class RenderEngine {
                 continue;
             }
 
-            renderPolygon(polygonPoints, luminationOn, lightSources, model.getMaterial(), useTexture, buffer, width, height, gc);
+            renderPolygon(polygonPoints, luminationOn, lightSources, model.getMaterial(), useTexture, camera, buffer, width, height, gc);
         }
     }
 
     private static void renderPolygon(List<Point> points,
                                       boolean luminationOn, List<LightSource> lightSources,
-                                      Material material, boolean useTexture,
+                                      Material material, boolean useTexture, Camera camera,
                                       ZBuffer buffer, int width, int height,
                                       GraphicsContext gc) {
         Point p1 = points.getFirst();
         for (int index = 1; index < points.size() - 1; index++) {
             Point p2 = points.get(index);
             Point p3 = points.get(index + 1);
-            fillTriangle(gc, p1, p2, p3, lightSources, luminationOn, useTexture, material, buffer, width, height);
+            fillTriangle(gc, p1, p2, p3, lightSources, luminationOn, useTexture, material, camera, buffer, width, height);
         }
     }
 

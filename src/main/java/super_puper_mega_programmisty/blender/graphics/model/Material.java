@@ -6,12 +6,14 @@ import javafx.scene.paint.Color;
 public class Material {
     private final Color color;
     private Image texture;
+    private final double brilliance_factor;
     private boolean useTexture;
 
     public Material(Color color, Image texture) {
         this.color = color;
         this.texture = texture;
         this.useTexture = texture != null;
+        this.brilliance_factor = 32;  // TODO: iliak|22.01.2026|пока захводкожено, для разных материалов должно быть разное
     }
 
     public Color getColor() {
@@ -32,5 +34,9 @@ public class Material {
 
     public void setTexture(Image texture) {
         this.texture = texture;
+    }
+
+    public double getBrilliance_factor() {
+        return brilliance_factor;
     }
 }
