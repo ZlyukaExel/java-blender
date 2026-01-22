@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 
 public class Material {
     private final Color color;
-    private final Image texture;
+    private Image texture;
     private boolean useTexture;
 
     public Material(Color color, Image texture) {
@@ -28,5 +28,9 @@ public class Material {
 
     public boolean isUseTexture() {
         return useTexture;
+    }
+
+    public void setTexture(Image texture) {
+        this.texture = texture;
     }
 }

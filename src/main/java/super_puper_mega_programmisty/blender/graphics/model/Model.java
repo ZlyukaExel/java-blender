@@ -141,4 +141,17 @@ public class Model extends SceneObject implements Transformable{
     public Matrix4d getNormalMatrix() {
         return this.transform.getNormalMatrix();
     }
+
+    public boolean getIsUseTexture() {
+        return material.isUseTexture();
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
+
+    }
+
+    public void setUseTexture(boolean useTexture) {
+        this.material.setUseTexture(useTexture);
+    }
 }
