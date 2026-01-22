@@ -8,7 +8,6 @@ import super_puper_mega_programmisty.blender.graphics.light.LightSource;
 import super_puper_mega_programmisty.blender.graphics.model.Material;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.graphics.model.Polygon;
-import super_puper_mega_programmisty.blender.math.matrix.Matrix3d;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
@@ -30,44 +29,33 @@ public class RenderEngine {
                 lightSources.add(source);
             }
         }
-        for (Model model : scene.getModels()) {
-            renderModel(gc, curCamera.getViewMatrix(), curCamera.getProjectionMatrix(), model, luminationOn, lightSources, buffer, width, height, renderMesh);
 
+        if (renderMesh) {
+            for (Model model : scene.getModels()) {
+                renderMesh(model, curCamera, gc, width, height);
+            }
+        }
+        else {
+            for (Model model : scene.getModels()) {
+                renderModel(gc, curCamera, model, luminationOn, lightSources, buffer, width, height);
+            }
         }
     }
 
-    public static void renderModel(
+    private static void renderModel(
             final GraphicsContext gc,
-            Matrix4d viewMatrix,
-            Matrix4d projectionMatrix,
+            Camera camera,
             final Model model,
             boolean luminationOn,
             List<LightSource> lightSources,
             ZBuffer buffer,
             final int width,
-            final int height,
-            boolean renderMesh) {
+            final int height) {
+
+        Matrix4d MVPMatrix = createMVPMatrix(camera, model);
         Matrix4d modelMatrix = model.getTransformMatrix();
-        Matrix4d VPMatrix = new Matrix4d();
-        VPMatrix.multiply(projectionMatrix).multiply(viewMatrix);
-
-
-        Matrix4d MVPMatrix = new Matrix4d();
-
-        MVPMatrix
-                .multiply(projectionMatrix)
-                .multiply(viewMatrix)
-                .multiply(modelMatrix)
-        ;
-
-        if (renderMesh) {
-            renderMesh(model, MVPMatrix, gc, width, height);
-            return;
-        }
 
         Matrix4d normalMatrix = model.getNormalMatrix();
-//        normalMatrix.multiply(projectionMatrix).multiply(viewMatrix).multiply(model.getNormalMatrix());
-
         boolean useTexture = model.getIsUseTexture() && !model.getTextureVertices().isEmpty();
         for (Polygon polygon : model.getPolygons()) {
             boolean skipPolygon = false;
@@ -98,12 +86,6 @@ public class RenderEngine {
 
             renderPolygon(polygonPoints, luminationOn, lightSources, model.getMaterial(), useTexture, buffer, width, height, gc);
         }
-
-//        if (!model.getMaterial().isUseTexture() || model.getTextureVertices().isEmpty()) {
-//            renderWithoutTexture(model, MVPMatrix, normalMatrix, lightSources, gc, buffer, width, height);
-//        } else {
-//            renderWithTexture(model, MVPMatrix, normalMatrix, lightSources, gc, buffer, width, height);
-//        }
     }
 
     private static void renderPolygon(List<Point> points,
@@ -119,22 +101,15 @@ public class RenderEngine {
         }
     }
 
-    private static Vector3d toPointCoordinates(Vector3d v, int width, int height) {
-        return new Vector3d(v.X() * width + width/2d, -v.Y() * height + height/2d, v.Z());
-    }
-
-    private static Color getColorFromTexture(Image texture, Vector2d vt) {
-        return texture.getPixelReader().getColor(
-                (int) (vt.X() * texture.getWidth()),
-                (int) ((1 - vt.Y()) * texture.getHeight())
-        );
-    }
 
     private static void renderMesh(Model model,
-                                   Matrix4d MVPMatrix,
+                                   Camera camera,
                                    GraphicsContext gc,
                                    int width,
                                    int height) {
+
+        Matrix4d MVPMatrix = createMVPMatrix(camera, model);
+
         final int nPolygons = model.getPolygons().size();
         for (int polygonInd = 0; polygonInd < nPolygons; ++polygonInd) {
             boolean skipPolygon = false;
@@ -174,49 +149,21 @@ public class RenderEngine {
         }
     }
 
-    private static Color applyLight(Color c, List<LightSource> lightSources, Vector3d point, Vector3d vn) {
-        Vector3d color = new Vector3d(c.getRed(), c.getGreen(), c.getBlue());
-        double ambient = 0.15;  // TODO: iliak|20.01.2026|магическое число - эмбиент
-        Matrix3d result = new Matrix3d(new double[][] {
-                {ambient, 0, 0},
-                {0, ambient, 0},
-                {0, 0, ambient}
-        });
-        for (LightSource light : lightSources) {
-            double diffuse = calculateDiffuse(light.getPosition(), light.getLightIntensity(), point, vn);
-            Color lightColor = light.getLightColor();
-            Matrix3d matrixColor = new Matrix3d(new double[][] {
-                    {lightColor.getRed() * diffuse, 0, 0},
-                    {0, lightColor.getGreen() * diffuse, 0},
-                    {0, 0, lightColor.getBlue() * diffuse}
-            });
-            result.addMatrix(matrixColor);
-        }
-        color = (Vector3d) result.multiply(color);
-
-        double red = clamp(color.X(), 0, 1);
-        double green = clamp(color.Y(), 0, 1);
-        double blue = clamp(color.Z(), 0, 1);
-
-        return new Color(red, green, blue, 1);
+    private static Vector3d toPointCoordinates(Vector3d v, int width, int height) {
+        return new Vector3d(v.X() * width + width/2d, -v.Y() * height + height/2d, v.Z());
     }
 
-    private static double calculateDiffuse(Vector3d lightPosition, double intensity, Vector3d point, Vector3d normal) {
-        Vector3d lightVector = new Vector3d(lightPosition);
-        lightVector.subVector(point);
-        double length = lightVector.length();
-        if (length < 1E-4) {
-            return 0;
-        }
-        lightVector.normalize();
+    private static Matrix4d createMVPMatrix(Camera camera, Model model) {
+        Matrix4d modelMatrix = model.getTransformMatrix();
+        Matrix4d viewMatrix = camera.getViewMatrix();
+        Matrix4d projectionMatrix = camera.getProjectionMatrix();
 
-        return Math.max(normal.dot(lightVector) * (intensity/length), 0);
-    }
-
-    private static double clamp(double a, double min, double max) {
-        if (a > max) {
-            return max;
-        }
-        return Math.max(a, min);
+        Matrix4d MVPMatrix = new Matrix4d();
+        MVPMatrix
+                .multiply(projectionMatrix)
+                .multiply(viewMatrix)
+                .multiply(modelMatrix)
+        ;
+        return MVPMatrix;
     }
 }
