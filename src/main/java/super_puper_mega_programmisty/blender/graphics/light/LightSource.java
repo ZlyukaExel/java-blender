@@ -6,15 +6,19 @@ import super_puper_mega_programmisty.blender.scene.SceneObject;
 public class LightSource extends SceneObject {
     public static final double MAX_AMOUNT_OF_COLOR = 255;
     private static final double EPS = 1E-4;
+    private static final double BASE_INTENSITY = 3;
+    private static final Color BASE_COLOR = Color.WHITE;
 
     private boolean turnedOn;
     private Color lightColor;
+    private double lightIntensity;
     // TODO: iliak|17.01.2026|продолжить реализацию освещения
     
     public LightSource() {
         super("Источник Света", true, false, false);
         turnedOn = true;
-        lightColor = Color.WHITE;
+        lightColor = BASE_COLOR;
+        lightIntensity = BASE_INTENSITY;
     }
     
     public boolean isTurnedOn() {
@@ -31,6 +35,16 @@ public class LightSource extends SceneObject {
 
     public void setLightColor(Color lightColor) {
         this.lightColor = lightColor;
+    }
+
+    public double getLightIntensity() {
+        return lightIntensity;
+    }
+
+    public void setLightIntensity(double lightIntensity) {
+        // TODO: iliak|22.01.2026|можно добавить проверку на неотрицательность, но не обязательно
+        // если отрицательная, то источник будет освещать с обратной стороны объекта
+        this.lightIntensity = lightIntensity;
     }
 
     public double getColorRed() {

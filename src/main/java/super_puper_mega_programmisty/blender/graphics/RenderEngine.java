@@ -246,7 +246,7 @@ public class RenderEngine {
                 {0, 0, ambient}
         });
         for (LightSource light : lightSources) {
-            double diffuse = calculateDiffuse(light.getPosition(), point, vn);
+            double diffuse = calculateDiffuse(light.getPosition(), light.getLightIntensity(), point, vn);
             Color lightColor = light.getLightColor();
             Matrix3d matrixColor = new Matrix3d(new double[][] {
                     {lightColor.getRed() * diffuse, 0, 0},
@@ -264,14 +264,16 @@ public class RenderEngine {
         return new Color(red, green, blue, 1);
     }
 
-    private static double calculateDiffuse(Vector3d light, Vector3d point, Vector3d normal) {
-        Vector3d lightVector = new Vector3d(light);
+    private static double calculateDiffuse(Vector3d lightPosition, double intensity, Vector3d point, Vector3d normal) {
+        Vector3d lightVector = new Vector3d(lightPosition);
         lightVector.subVector(point);
-        if (lightVector.length() > 1E-4) {
-            lightVector.normalize();
+        double length = lightVector.length();
+        if (length < 1E-4) {
+            return 0;
         }
+        lightVector.normalize();
 
-        return Math.max(normal.dot(lightVector), 0);
+        return Math.max(normal.dot(lightVector) * (intensity/length), 0);
     }
 
     private static double clamp(double a, double min, double max) {
