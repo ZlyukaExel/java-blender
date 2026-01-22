@@ -1,4 +1,4 @@
-package super_puper_mega_programmisty.blender.graphics;
+package super_puper_mega_programmisty.blender.graphics.engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -7,7 +7,6 @@ import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.graphics.model.Polygon;
-import super_puper_mega_programmisty.blender.graphics.rasterization.TriangleRasterization;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix3d;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;

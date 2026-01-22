@@ -1,4 +1,4 @@
-package super_puper_mega_programmisty.blender.graphics;
+package super_puper_mega_programmisty.blender.graphics.engine;
 
 public class ZBuffer {
     final double [][] elementsData;

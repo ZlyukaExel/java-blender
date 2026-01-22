@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 import super_puper_mega_programmisty.blender.filer.imagereader.ImageReader;
-import super_puper_mega_programmisty.blender.graphics.RenderEngine;
+import super_puper_mega_programmisty.blender.graphics.engine.RenderEngine;
 import super_puper_mega_programmisty.blender.scene.SceneObject;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;

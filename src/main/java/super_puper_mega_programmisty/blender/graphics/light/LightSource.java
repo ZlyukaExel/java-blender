@@ -12,7 +12,6 @@ public class LightSource extends SceneObject {
     private boolean turnedOn;
     private Color lightColor;
     private double lightIntensity;
-    // TODO: iliak|17.01.2026|продолжить реализацию освещения
     
     public LightSource() {
         super("Источник Света", true, false, false);

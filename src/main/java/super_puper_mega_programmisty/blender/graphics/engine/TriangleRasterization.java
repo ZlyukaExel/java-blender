@@ -1,18 +1,12 @@
-package super_puper_mega_programmisty.blender.graphics.rasterization;
+package super_puper_mega_programmisty.blender.graphics.engine;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
-import super_puper_mega_programmisty.blender.graphics.ZBuffer;
-import super_puper_mega_programmisty.blender.graphics.light.LightSource;
-import super_puper_mega_programmisty.blender.math.matrix.Matrix3d;
-import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 public class TriangleRasterization {
     // TODO: iliak|20.01.2026|МОЖНО ОПТИМИЗИРОВАТЬ, ПРИЧЕМ СИЛЬНО
