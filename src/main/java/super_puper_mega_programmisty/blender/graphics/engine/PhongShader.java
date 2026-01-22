@@ -9,16 +9,16 @@ import java.util.List;
 
 class PhongShader extends Shader{
     private final double AMBIENT;
-    private final double BRILLIANCE_FACTOR;
+    private final int BRILLIANCE_POW_FACTOR;
 
     PhongShader() {
         AMBIENT = 0.1;
-        BRILLIANCE_FACTOR = 32;
+        BRILLIANCE_POW_FACTOR = 5;
     }
 
-    PhongShader(double ambient, double brilliance_factor) {
+    PhongShader(double ambient, int brilliance_factor) {
         this.AMBIENT = ambient;
-        this.BRILLIANCE_FACTOR = brilliance_factor;
+        this.BRILLIANCE_POW_FACTOR = brilliance_factor;
     }
 
     public Color applyLight(Color c, List<LightSource> lightSources, Vector3d vertexPosition, Vector3d vn, Vector3d cameraPos) {
@@ -77,7 +77,7 @@ class PhongShader extends Shader{
         Vector3d reflect = (Vector3d) lightVec.subVector(proj.multiplyByScalar(2)).normalize();
         cameraVec.normalize();
 
-        return Math.pow(Math.max(cameraVec.dot(reflect), 0), BRILLIANCE_FACTOR) * specularStrength;
+        return Math.pow(Math.max(cameraVec.dot(reflect), 0), Math.pow(2, BRILLIANCE_POW_FACTOR)) * specularStrength;
     }
 
     private static double intensityEquation(double intensity, double length) {

@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import super_puper_mega_programmisty.blender.scene.SceneObject;
 import super_puper_mega_programmisty.blender.math.transform.AffineTransform;
-import super_puper_mega_programmisty.blender.math.transform.Transform;
 import super_puper_mega_programmisty.blender.math.transform.Translation;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
