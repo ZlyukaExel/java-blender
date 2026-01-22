@@ -38,11 +38,11 @@ public class LightSource extends SceneObject {
     }
 
     public double getColorGreen() {
-        return lightColor.getRed() * MAX_AMOUNT_OF_COLOR;
+        return lightColor.getGreen() * MAX_AMOUNT_OF_COLOR;
     }
 
     public double getColorBlue() {
-        return lightColor.getRed() * MAX_AMOUNT_OF_COLOR;
+        return lightColor.getBlue() * MAX_AMOUNT_OF_COLOR;
     }
 
     public void setColorRed(double amount) {

@@ -111,7 +111,11 @@ public class RenderEngine {
         if (luminationOn) {
             c1 = applyLight(c1, lightSources, v1, normalVertices.getFirst());
         }
-        v1 = toPoint(VPMatrix.transform(v1), width, height);
+        v1 = VPMatrix.transform(v1);
+        if (v1.X() < -1 || v1.X() > 1 || v1.Y() < -1 || v1.Y() > 1 || v1.Z() > 1) {
+            return;
+        }
+        v1 = toPoint(v1, width, height);
         for (int index = 1; index < vertices.size() - 1; index++) {
             Vector3d v2 = vertices.get(index);
             Color c2 = getColorFromTexture(texture, textureVertices.get(index));
@@ -123,8 +127,16 @@ public class RenderEngine {
             if (luminationOn) {
                 c3 = applyLight(c3, lightSources, v3, normalVertices.get(index + 1));
             }
-            v2 = toPoint(VPMatrix.transform(v2), width, height);
-            v3 = toPoint(VPMatrix.transform(v3), width, height);
+            v2 = VPMatrix.transform(v2);
+            if (v2.X() < -1 || v2.X() > 1 || v2.Y() < -1 || v2.Y() > 1 || v2.Z() > 1) {
+                return;
+            }
+            v2 = toPoint(v2, width, height);
+            v3 = VPMatrix.transform(v3);
+            if (v3.X() < -1 || v3.X() > 1 || v3.Y() < -1 || v3.Y() > 1 || v3.Z() > 1) {
+                return;
+            }
+            v3 = toPoint(v3, width, height);
             TriangleRasterization.fillTriangle(gc, v1, v2, v3, c1, c2, c3, buffer, width, height);
         }
     }
@@ -140,7 +152,11 @@ public class RenderEngine {
         if (luminationOn) {
             c1 = applyLight(c1, lightSources, v1, normalVertices.getFirst());
         }
-        v1 = toPoint(VPMatrix.transform(v1), width, height);
+        v1 = VPMatrix.transform(v1);
+        if (v1.X() < -1 || v1.X() > 1 || v1.Y() < -1 || v1.Y() > 1 || v1.Z() > 1) {
+            return;
+        }
+        v1 = toPoint(v1, width, height);
         for (int index = 1; index < vertices.size() - 1; index++) {
             Vector3d v2 = vertices.get(index);
             Color c2 = color;
@@ -152,8 +168,16 @@ public class RenderEngine {
             if (luminationOn) {
                 c3 = applyLight(c3, lightSources, v3, normalVertices.get(index + 1));
             }
-            v2 = toPoint(VPMatrix.transform(v2), width, height);
-            v3 = toPoint(VPMatrix.transform(v3), width, height);
+            v2 = VPMatrix.transform(v2);
+            if (v2.X() < -1 || v2.X() > 1 || v2.Y() < -1 || v2.Y() > 1 || v2.Z() > 1) {
+                return;
+            }
+            v2 = toPoint(v2, width, height);
+            v3 = VPMatrix.transform(v3);
+            if (v3.X() < -1 || v3.X() > 1 || v3.Y() < -1 || v3.Y() > 1 || v3.Z() > 1) {
+                return;
+            }
+            v3 = toPoint(v3, width, height);
             TriangleRasterization.fillTriangle(gc, v1, v2, v3, c1, c2, c3, buffer, width, height);
         }
     }
@@ -176,13 +200,23 @@ public class RenderEngine {
                                    int height) {
         final int nPolygons = model.getPolygons().size();
         for (int polygonInd = 0; polygonInd < nPolygons; ++polygonInd) {
+            boolean skipPolygon = false;
             Polygon polygon = model.getPolygons().get(polygonInd);
             final int nVerticesInPolygon = polygon.getVertexIndices().size();
             List<Vector3d> vertices = new ArrayList<>();
             for (Integer vertexInPolygonInd : polygon.getVertexIndices()) {
                 Vector3d vertex = new Vector3d(MVPMatrix.transform(model.getVertices().get(vertexInPolygonInd)));
-                vertex = new Vector3d(vertex.X() * width + width/2F, -vertex.Y()*height + height/2F, vertex.Z());
+
+                if (vertex.X() < -1 || vertex.X() > 1 || vertex.Y() < -1 || vertex.Y() > 1 || vertex.Z() > 1) {
+                    skipPolygon = true;
+                    break;
+                }
+
+                vertex = toPoint(vertex, width, height);
                 vertices.add(vertex);
+            }
+            if (skipPolygon) {
+                continue;
             }
 
             for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
@@ -205,7 +239,7 @@ public class RenderEngine {
 
     private static Color applyLight(Color c, List<LightSource> lightSources, Vector3d point, Vector3d vn) {
         Vector3d color = new Vector3d(c.getRed(), c.getGreen(), c.getBlue());
-        double ambient = 0.1;  // TODO: iliak|20.01.2026|магическое число - эмбиент
+        double ambient = 0.15;  // TODO: iliak|20.01.2026|магическое число - эмбиент
         Matrix3d result = new Matrix3d(new double[][] {
                 {ambient, 0, 0},
                 {0, ambient, 0},
