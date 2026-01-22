@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
+import super_puper_mega_programmisty.blender.graphics.model.Material;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.graphics.model.Polygon;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix3d;
@@ -16,17 +17,17 @@ import super_puper_mega_programmisty.blender.scene.Scene;
 import java.util.ArrayList;
 import java.util.List;
 
+import static super_puper_mega_programmisty.blender.graphics.engine.TriangleRasterization.fillTriangle;
+
 public class RenderEngine {
     public static void renderScene(GraphicsContext gc, Camera curCamera, Scene scene, int width, int height) {
         ZBuffer buffer = new ZBuffer(width, height);
         boolean renderMesh = scene.getPolygonGridOn();
         boolean luminationOn = scene.getLuminationOn();
         List<LightSource> lightSources = new ArrayList<>();
-        if (luminationOn) {
-            for (LightSource source : scene.getLightSources()) {
-                if (source.isTurnedOn()) {
-                    lightSources.add(source);
-                }
+        for (LightSource source : scene.getLightSources()) {
+            if (source.isTurnedOn()) {
+                lightSources.add(source);
             }
         }
         for (Model model : scene.getModels()) {
@@ -51,137 +52,74 @@ public class RenderEngine {
         VPMatrix.multiply(projectionMatrix).multiply(viewMatrix);
 
 
-        Matrix4d modelViewProjectionMatrix = new Matrix4d();
+        Matrix4d MVPMatrix = new Matrix4d();
 
-        modelViewProjectionMatrix
+        MVPMatrix
                 .multiply(projectionMatrix)
                 .multiply(viewMatrix)
                 .multiply(modelMatrix)
         ;
 
         if (renderMesh) {
-            renderMesh(model, modelViewProjectionMatrix, gc, width, height);
+            renderMesh(model, MVPMatrix, gc, width, height);
             return;
         }
 
         Matrix4d normalMatrix = model.getNormalMatrix();
 //        normalMatrix.multiply(projectionMatrix).multiply(viewMatrix).multiply(model.getNormalMatrix());
 
+        boolean useTexture = model.getIsUseTexture() && !model.getTextureVertices().isEmpty();
         for (Polygon polygon : model.getPolygons()) {
-            List<Vector3d> vertices = new ArrayList<>();
-            List<Vector3d> normalVertices = new ArrayList<>();
-            List<Vector2d> textureVertices = new ArrayList<>();
-            for (Integer index : polygon.getVertexIndices()) {
-                vertices.add(modelMatrix.transform(model.getVertices().get(index)));
-            }
-            for (Integer index : polygon.getNormalIndices()) {
-                normalVertices.add(normalMatrix.transform(model.getNormals().get(index)));
-            }
-            for (Integer index : polygon.getTextureVertexIndices()) {
-                textureVertices.add(model.getTextureVertices().get(index));
+            boolean skipPolygon = false;
+            List<Point> polygonPoints = new ArrayList<>();
+
+            int numOfVertices = polygon.getVertexCount();
+            for (int index = 0; index < numOfVertices; index++) {
+                Vector3d v = model.getVertices().get(polygon.getVertexIndices().get(index));
+
+                Vector3d point = MVPMatrix.transform(v);
+                if (point.X() < -1 || point.X() > 1 || point.Y() < -1 || point.Y() > 1 || point.Z() > 1) {
+                    skipPolygon = true;
+                    break;
+                }
+                point = toPointCoordinates(point, width, height);
+                Vector3d actualVertex = modelMatrix.transform(v);
+                Vector3d vn = normalMatrix.transform(model.getNormals().get(polygon.getNormalIndices().get(index)));
+                Vector2d vt = null;
+                if (useTexture) {
+                    vt = model.getTextureVertices().get(polygon.getTextureVertexIndices().get(index));
+                }
+                polygonPoints.add(new Point(actualVertex, point, vn, vt));
             }
 
-            if (!model.getMaterial().isUseTexture() || textureVertices.isEmpty()) {
-                renderPolygonWithoutTexture(model.getMaterial().getColor(),
-                        vertices, normalVertices,
-                        luminationOn, lightSources, VPMatrix, buffer, width, height, gc);
-            } else {
-                renderPolygonWithTexture(model.getMaterial().getTexture(),
-                        vertices, normalVertices, textureVertices,
-                        luminationOn, lightSources, VPMatrix, buffer, width, height, gc);
+            if (skipPolygon) {
+                continue;
             }
+
+            renderPolygon(polygonPoints, luminationOn, lightSources, model.getMaterial(), useTexture, buffer, width, height, gc);
         }
 
 //        if (!model.getMaterial().isUseTexture() || model.getTextureVertices().isEmpty()) {
-//            renderWithoutTexture(model, modelViewProjectionMatrix, normalMatrix, lightSources, gc, buffer, width, height);
+//            renderWithoutTexture(model, MVPMatrix, normalMatrix, lightSources, gc, buffer, width, height);
 //        } else {
-//            renderWithTexture(model, modelViewProjectionMatrix, normalMatrix, lightSources, gc, buffer, width, height);
+//            renderWithTexture(model, MVPMatrix, normalMatrix, lightSources, gc, buffer, width, height);
 //        }
     }
 
-    private static void renderPolygonWithTexture(Image texture,
-                                                 List<Vector3d> vertices, List<Vector3d> normalVertices, List<Vector2d> textureVertices,
-                                                 boolean luminationOn, List<LightSource> lightSources,
-                                                 Matrix4d VPMatrix,
-                                                 ZBuffer buffer, int width, int height,
-                                                 GraphicsContext gc) {
-        Vector3d v1 = vertices.getFirst();
-        Color c1 = getColorFromTexture(texture, textureVertices.getFirst());
-        if (luminationOn) {
-            c1 = applyLight(c1, lightSources, v1, normalVertices.getFirst());
-        }
-        v1 = VPMatrix.transform(v1);
-        if (v1.X() < -1 || v1.X() > 1 || v1.Y() < -1 || v1.Y() > 1 || v1.Z() > 1) {
-            return;
-        }
-        v1 = toPoint(v1, width, height);
-        for (int index = 1; index < vertices.size() - 1; index++) {
-            Vector3d v2 = vertices.get(index);
-            Color c2 = getColorFromTexture(texture, textureVertices.get(index));
-            if (luminationOn) {
-                c2 = applyLight(c2, lightSources, v2, normalVertices.get(index));
-            }
-            Vector3d v3 = vertices.get(index + 1);
-            Color c3 = getColorFromTexture(texture, textureVertices.get(index + 1));
-            if (luminationOn) {
-                c3 = applyLight(c3, lightSources, v3, normalVertices.get(index + 1));
-            }
-            v2 = VPMatrix.transform(v2);
-            if (v2.X() < -1 || v2.X() > 1 || v2.Y() < -1 || v2.Y() > 1 || v2.Z() > 1) {
-                return;
-            }
-            v2 = toPoint(v2, width, height);
-            v3 = VPMatrix.transform(v3);
-            if (v3.X() < -1 || v3.X() > 1 || v3.Y() < -1 || v3.Y() > 1 || v3.Z() > 1) {
-                return;
-            }
-            v3 = toPoint(v3, width, height);
-            TriangleRasterization.fillTriangle(gc, v1, v2, v3, c1, c2, c3, buffer, width, height);
+    private static void renderPolygon(List<Point> points,
+                                      boolean luminationOn, List<LightSource> lightSources,
+                                      Material material, boolean useTexture,
+                                      ZBuffer buffer, int width, int height,
+                                      GraphicsContext gc) {
+        Point p1 = points.getFirst();
+        for (int index = 1; index < points.size() - 1; index++) {
+            Point p2 = points.get(index);
+            Point p3 = points.get(index + 1);
+            fillTriangle(gc, p1, p2, p3, lightSources, luminationOn, useTexture, material, buffer, width, height);
         }
     }
 
-    private static void renderPolygonWithoutTexture(Color color,
-                                                 List<Vector3d> vertices, List<Vector3d> normalVertices,
-                                                 boolean luminationOn, List<LightSource> lightSources,
-                                                 Matrix4d VPMatrix,
-                                                 ZBuffer buffer, int width, int height,
-                                                 GraphicsContext gc) {
-        Vector3d v1 = vertices.getFirst();
-        Color c1 = color;
-        if (luminationOn) {
-            c1 = applyLight(c1, lightSources, v1, normalVertices.getFirst());
-        }
-        v1 = VPMatrix.transform(v1);
-        if (v1.X() < -1 || v1.X() > 1 || v1.Y() < -1 || v1.Y() > 1 || v1.Z() > 1) {
-            return;
-        }
-        v1 = toPoint(v1, width, height);
-        for (int index = 1; index < vertices.size() - 1; index++) {
-            Vector3d v2 = vertices.get(index);
-            Color c2 = color;
-            if (luminationOn) {
-                c2 = applyLight(c2, lightSources, v2, normalVertices.get(index));
-            }
-            Vector3d v3 = vertices.get(index + 1);
-            Color c3 = color;
-            if (luminationOn) {
-                c3 = applyLight(c3, lightSources, v3, normalVertices.get(index + 1));
-            }
-            v2 = VPMatrix.transform(v2);
-            if (v2.X() < -1 || v2.X() > 1 || v2.Y() < -1 || v2.Y() > 1 || v2.Z() > 1) {
-                return;
-            }
-            v2 = toPoint(v2, width, height);
-            v3 = VPMatrix.transform(v3);
-            if (v3.X() < -1 || v3.X() > 1 || v3.Y() < -1 || v3.Y() > 1 || v3.Z() > 1) {
-                return;
-            }
-            v3 = toPoint(v3, width, height);
-            TriangleRasterization.fillTriangle(gc, v1, v2, v3, c1, c2, c3, buffer, width, height);
-        }
-    }
-
-    private static Vector3d toPoint(Vector3d v, int width, int height) {
+    private static Vector3d toPointCoordinates(Vector3d v, int width, int height) {
         return new Vector3d(v.X() * width + width/2d, -v.Y() * height + height/2d, v.Z());
     }
 
@@ -211,7 +149,7 @@ public class RenderEngine {
                     break;
                 }
 
-                vertex = toPoint(vertex, width, height);
+                vertex = toPointCoordinates(vertex, width, height);
                 vertices.add(vertex);
             }
             if (skipPolygon) {

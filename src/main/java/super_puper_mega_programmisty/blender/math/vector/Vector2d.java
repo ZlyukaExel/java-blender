@@ -20,6 +20,11 @@ public class Vector2d extends AbstractVector {
         this.y = array[1];
     }
 
+    public Vector2d(Vector2d other) {
+        this.x = other.x;
+        this.y = other.y;
+    }
+
     @Override
     public IVector addVector(IVector v) {
         if (this.haveDifferentDimensions(v)) {

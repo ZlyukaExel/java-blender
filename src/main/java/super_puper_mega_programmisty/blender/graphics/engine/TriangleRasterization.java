@@ -1,74 +1,123 @@
 package super_puper_mega_programmisty.blender.graphics.engine;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
+import super_puper_mega_programmisty.blender.graphics.light.LightSource;
+import super_puper_mega_programmisty.blender.graphics.model.Material;
+import super_puper_mega_programmisty.blender.math.matrix.Matrix3d;
+import super_puper_mega_programmisty.blender.math.vector.Vector2d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+
+import static super_puper_mega_programmisty.blender.graphics.engine.LuminationEngine.applyLight;
 
 public class TriangleRasterization {
     // TODO: iliak|20.01.2026|МОЖНО ОПТИМИЗИРОВАТЬ, ПРИЧЕМ СИЛЬНО
-    public static void fillTriangle(GraphicsContext gc,
-                             Vector3d v1, Vector3d v2, Vector3d v3,
-                             javafx.scene.paint.Color c1,
-                             javafx.scene.paint.Color c2,
-                             javafx.scene.paint.Color c3,
+    static void fillTriangle(GraphicsContext gc,
+                             Point p1, Point p2, Point p3,
+                             List<LightSource> lightSources,
+                             boolean luminationOn,
+                             boolean useTexture,
+                             Material material,
                              ZBuffer buffer,
                              int width, int height) {
 
         PixelWriter pixelWriter = gc.getPixelWriter();
-        Point p1 = new Point(v1, c1);
-        Point p2 = new Point(v2, c2);
-        Point p3 = new Point(v3, c3);
+        
         Point[] pointArray = new Point[]{p1, p2, p3};
         sortByY(pointArray);
+        
+        p1 = pointArray[0];
+        p2 = pointArray[1];
+        p3 = pointArray[2];
 
-        double x1 = pointArray[0].getX(), y1 = pointArray[0].getY(), z1 = pointArray[0].getZ();
-        double x2 = pointArray[1].getX(), y2 = pointArray[1].getY(), z2 = pointArray[1].getZ();
-        double x3 = pointArray[2].getX(), y3 = pointArray[2].getY(), z3 = pointArray[2].getZ();
+        double x1 = p1.getX(), y1 = p1.getY(), z1 = p1.getZ();
+        double x2 = p2.getX(), y2 = p2.getY(), z2 = p2.getZ();
+        double x3 = p3.getX(), y3 = p3.getY(), z3 = p3.getZ();
+
+        Color c = material.getColor();
 
         double maxX = Math.max(Math.max(x1, x2), x3);
-        double maxY = Math.max(Math.max(y1, y2), y3);
         double minX = Math.min(Math.min(x1, x2), x3);
-        double minY = Math.min(Math.min(y1, y2), y3);
 
         // треугольник вне полотна
-        if (maxX < 0 || minX > width || maxY < 0 || minY > height) {
+        if (maxX < 0 || minX > width || y3 < 0 || y1 > height) {
             return;
         }
 
-        for (double y = (int) clamp(pointArray[0].getY(), 0, height) ; y < clamp(pointArray[1].getY(), 0, height); y++) {
+        for (double y = (int) clamp(p1.getY(), 0, height) ; y < clamp(p2.getY(), 0, height); y++) {
             for (double x = (int) minX; x < maxX; x++) {
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
-                if ((bCoords[0] + bCoords[1] + bCoords[2]) - 1 > 1E-4) {
+                double alpha = bCoords[0];
+                double beta = bCoords[1];
+                double gamma = bCoords[2];
+
+                if ((alpha + beta + gamma) - 1 > 1E-4) {
                     continue;
                 }
-                double z = z1 * bCoords[0] + z2 * bCoords[1] + z3 * bCoords[2];
+                double z = z1 * alpha + z2 * beta + z3 * gamma;
                 if (buffer.getZ((int) Math.round(x), (int) Math.round(y)) <= z) {
                     continue;
                 }
+                
+                if (useTexture) {
+                    Image texture = material.getTexture();
+                    Vector2d vt1 = p1.getTextureVector();
+                    Vector2d vt2 = p2.getTextureVector();
+                    Vector2d vt3 = p3.getTextureVector();
+                    Vector2d vt = interpolateVector2d(alpha, beta, gamma, vt1, vt2, vt3);
+                    c = getColorFromTexture(texture, vt);
+                }
 
-                Color c = interpolationColor(bCoords[0], bCoords[1], bCoords[2],
-                        pointArray[0].getColor(), pointArray[1].getColor(), pointArray[2].getColor());
+                if (luminationOn) {
+                    Vector3d v = interpolateVector3d(alpha, beta, gamma,
+                            p1.getActualPosition(), p2.getActualPosition(), p3.getActualPosition());
+                    Vector3d vn = interpolateVector3d(alpha, beta, gamma, 
+                            p1.getNormal(), p2.getNormal(), p3.getNormal());
+                    c = applyLight(c, lightSources, v, vn);
+                }
 
                 pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
                 buffer.setZ((int) Math.round(x), (int) Math.round(y), z);
             }
         }
-        for (double y = (int) clamp(pointArray[1].getY(), 0, height); y < clamp(pointArray[2].getY(), 0, height); y++) {
+        for (double y = (int) clamp(p2.getY(), 0, height); y < clamp(p3.getY(), 0, height); y++) {
             for (double x = (int) minX; x <= maxX; x++) {
                 double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
-                if ((bCoords[0] + bCoords[1] + bCoords[2]) - 1 > 1E-4) {
+                double alpha = bCoords[0];
+                double beta = bCoords[1];
+                double gamma = bCoords[2];
+
+                if ((alpha + beta + gamma) - 1 > 1E-4) {
                     continue;
                 }
-                double z = z1 * bCoords[0] + z2 * bCoords[1] + z3 * bCoords[2];
+                double z = z1 * alpha + z2 * beta + z3 * gamma;
                 if (buffer.getZ((int) Math.round(x), (int) Math.round(y)) <= z) {
                     continue;
                 }
-                Color c = interpolationColor(bCoords[0], bCoords[1], bCoords[2],
-                        pointArray[0].getColor(), pointArray[1].getColor(), pointArray[2].getColor());
+
+                if (useTexture) {
+                    Image texture = material.getTexture();
+                    Vector2d vt1 = p1.getTextureVector();
+                    Vector2d vt2 = p2.getTextureVector();
+                    Vector2d vt3 = p3.getTextureVector();
+                    Vector2d vt = interpolateVector2d(alpha, beta, gamma, vt1, vt2, vt3);
+                    c = getColorFromTexture(texture, vt);
+                }
+
+                if (luminationOn) {
+                    Vector3d v = interpolateVector3d(alpha, beta, gamma,
+                            p1.getActualPosition(), p2.getActualPosition(), p3.getActualPosition());
+                    Vector3d vn = interpolateVector3d(alpha, beta, gamma,
+                            p1.getNormal(), p2.getNormal(), p3.getNormal());
+                    c = applyLight(c, lightSources, v, vn);
+                }
 
                 pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
                 buffer.setZ((int) Math.round(x), (int) Math.round(y), z);
@@ -90,17 +139,28 @@ public class TriangleRasterization {
         });
     }
 
-    private static Color interpolationColor(double alpha, double beta, double gamma,
-                                                        Color c1, Color c2, Color c3) {
-        double red = alpha * c1.getRed() + beta * c2.getRed() + gamma * c3.getRed();
-        double green = alpha * c1.getGreen() + beta * c2.getGreen() + gamma * c3.getGreen();
-        double blue = alpha * c1.getBlue() + beta * c2.getBlue() + gamma * c3.getBlue();
+    private static Vector2d interpolateVector2d(double alpha, double beta, double gamma,
+                                                Vector2d v1, Vector2d v2, Vector2d v3) {
+        double x = v1.X() * alpha + v2.X() * beta + v3.X() * gamma;
+        double y = v1.Y() * alpha + v2.Y() * beta + v3.Y() * gamma;
 
-        red = clamp(red, 0, 1);
-        green = clamp(green, 0, 1);
-        blue = clamp(blue, 0, 1);
+        return new Vector2d(x, y);
+    }
 
-        return new Color(red, green, blue, 1);
+    private static Vector3d interpolateVector3d(double alpha, double beta, double gamma,
+                                                Vector3d v1, Vector3d v2, Vector3d v3) {
+        double x = v1.X() * alpha + v2.X() * beta + v3.X() * gamma;
+        double y = v1.Y() * alpha + v2.Y() * beta + v3.Y() * gamma;
+        double z = v1.Z() * alpha + v2.Z() * beta + v3.Z() * gamma;
+
+        return new Vector3d(x, y, z);
+    }
+
+    private static Color getColorFromTexture(Image texture, Vector2d vt) {
+        return texture.getPixelReader().getColor(
+                (int) (vt.X() * texture.getWidth()),
+                (int) ((1 - vt.Y()) * texture.getHeight())
+        );
     }
 
     private static double clamp(double a, double min, double max) {
@@ -124,31 +184,5 @@ public class TriangleRasterization {
         double gamma = areaABP / areaABC;
 
         return new double[]{alpha, beta, gamma};
-    }
-
-    static class Point {
-        private final Color color;
-        private final Vector3d position;
-
-        public Point(Vector3d v, Color c) {
-            color = c;
-            position = v;
-        }
-
-        public Color getColor() {
-            return color;
-        }
-
-        public double getX() {
-            return position.X();
-        }
-
-        public double getY() {
-            return position.Y();
-        }
-
-        public double getZ() {
-            return position.Z();
-        }
     }
 }
