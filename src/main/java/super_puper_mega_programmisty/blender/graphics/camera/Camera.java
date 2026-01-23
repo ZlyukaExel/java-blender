@@ -23,7 +23,7 @@ public class Camera extends SceneObject {
     }
 
     public Camera(Vector3d position, Vector3d target) {
-        this(position, target, 1, 16f/9f, 0.1, 100.0);
+        this(position, target, 45, 16f/9f, 0.1, 100.0);
     }
 
     public Camera(Vector3d position, Vector3d target, double FOV, double aspectRatio, double nearClip, double farClip) {
@@ -78,7 +78,7 @@ public class Camera extends SceneObject {
     }
 
     private void updateProjectionMatrix() {
-        double f = 1.0 / Math.tan(fov / 2.0);
+        double f = 1.0 / Math.tan(Math.toRadians(fov) / 2.0);
 
         double[][] projData = new double[4][4];
 

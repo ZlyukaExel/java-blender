@@ -83,9 +83,7 @@ public class CameraMenu extends ObjectMenu {
         double y = formatDoubleInput(posY);
         double z = formatDoubleInput(posZ);
 
-        Vector3d position = new Vector3d(x, y, z);
-
-        camera.setPosition(position);
+        camera.setPosition(x, y, z);
     }
 
     @FXML
