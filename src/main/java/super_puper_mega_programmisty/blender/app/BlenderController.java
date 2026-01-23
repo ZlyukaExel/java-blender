@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import super_puper_mega_programmisty.blender.graphics.engine.RenderEngine;
+import super_puper_mega_programmisty.blender.graphics.model.utils.NormalsCalculator;
 import super_puper_mega_programmisty.blender.scene.SceneObject;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
 import super_puper_mega_programmisty.blender.filer.objreader.ObjReader;
@@ -66,6 +67,7 @@ public class BlenderController {
         if (model == null) {
             return;
         }
+        NormalsCalculator.recalculateNormals(model);
         scene.addModel(model);
         updateInfo();
     }
