@@ -42,7 +42,7 @@ public class Model extends SceneObject implements Transformable{
         for (Polygon poly : other.polygons) {
             this.polygons.add(new Polygon(poly));
         }
-        this.material = other.material;
+        this.material = new Material(other.material);
     }
 
     public List<Vector3d> getVertices() { return vertices; }
@@ -51,6 +51,12 @@ public class Model extends SceneObject implements Transformable{
     public List<Polygon> getPolygons() { return polygons; }
     public Material getMaterial() {
         return material;
+    }
+
+    public Model getTransformedModel() {
+        Model transformedModel = new Model(this);
+        transformedModel.applyTransformation(this.getTransformMatrix());
+        return transformedModel;
     }
 
     public void applyTransformation() {

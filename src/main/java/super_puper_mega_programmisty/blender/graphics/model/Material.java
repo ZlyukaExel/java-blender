@@ -4,20 +4,32 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class Material {
-    private final Color color;
+    private Color color;
     private Image texture;
     private final int brilliance_pow_factor;
-    private boolean useTexture;
+    private boolean useTexture = false;
+
+    public static final int MIN_BRILLIANCE_FACTOR = 1;
+    public static final int MAX_BRILLIANCE_FACTOR = 12;
 
     public Material(Color color, Image texture) {
         this.color = color;
         this.texture = texture;
-        this.useTexture = texture != null;
         this.brilliance_pow_factor = 5;  // TODO: iliak|22.01.2026|пока захводкожено, для разных материалов должно быть разное
+    }
+
+    public Material(Material other) {
+        this.color = other.color;
+        this.brilliance_pow_factor = other.getBrilliance_factor();
+        this.texture = other.getTexture();  // TODO: iliak|23.01.2026|не знаю, нужно ли копировать текстуру при копировании материала
     }
 
     public Color getColor() {
         return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public Image getTexture() {
@@ -25,11 +37,11 @@ public class Material {
     }
 
     public void setUseTexture(boolean useTexture) {
-        this.useTexture = this.texture != null && useTexture;
+        this.useTexture = useTexture;
     }
 
     public boolean isUseTexture() {
-        return useTexture;
+        return useTexture && texture != null;
     }
 
     public void setTexture(Image texture) {
