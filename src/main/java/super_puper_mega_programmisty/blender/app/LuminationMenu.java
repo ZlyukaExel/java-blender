@@ -29,7 +29,7 @@ public class LuminationMenu extends ObjectMenu {
         try {
             loader.load();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load LuminationMenu.fxml", e);
+            throw new RuntimeException("Failed to load lumination-menu.fxml", e);
         }
 
         updateLabels();

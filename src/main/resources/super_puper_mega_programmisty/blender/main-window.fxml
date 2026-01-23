@@ -65,6 +65,7 @@
                             <Separator prefHeight="5"/>
 
                             <VBox fx:id="objectMenu" alignment="TOP_CENTER" prefWidth="180.0">
+
                             </VBox>
 
                             <Separator prefHeight="15" visible="false"/>

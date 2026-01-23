@@ -36,7 +36,7 @@ public class ModelMenu extends ObjectMenu {
         try {
             loader.load();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load ModelMenu.fxml", e);
+            throw new RuntimeException("Failed to load model-menu.fxml", e);
         }
 
         updateLabels();
