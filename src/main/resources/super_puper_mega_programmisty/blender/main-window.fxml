@@ -4,7 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import super_puper_mega_programmisty.blender.app.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="super_puper_mega_programmisty.blender.app.BlenderController">
     <top>
@@ -13,7 +12,6 @@
                 <Menu mnemonicParsing="false" text="Файл">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#loadModel" text="Открыть" />
-                        <MenuItem mnemonicParsing="false" onAction="#saveModel" text="Сохранить" />
                         <MenuItem mnemonicParsing="false" onAction="#clearScene" text="Очистить сцену" />
                     </items>
                 </Menu>
@@ -28,9 +26,6 @@
                             </items>
                         </Menu>
                         <MenuItem mnemonicParsing="false" onAction="#deleteObject" text="Удалить" />
-                        <MenuItem mnemonicParsing="false" onAction="#triangulate" text="Триангулировать" />
-                        <MenuItem mnemonicParsing="false" onAction="#recalculateNormals" text="Пересчитать нормали" />
-                        <MenuItem mnemonicParsing="false" onAction="#applyTexture" text="Наложить текстуру" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Камера">
@@ -48,67 +43,35 @@
             </menus>
         </MenuBar>
     </top>
-    <right>
-      <HBox BorderPane.alignment="CENTER">
-         <children>
-              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
-                  <children>
-                      <Label fx:id="objectLabel" prefHeight="30" text="Null" textAlignment="CENTER">
-                          <font>
-                              <Font name="System Bold" size="14.0" />
-                          </font>
-                      </Label>
-                      <Separator prefHeight="5" />
-                      <Label prefHeight="30" text="Позиция" textAlignment="CENTER" />
-                      <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0">
-                          <children>
-                              <Label prefWidth="15" text="X" />
-                              <ScrollableDoubleField fx:id="posX" alignment="CENTER" onAction="#updatePos" prefWidth="40" />
-                              <Separator orientation="VERTICAL" prefWidth="10" visible="false" />
-                              <Label prefWidth="15" text="Y" />
-                              <ScrollableDoubleField fx:id="posY" alignment="CENTER" onAction="#updatePos" prefWidth="40" />
-                              <Separator orientation="VERTICAL" prefWidth="10" visible="false" />
-                              <Label prefWidth="15" text="Z" />
-                              <ScrollableDoubleField fx:id="posZ" alignment="CENTER" onAction="#updatePos" prefWidth="40" />
-                          </children>
-                      </HBox>
-                      <Separator prefHeight="5" visible="false" />
-                      <Label prefHeight="30" text="Вращение" textAlignment="CENTER" />
-                      <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0">
-                          <children>
-                              <Label prefWidth="15" text="X" />
-                              <ScrollableDoubleField fx:id="rotX" alignment="CENTER" onAction="#updateRotation" prefWidth="40" />
-                              <Separator orientation="VERTICAL" prefWidth="10" visible="false" />
-                              <Label prefWidth="15" text="Y" />
-                              <ScrollableDoubleField fx:id="rotY" alignment="CENTER" onAction="#updateRotation" prefWidth="40" />
-                              <Separator orientation="VERTICAL" prefWidth="10" visible="false" />
-                              <Label prefWidth="15" text="Z" />
-                              <ScrollableDoubleField fx:id="rotZ" alignment="CENTER" onAction="#updateRotation" prefWidth="40" />
-                          </children>
-                      </HBox>
-                      <Separator layoutX="10.0" layoutY="75.0" prefHeight="5" visible="false" />
-                      <Label prefHeight="30" text="Размер" textAlignment="CENTER" />
-                      <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0">
-                          <children>
-                              <Label prefWidth="15" text="X" />
-                              <ScrollableDoubleField fx:id="scaleX" alignment="CENTER" onAction="#updateScale" prefWidth="40" text="1" />
-                              <Separator orientation="VERTICAL" prefWidth="10" visible="false" />
-                              <Label prefWidth="15" text="Y" />
-                              <ScrollableDoubleField fx:id="scaleY" alignment="CENTER" onAction="#updateScale" prefWidth="40" text="1" />
-                              <Separator orientation="VERTICAL" prefWidth="10" visible="false" />
-                              <Label prefWidth="15" text="Z" />
-                              <ScrollableDoubleField fx:id="scaleZ" alignment="CENTER" onAction="#updateScale" prefWidth="40" text="1" />
-                          </children>
-                      </HBox>
-                  <Separator prefHeight="15" visible="false" />
-                  <CheckBox mnemonicParsing="false" selected="true" text="Активен" fx:id="activeSwitch" onAction="#switchActive"/>
-                  </children>
-              </VBox>
-            <Separator orientation="VERTICAL" prefWidth="15.0" visible="false" />
-         </children>
-      </HBox>
-    </right>
     <center>
         <Canvas fx:id="canvas" height="400.0" width="600.0" BorderPane.alignment="CENTER" />
     </center>
+    <right>
+        <ScrollPane hbarPolicy="NEVER" prefHeight="400.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
+                    <children>
+                        <VBox alignment="TOP_CENTER" prefWidth="180.0">
+
+                            <Label fx:id="objectLabel" prefHeight="30" text="Null" textAlignment="CENTER">
+                                <font>
+                                    <Font name="System Bold" size="14.0" />
+                                </font>
+                            </Label>
+                            <Separator prefHeight="5" />
+
+                            <VBox fx:id="objectMenu" alignment="TOP_CENTER" prefWidth="180.0">
+
+                            </VBox>
+
+                            <Separator prefHeight="15" visible="false" />
+                            <CheckBox fx:id="activeSwitch" mnemonicParsing="false" onAction="#switchActive" selected="true" text="Активен" />
+                            <Separator prefHeight="15" visible="false" />
+
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
+    </right>
 </BorderPane>

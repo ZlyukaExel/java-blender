@@ -1,5 +1,6 @@
 package super_puper_mega_programmisty.blender.graphics.camera;
 
+import super_puper_mega_programmisty.blender.app.CameraMenu;
 import super_puper_mega_programmisty.blender.scene.SceneObject;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix4d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
@@ -27,6 +28,7 @@ public class Camera extends SceneObject {
 
     public Camera(Vector3d position, Vector3d target, double FOV, double aspectRatio, double nearClip, double farClip) {
         super("Камера", true, true, false);
+        menu = new CameraMenu(this);
         this.position = position;
         this.target = target;
         this.up = new Vector3d(0.0, 1.0, 0.0);

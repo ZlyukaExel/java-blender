@@ -1,8 +1,11 @@
 package super_puper_mega_programmisty.blender.graphics.model;
 
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import super_puper_mega_programmisty.blender.app.ModelMenu;
+import super_puper_mega_programmisty.blender.app.ObjectMenu;
 import super_puper_mega_programmisty.blender.scene.SceneObject;
 import super_puper_mega_programmisty.blender.math.transform.AffineTransform;
 import super_puper_mega_programmisty.blender.math.transform.Translation;
@@ -26,6 +29,7 @@ public class Model extends SceneObject implements Transformable{
 
     public Model(Material material) {
         super("Модель");
+        menu = new ModelMenu(this);
         vertices = new ArrayList<>();
         textureVertices = new ArrayList<>();
         normals = new ArrayList<>();
@@ -35,6 +39,7 @@ public class Model extends SceneObject implements Transformable{
 
     public Model(Model other) {
         super("Модель");
+        menu = new ModelMenu(this);
         this.vertices = new ArrayList<>(other.vertices);
         this.textureVertices = new ArrayList<>(other.textureVertices);
         this.normals = new ArrayList<>(other.normals);
@@ -149,6 +154,12 @@ public class Model extends SceneObject implements Transformable{
 
     public boolean getIsUseTexture() {
         return material.isUseTexture();
+    }
+
+    @Override
+    public ObjectMenu getMenu() {
+        menu.load();
+        return menu;
     }
 
     public void setMaterial(Material material) {

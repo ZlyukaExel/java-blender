@@ -8,15 +8,11 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import super_puper_mega_programmisty.blender.filer.imagereader.ImageReader;
 import super_puper_mega_programmisty.blender.graphics.engine.RenderEngine;
-import super_puper_mega_programmisty.blender.graphics.model.utils.NormalsCalculator;
 import super_puper_mega_programmisty.blender.scene.SceneObject;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
-import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 import super_puper_mega_programmisty.blender.filer.objreader.ObjReader;
 import super_puper_mega_programmisty.blender.scene.Scene;
 
@@ -32,15 +28,6 @@ public class BlenderController {
     private Label objectLabel;
 
     @FXML
-    private TextField posX, posY, posZ;
-
-    @FXML
-    private TextField rotX, rotY, rotZ;
-
-    @FXML
-    private TextField scaleX, scaleY, scaleZ;
-
-    @FXML
     private CheckMenuItem luminationSwitch;
 
     @FXML
@@ -48,6 +35,9 @@ public class BlenderController {
 
     @FXML
     private CheckBox activeSwitch;
+
+    @FXML
+    private VBox objectMenu;
 
     @FXML
     private void initialize() {
@@ -76,14 +66,8 @@ public class BlenderController {
         if (model == null) {
             return;
         }
-        NormalsCalculator.recalculateNormals(model);
         scene.addModel(model);
         updateInfo();
-    }
-
-    @FXML
-    private void saveModel() {
-        scene.saveModel(canvas.getScene().getWindow());
     }
 
     @FXML
@@ -127,61 +111,9 @@ public class BlenderController {
     }
 
     @FXML
-    private void updatePos() {
-        double x = formatDoubleInput(posX);
-        double y = formatDoubleInput(posY);
-        double z = formatDoubleInput(posZ);
-
-        Vector3d position = new Vector3d(x, y, z);
-
-        scene.setObjectPosition(position);
-    }
-
-    @FXML
-    private void updateRotation() {
-        double x = formatDoubleInput(rotX);
-        double y = formatDoubleInput(rotY);
-        double z = formatDoubleInput(rotZ);
-
-        Vector3d rotation = new Vector3d(x, y, z);
-
-        scene.setObjectRotation(rotation);
-    }
-
-    @FXML
-    private void updateScale() {
-        double x = formatDoubleInput(scaleX, 1);
-        double y = formatDoubleInput(scaleY, 1);
-        double z = formatDoubleInput(scaleZ, 1);
-
-        Vector3d scale = new Vector3d(x, y, z);
-
-        scene.setObjectScale(scale);
-    }
-
-    @FXML
     private void clearScene() {
         scene = new Scene();
         updateInfo();
-    }
-
-    @FXML
-    private void recalculateNormals() {
-        scene.recalculateNormals();
-    }
-
-    @FXML
-    private void triangulate() {
-        scene.triangulate();
-    }
-
-    @FXML
-    private void applyTexture() {
-        Image texture = ImageReader.getImage(canvas.getScene().getWindow());
-        if (texture == null) {
-            return;
-        }
-        scene.applyTexture(texture);
     }
 
     @FXML
@@ -199,40 +131,15 @@ public class BlenderController {
         scene.getObject().setActive(activeSwitch.isSelected());
     }
 
-    private double formatDoubleInput(TextField textField) {
-        return formatDoubleInput(textField, 0);
-    }
-
-    private double formatDoubleInput(TextField textField, double defaultValue) {
-        double doubleInput = defaultValue;
-        try {
-            doubleInput = Double.parseDouble(textField.getText());
-        } catch (NumberFormatException e) {
-            textField.setText(String.valueOf(defaultValue));
-        }
-        return doubleInput;
-    }
-
     private void updateInfo() {
         SceneObject object = scene.getObject();
+
         objectLabel.setText(object.toString());
 
-        Vector3d position = object.getPosition();
-        posX.setText(String.valueOf(position.X()));
-        posY.setText(String.valueOf(position.Y()));
-        posZ.setText(String.valueOf(position.Z()));
+        ObjectMenu newMenu = object.getMenu();
+        objectMenu.getChildren().setAll(newMenu.getChildren());
 
-        Vector3d rotation = object.getRotation();
-        rotX.setText(String.valueOf(rotation.X()));
-        rotY.setText(String.valueOf(rotation.Y()));
-        rotZ.setText(String.valueOf(rotation.Z()));
-
-        Vector3d scale = object.getScale();
-        scaleX.setText(String.valueOf(scale.X()));
-        scaleY.setText(String.valueOf(scale.Y()));
-        scaleZ.setText(String.valueOf(scale.Z()));
-
-        activeSwitch.setSelected(scene.getObject().isActive());
+        activeSwitch.setSelected(object.isActive());
 
         luminationSwitch.setSelected(scene.getLuminationOn());
         polygonGridSwitch.setSelected(scene.getPolygonGridOn());

@@ -1,6 +1,7 @@
 package super_puper_mega_programmisty.blender.graphics.light;
 
 import javafx.scene.paint.Color;
+import super_puper_mega_programmisty.blender.app.LuminationMenu;
 import super_puper_mega_programmisty.blender.scene.SceneObject;
 
 public class LightSource extends SceneObject {
@@ -15,6 +16,7 @@ public class LightSource extends SceneObject {
     
     public LightSource() {
         super("Источник Света", true, false, false);
+        menu = new LuminationMenu(this);
         turnedOn = true;
         lightColor = BASE_COLOR;
         lightIntensity = BASE_INTENSITY;

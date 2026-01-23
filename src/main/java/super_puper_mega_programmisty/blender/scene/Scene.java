@@ -1,16 +1,10 @@
 package super_puper_mega_programmisty.blender.scene;
 
 import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
-import javafx.stage.Window;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
 import super_puper_mega_programmisty.blender.graphics.camera.engine.RenderPanel;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
-import super_puper_mega_programmisty.blender.graphics.model.utils.NormalsCalculator;
-import super_puper_mega_programmisty.blender.graphics.model.utils.Triangulator;
-import super_puper_mega_programmisty.blender.math.vector.Vector3d;
-import super_puper_mega_programmisty.blender.filer.objwriter.ObjWriter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,69 +150,6 @@ public class Scene {
         currentCamera = cameras.get(prevIndex);
 
         renderPanel.setCamera(currentCamera);
-    }
-
-    public void saveModel(Window window) {
-        if (!(currentObject instanceof Model model)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка сохранения");
-            alert.setHeaderText("Не удалось сохранить объект");
-            alert.setContentText("Сохранить можно только модель");
-            alert.showAndWait();
-            return;
-        }
-
-        ObjWriter.write(model, window);
-    }
-
-    public void recalculateNormals() {
-        if (!(currentObject instanceof Model model)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка при пересчете нормалей");
-            alert.setHeaderText("Не удалось пересчитать нормали");
-            alert.setContentText("Пересчитать нормали можно только у модели");
-            alert.showAndWait();
-            return;
-        }
-        NormalsCalculator.recalculateNormals(model);
-    }
-
-    public void triangulate() {
-        if (!(currentObject instanceof Model model)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка триангуляции");
-            alert.setHeaderText("Не удалось триангулировать модель");
-            alert.setContentText("Триангулировать можно только модель");
-            alert.showAndWait();
-            return;
-        }
-
-        Triangulator.triangulate(model);
-    }
-
-    public void applyTexture(Image texture) {
-        if (!(currentObject instanceof Model model)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка при применении текстуры");
-            alert.setHeaderText("Не удалось применить текстуру");
-            alert.setContentText("Применить текстуру можно только к модели");
-            alert.showAndWait();
-            return;
-        }
-
-        model.applyTexture(texture);
-    }
-
-    public void setObjectPosition(Vector3d position) {
-        currentObject.setPosition(position);
-    }
-
-    public void setObjectRotation(Vector3d rotation) {
-        currentObject.setRotation(rotation);
-    }
-
-    public void setObjectScale(Vector3d scale) {
-        currentObject.setScale(scale);
     }
 
     public void setLuminationOn(boolean isOn) {
