@@ -31,5 +31,9 @@
         <Slider fx:id="intensitySlider" majorTickUnit="2.0" max="10.0" minorTickCount="1"
                 onDragDetected="#onIntensitySliderDrag" snapToTicks="true" value="5.0"/>
 
+        <Separator prefHeight="15" visible="false"/>
+        <CheckBox fx:id="activeSwitch" mnemonicParsing="false" onAction="#switchActive"
+                  selected="true" text="Включен"/>
+
     </children>
 </fx:root>

@@ -67,12 +67,7 @@
                             <VBox fx:id="objectMenu" alignment="TOP_CENTER" prefWidth="180.0">
 
                             </VBox>
-
                             <Separator prefHeight="15" visible="false"/>
-                            <CheckBox fx:id="activeSwitch" mnemonicParsing="false" onAction="#switchActive"
-                                      selected="true" text="Активен"/>
-                            <Separator prefHeight="15" visible="false"/>
-
                         </VBox>
                     </children>
                 </AnchorPane>

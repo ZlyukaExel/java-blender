@@ -2,6 +2,7 @@ package super_puper_mega_programmisty.blender.app;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
@@ -44,6 +45,8 @@ public class LuminationMenu extends ObjectMenu {
         colorPicker.setValue(lightSource.getLightColor());
 
         intensitySlider.setValue(lightSource.getLightIntensity());
+
+        activeSwitch.setSelected(lightSource.isTurnedOn());
     }
 
     @FXML
@@ -60,6 +63,9 @@ public class LuminationMenu extends ObjectMenu {
 
     @FXML
     private Slider intensitySlider;
+
+    @FXML
+    private CheckBox activeSwitch;
 
     @FXML
     private void updatePos() {
@@ -81,5 +87,10 @@ public class LuminationMenu extends ObjectMenu {
     @FXML
     private void onIntensitySliderDrag() {
         lightSource.setLightIntensity(intensitySlider.getValue());
+    }
+
+    @FXML
+    private void switchActive() {
+        lightSource.setTurnedOn(activeSwitch.isSelected());
     }
 }

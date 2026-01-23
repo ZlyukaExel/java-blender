@@ -35,9 +35,6 @@ public class BlenderController {
     private CheckMenuItem polygonGridSwitch;
 
     @FXML
-    private CheckBox activeSwitch;
-
-    @FXML
     private VBox objectMenu;
 
     @FXML
@@ -128,11 +125,6 @@ public class BlenderController {
         scene.setPolygonGridOn(polygonGridSwitch.isSelected());
     }
 
-    @FXML
-    private void switchActive() {
-        scene.getObject().setActive(activeSwitch.isSelected());
-    }
-
     private void updateInfo() {
         SceneObject object = scene.getObject();
 
@@ -140,8 +132,6 @@ public class BlenderController {
 
         ObjectMenu newMenu = object.getMenu();
         objectMenu.getChildren().setAll(newMenu.getChildren());
-
-        activeSwitch.setSelected(object.isActive());
 
         luminationSwitch.setSelected(scene.getLuminationOn());
         polygonGridSwitch.setSelected(scene.getPolygonGridOn());
