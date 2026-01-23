@@ -70,8 +70,6 @@ public class ObjReader {
             }
         }
 
-        NormalsCalculator.recalculateNormals(model);
-
         return model;
     }
 

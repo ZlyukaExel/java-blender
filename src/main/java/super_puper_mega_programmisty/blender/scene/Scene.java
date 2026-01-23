@@ -180,7 +180,6 @@ public class Scene {
             alert.showAndWait();
             return;
         }
-
         NormalsCalculator.recalculateNormals(model);
     }
 
