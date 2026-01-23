@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
+import super_puper_mega_programmisty.blender.graphics.engine.shaders.PhongShader;
+import super_puper_mega_programmisty.blender.graphics.engine.shaders.Shader;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
 import super_puper_mega_programmisty.blender.graphics.model.Material;
 import super_puper_mega_programmisty.blender.math.vector.Vector2d;
@@ -20,6 +22,7 @@ public class TriangleRasterization {
                              Point p1, Point p2, Point p3,
                              List<LightSource> lightSources,
                              boolean luminationOn,
+                             Shader shader,
                              boolean useTexture,
                              Material material,
                              Camera camera,
@@ -38,9 +41,6 @@ public class TriangleRasterization {
         double x1 = p1.getX(), y1 = p1.getY(), z1 = p1.getZ();
         double x2 = p2.getX(), y2 = p2.getY(), z2 = p2.getZ();
         double x3 = p3.getX(), y3 = p3.getY(), z3 = p3.getZ();
-
-        Shader shader = new PhongShader(0.15, material.getBrilliance_factor());
-        // TODO: iliak|22.01.2026|захардкожен единственный шейдер
 
         double maxX = Math.max(Math.max(x1, x2), x3);
         double minX = Math.min(Math.min(x1, x2), x3);
@@ -80,7 +80,7 @@ public class TriangleRasterization {
                             p1.getActualPosition(), p2.getActualPosition(), p3.getActualPosition());
                     Vector3d vn = interpolateVector3d(alpha, beta, gamma, 
                             p1.getNormal(), p2.getNormal(), p3.getNormal());
-                    c = shader.applyLight(c, lightSources, v, vn, camera.getPosition());
+                    c = shader.applyLight(c, lightSources, material, v, vn, camera.getPosition());
                 }
 
                 pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
@@ -117,7 +117,7 @@ public class TriangleRasterization {
                             p1.getActualPosition(), p2.getActualPosition(), p3.getActualPosition());
                     Vector3d vn = interpolateVector3d(alpha, beta, gamma,
                             p1.getNormal(), p2.getNormal(), p3.getNormal());
-                    c = shader.applyLight(c, lightSources, v, vn, camera.getPosition());
+                    c = shader.applyLight(c, lightSources, material, v, vn, camera.getPosition());
                 }
 
                 pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);

@@ -1,27 +1,26 @@
-package super_puper_mega_programmisty.blender.graphics.engine;
+package super_puper_mega_programmisty.blender.graphics.engine.shaders;
 
 import javafx.scene.paint.Color;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
+import super_puper_mega_programmisty.blender.graphics.model.Material;
 import super_puper_mega_programmisty.blender.math.matrix.Matrix3d;
 import super_puper_mega_programmisty.blender.math.vector.Vector3d;
 
 import java.util.List;
 
-class PhongShader extends Shader{
+public class PhongShader extends Shader {
     private final double AMBIENT;
-    private final int BRILLIANCE_POW_FACTOR;
 
-    PhongShader() {
+    public PhongShader() {
         AMBIENT = 0.1;
-        BRILLIANCE_POW_FACTOR = 5;
     }
 
-    PhongShader(double ambient, int brilliance_factor) {
+    public PhongShader(double ambient) {
         this.AMBIENT = ambient;
-        this.BRILLIANCE_POW_FACTOR = brilliance_factor;
     }
 
-    public Color applyLight(Color c, List<LightSource> lightSources, Vector3d vertexPosition, Vector3d vn, Vector3d cameraPos) {
+    public Color applyLight(Color c, List<LightSource> lightSources, Material material,
+                            Vector3d vertexPosition, Vector3d vn, Vector3d cameraPos) {
         Vector3d color = new Vector3d(c.getRed(), c.getGreen(), c.getBlue());
         Matrix3d result = new Matrix3d(new double[][] {
                 {AMBIENT, 0, 0},
@@ -38,7 +37,8 @@ class PhongShader extends Shader{
 
             Vector3d cameraVec = new Vector3d(vertexPosition);
             cameraVec.subVector(cameraPos);
-            shader += calculateSpecular((Vector3d) new Vector3d(lightVec).neg(), cameraVec, vn);
+            shader += calculateSpecular((Vector3d) new Vector3d(lightVec).neg(), cameraVec, vn,
+                    material.getBrilliance_factor());
             shader *= intensityEquation(light.getLightIntensity(), lightVec.length());
 
             Color lightColor = light.getLightColor();
@@ -51,9 +51,9 @@ class PhongShader extends Shader{
         }
         color = (Vector3d) result.multiply(color);
 
-        double red = clamp(color.X(), 1);
-        double green = clamp(color.Y(), 1);
-        double blue = clamp(color.Z(), 1);
+        double red = clamp(color.X(), 0, 1);
+        double green = clamp(color.Y(), 0, 1);
+        double blue = clamp(color.Z(), 0, 1);
 
         return new Color(red, green, blue, 1);
     }
@@ -68,7 +68,8 @@ class PhongShader extends Shader{
         return Math.max(normal.dot(lightVector), 0);
     }
 
-    private double calculateSpecular(Vector3d lightVec, Vector3d cameraVec, Vector3d normal) {
+    private double calculateSpecular(Vector3d lightVec, Vector3d cameraVec, Vector3d normal,
+                                     double brilliance_factor) {
         double specularStrength = 0.5d;
 
         Vector3d proj = new Vector3d(normal);
@@ -77,17 +78,17 @@ class PhongShader extends Shader{
         Vector3d reflect = (Vector3d) lightVec.subVector(proj.multiplyByScalar(2)).normalize();
         cameraVec.normalize();
 
-        return Math.pow(Math.max(cameraVec.dot(reflect), 0), Math.pow(2, BRILLIANCE_POW_FACTOR)) * specularStrength;
+        return Math.pow(Math.max(cameraVec.dot(reflect), 0), Math.pow(2, brilliance_factor)) * specularStrength;
     }
 
     private static double intensityEquation(double intensity, double length) {
-        return clamp(intensity/length, 10);
+        return clamp(intensity/length, 0, 10);
     }
 
-    private static double clamp(double a, double max) {
+    private static double clamp(double a, double min, double max) {
         if (a > max) {
             return max;
         }
-        return Math.max(a, 0);
+        return Math.max(a, min);
     }
 }

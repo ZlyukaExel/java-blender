@@ -4,6 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import super_puper_mega_programmisty.blender.graphics.camera.Camera;
+import super_puper_mega_programmisty.blender.graphics.engine.shaders.PhongShader;
+import super_puper_mega_programmisty.blender.graphics.engine.shaders.Shader;
 import super_puper_mega_programmisty.blender.graphics.light.LightSource;
 import super_puper_mega_programmisty.blender.graphics.model.Material;
 import super_puper_mega_programmisty.blender.graphics.model.Model;
@@ -23,6 +25,9 @@ public class RenderEngine {
         ZBuffer buffer = new ZBuffer(width, height);
         boolean renderMesh = scene.getPolygonGridOn();
         boolean luminationOn = scene.getLuminationOn();
+        Shader shader = new PhongShader(0.15);
+        // TODO: iliak|23.01.2026|захардкожен единственный шейдер
+
         List<LightSource> lightSources = new ArrayList<>();
         for (LightSource source : scene.getLightSources()) {
             if (source.isTurnedOn()) {
@@ -37,7 +42,7 @@ public class RenderEngine {
         }
         else {
             for (Model model : scene.getModels()) {
-                renderModel(gc, curCamera, model, luminationOn, lightSources, buffer, width, height);
+                renderModel(gc, curCamera, model, luminationOn, lightSources, shader, buffer, width, height);
             }
         }
     }
@@ -48,6 +53,7 @@ public class RenderEngine {
             final Model model,
             boolean luminationOn,
             List<LightSource> lightSources,
+            Shader shader,
             ZBuffer buffer,
             final int width,
             final int height) {
@@ -84,12 +90,12 @@ public class RenderEngine {
                 continue;
             }
 
-            renderPolygon(polygonPoints, luminationOn, lightSources, model.getMaterial(), useTexture, camera, buffer, width, height, gc);
+            renderPolygon(polygonPoints, luminationOn, lightSources, shader, model.getMaterial(), useTexture, camera, buffer, width, height, gc);
         }
     }
 
     private static void renderPolygon(List<Point> points,
-                                      boolean luminationOn, List<LightSource> lightSources,
+                                      boolean luminationOn, List<LightSource> lightSources, Shader shader,
                                       Material material, boolean useTexture, Camera camera,
                                       ZBuffer buffer, int width, int height,
                                       GraphicsContext gc) {
@@ -97,7 +103,7 @@ public class RenderEngine {
         for (int index = 1; index < points.size() - 1; index++) {
             Point p2 = points.get(index);
             Point p3 = points.get(index + 1);
-            fillTriangle(gc, p1, p2, p3, lightSources, luminationOn, useTexture, material, camera, buffer, width, height);
+            fillTriangle(gc, p1, p2, p3, lightSources, luminationOn, shader, useTexture, material, camera, buffer, width, height);
         }
     }
 

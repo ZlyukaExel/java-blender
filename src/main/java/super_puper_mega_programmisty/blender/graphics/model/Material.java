@@ -7,7 +7,7 @@ public class Material {
     private Color color;
     private Image texture;
     private final int brilliance_pow_factor;
-    private boolean useTexture = false;
+    private boolean useTexture = true;
 
     public static final int MIN_BRILLIANCE_FACTOR = 1;
     public static final int MAX_BRILLIANCE_FACTOR = 12;
