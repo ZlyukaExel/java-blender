@@ -35,14 +35,10 @@ public class RenderEngine {
             }
         }
 
-        if (renderMesh) {
-            for (Model model : scene.getModels()) {
+        for (Model model : scene.getModels()) {
+            renderModel(gc, curCamera, model, luminationOn, lightSources, shader, buffer, width, height);
+            if (renderMesh) {
                 renderMesh(model, curCamera, gc, width, height);
-            }
-        }
-        else {
-            for (Model model : scene.getModels()) {
-                renderModel(gc, curCamera, model, luminationOn, lightSources, shader, buffer, width, height);
             }
         }
     }
