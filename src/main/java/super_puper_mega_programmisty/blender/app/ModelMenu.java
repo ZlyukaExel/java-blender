@@ -58,9 +58,9 @@ public class ModelMenu extends ObjectMenu {
         scaleY.setText(String.valueOf(scale.Y()));
         scaleZ.setText(String.valueOf(scale.Z()));
 
-        //applyTextureBox.setSelected();
-        //bleskSlider.setValue();
-        //colorPicker.setValue();
+        applyTextureBox.setSelected(model.getIsUseTexture());
+        bleskSlider.setValue(model.getMaterial().getBrilliance_factor());
+        colorPicker.setValue(model.getMaterial().getColor());
     }
 
     @FXML

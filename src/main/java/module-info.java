@@ -9,6 +9,8 @@ module company.name.blender {
     exports super_puper_mega_programmisty.blender.graphics.camera.engine;
     opens super_puper_mega_programmisty.blender.graphics.camera.engine to javafx.fxml;
     exports super_puper_mega_programmisty.blender.graphics.model to javafx.fxml;
+    exports super_puper_mega_programmisty.blender.graphics.camera to javafx.fxml;
+    exports super_puper_mega_programmisty.blender.graphics.light to javafx.fxml;
     exports super_puper_mega_programmisty.blender.math.vector;
     exports super_puper_mega_programmisty.blender.math.transform;
     exports super_puper_mega_programmisty.blender.math.matrix;

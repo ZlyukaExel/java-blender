@@ -69,7 +69,8 @@
         <Separator prefHeight="10" visible="false"/>
 
         <Label text="blesk"/>
-        <Slider max="12.0" fx:id="bleskSlider" onDragDetected="#onBleskSliderDrag"/>
+        <Slider majorTickUnit="2.0" max="12.0" minorTickCount="1" snapToTicks="true" fx:id="bleskSlider"
+                onDragDetected="#onBleskSliderDrag" value="6"/>
         <Separator prefHeight="15" visible="false"/>
 
         <Button mnemonicParsing="false" text="Применить текстуру" onAction="#applyTexture"/>
