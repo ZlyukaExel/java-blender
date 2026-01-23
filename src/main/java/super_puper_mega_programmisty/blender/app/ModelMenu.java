@@ -146,18 +146,18 @@ public class ModelMenu extends ObjectMenu {
     @FXML
     private void onColorChanged() {
         Color color = colorPicker.getValue();
-        //model.setMaterial();
+        model.setMaterialColor(color);
     }
 
     @FXML
     private void onBleskSliderDrag() {
         double value = bleskSlider.getValue();
-        //model.setBlesk(value);
+        model.setBrillianceFactor((int) value);
     }
 
     @FXML
     private void onApplyTextureChanged() {
         boolean applyTexture = applyTextureBox.isSelected();
-        //model.setApplyTexture(applyTexture);
+        model.setUseTexture(applyTexture);
     }
 }

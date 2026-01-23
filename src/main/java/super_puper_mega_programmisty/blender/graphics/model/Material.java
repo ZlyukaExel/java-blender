@@ -6,8 +6,8 @@ import javafx.scene.paint.Color;
 public class Material {
     private Color color;
     private Image texture;
-    private final int brilliance_pow_factor;
-    private boolean useTexture = true;
+    private int brilliance_pow_factor;
+    private boolean useTexture = false;
 
     public static final int MIN_BRILLIANCE_FACTOR = 1;
     public static final int MAX_BRILLIANCE_FACTOR = 12;
@@ -50,5 +50,9 @@ public class Material {
 
     public int getBrilliance_factor() {
         return brilliance_pow_factor;
+    }
+
+    public void setBrilliance_pow_factor(int brilliance_pow_factor) {
+        this.brilliance_pow_factor = brilliance_pow_factor;
     }
 }

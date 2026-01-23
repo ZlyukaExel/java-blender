@@ -164,7 +164,14 @@ public class Model extends SceneObject implements Transformable{
 
     public void setMaterial(Material material) {
         this.material = material;
+    }
 
+    public void setMaterialColor(Color color) {
+        this.material.setColor(color);
+    }
+
+    public void setBrillianceFactor(int factor) {
+        this.material.setBrilliance_pow_factor(factor);
     }
 
     public void setUseTexture(boolean useTexture) {
