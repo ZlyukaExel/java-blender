@@ -50,10 +50,21 @@ public class TriangleRasterization {
             return;
         }
 
-        for (double y = (int) clamp(p1.getY(), 0, height) ; y < clamp(p2.getY(), 0, height); y++) {
-            for (double x = (int) minX; x < maxX; x++) {
+        for (double yi = (int) clamp(y1, 0, height) ; yi < clamp(y2, 0, height); yi++) {
+            double xi1 = minX, xi2 = maxX;
+            if (Math.abs(y1 - y2) > 1 && Math.abs(y1 - y3) > 1) {
+                xi1 = clamp(x1 - ((x1 - x2) * (y1 - yi) / (y1 - y2)), minX, maxX);
+                xi2 = clamp(x1 - ((x1 - x3) * (y1 - yi) / (y1 - y3)), minX, maxX);
+                if (xi1 - xi2 > 1E-4) {
+                    double tmp = xi2;
+                    xi2 = xi1;
+                    xi1 = tmp;
+                }
+            }
+
+            for (double x = (int) xi1; x < xi2; x++) {
                 Color c = material.getColor();
-                double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
+                double[] bCoords = getBarycentric(x, yi, x1, y1, x2, y2, x3, y3);
                 double alpha = bCoords[0];
                 double beta = bCoords[1];
                 double gamma = bCoords[2];
@@ -62,7 +73,7 @@ public class TriangleRasterization {
                     continue;
                 }
                 double z = z1 * alpha + z2 * beta + z3 * gamma;
-                if (buffer.getZ((int) Math.round(x), (int) Math.round(y)) <= z) {
+                if (buffer.getZ((int) Math.round(x), (int) Math.round(yi)) <= z) {
                     continue;
                 }
                 
@@ -83,14 +94,25 @@ public class TriangleRasterization {
                     c = shader.applyLight(c, lightSources, material, v, vn, camera.getPosition());
                 }
 
-                pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
-                buffer.setZ((int) Math.round(x), (int) Math.round(y), z);
+                pixelWriter.setColor((int) Math.round(x), (int) Math.round(yi), c);
+                buffer.setZ((int) Math.round(x), (int) Math.round(yi), z);
             }
         }
-        for (double y = (int) clamp(p2.getY(), 0, height); y < clamp(p3.getY(), 0, height); y++) {
-            for (double x = (int) minX; x <= maxX; x++) {
+        for (double yi = (int) clamp(y2, 0, height); yi < clamp(y3, 0, height); yi++) {
+            double xi1 = minX, xi2 = maxX;
+            if (Math.abs(y2 - y3) > 1 && Math.abs(y1 - y3) > 1) {
+                xi1 = clamp(x2 - ((x2 - x3) * (y2 - yi) / (y2 - y3)), minX, maxX);
+                xi2 = clamp(x1 - ((x1 - x3) * (y1 - yi) / (y1 - y3)), minX, maxX);
+                if (xi1 - xi2 > 1E-4) {
+                    double tmp = xi2;
+                    xi2 = xi1;
+                    xi1 = tmp;
+                }
+            }
+
+            for (double x = (int) xi1; x < xi2; x++) {
                 Color c = material.getColor();
-                double[] bCoords = getBarycentric(x, y, x1, y1, x2, y2, x3, y3);
+                double[] bCoords = getBarycentric(x, yi, x1, y1, x2, y2, x3, y3);
                 double alpha = bCoords[0];
                 double beta = bCoords[1];
                 double gamma = bCoords[2];
@@ -99,7 +121,7 @@ public class TriangleRasterization {
                     continue;
                 }
                 double z = z1 * alpha + z2 * beta + z3 * gamma;
-                if (buffer.getZ((int) Math.round(x), (int) Math.round(y)) <= z) {
+                if (buffer.getZ((int) Math.round(x), (int) Math.round(yi)) <= z) {
                     continue;
                 }
 
@@ -120,8 +142,8 @@ public class TriangleRasterization {
                     c = shader.applyLight(c, lightSources, material, v, vn, camera.getPosition());
                 }
 
-                pixelWriter.setColor((int) Math.round(x), (int) Math.round(y), c);
-                buffer.setZ((int) Math.round(x), (int) Math.round(y), z);
+                pixelWriter.setColor((int) Math.round(x), (int) Math.round(yi), c);
+                buffer.setZ((int) Math.round(x), (int) Math.round(yi), z);
             }
         }
     }
