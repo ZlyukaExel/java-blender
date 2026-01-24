@@ -61,6 +61,7 @@ public class ModelMenu extends ObjectMenu {
         applyTextureBox.setSelected(model.getIsUseTexture());
         bleskSlider.setValue(model.getMaterial().getBrilliance_factor());
         colorPicker.setValue(model.getMaterial().getColor());
+        //alphaSlider.setValue(model.getAlpha());
     }
 
     @FXML
@@ -77,6 +78,9 @@ public class ModelMenu extends ObjectMenu {
 
     @FXML
     private Slider bleskSlider;
+
+    @FXML
+    private Slider alphaSlider;
 
     @FXML
     private CheckBox applyTextureBox;
@@ -153,6 +157,11 @@ public class ModelMenu extends ObjectMenu {
     private void onBleskSliderDrag() {
         double value = bleskSlider.getValue();
         model.setBrillianceFactor((int) value);
+    }
+
+    @FXML
+    private void onAlphaSliderDrag() {
+        //model.setAlpha(alphaSlider.getValue());
     }
 
     @FXML
