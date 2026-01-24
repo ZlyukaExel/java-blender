@@ -23,7 +23,7 @@ public class BlenderController {
     private Timeline timeline;
 
     @FXML
-    private Canvas canvas;
+    public Canvas canvas;
 
     @FXML
     private Label objectLabel;

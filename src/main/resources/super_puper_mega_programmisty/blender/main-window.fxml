@@ -4,7 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import super_puper_mega_programmisty.blender.app.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="super_puper_mega_programmisty.blender.app.BlenderController">
@@ -48,7 +47,7 @@
         </MenuBar>
     </top>
     <center>
-        <Canvas fx:id="canvas" height="400.0" width="600.0" BorderPane.alignment="CENTER"/>
+        <Canvas fx:id="canvas" height="1000" width="1500" BorderPane.alignment="CENTER"/>
     </center>
     <right>
         <ScrollPane hbarPolicy="NEVER" prefHeight="400.0" prefWidth="200.0" BorderPane.alignment="CENTER">
