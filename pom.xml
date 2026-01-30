@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>super_puper_mega_programmisty</groupId>
-    <artifactId>blender</artifactId>
+    <artifactId>java-blender</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>blender</name>
 
@@ -84,7 +84,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>company.name.blender/super_puper_mega_programmisty.blender.app.BlenderApplication</mainClass>
+                            <mainClass>company.name.blender/app.mega_programmisty.blender.BlenderApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

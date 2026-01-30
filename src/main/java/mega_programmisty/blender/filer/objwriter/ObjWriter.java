@@ -1,0 +1,127 @@
+package mega_programmisty.blender.filer.objwriter;
+
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
+import mega_programmisty.blender.graphics.model.Polygon;
+import mega_programmisty.blender.graphics.model.Model;
+import mega_programmisty.blender.math.vector.Vector2d;
+import mega_programmisty.blender.math.vector.Vector3d;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class ObjWriter {
+
+    private static final String OBJ_VERTEX_TOKEN = "v";
+    private static final String OBJ_TEXTURE_TOKEN = "vt";
+    private static final String OBJ_NORMAL_TOKEN = "vn";
+    private static final String OBJ_FACE_TOKEN = "f";
+
+    public static void write(Model model, Window window) {
+        FileChooser fileChooser = new FileChooser();
+        File defaultDirectory = new File(".");
+        fileChooser.setInitialFileName(model.toString() + ".obj");
+        fileChooser.setInitialDirectory(defaultDirectory);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront OBJ (*.obj)", "*.obj"));
+        fileChooser.setTitle("Сохранение модели");
+
+        File file = fileChooser.showSaveDialog(window);
+        if (file == null) {
+            return;
+        }
+
+        if (!file.getName().toLowerCase().endsWith(".obj")) {
+            file = new File(file.getAbsolutePath() + ".obj");
+        }
+
+        write(model, file.toPath());
+    }
+
+    public static void write(Model model, Path path) {
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            int counter = 0;
+            // Запись вершин
+            for (Vector3d vertex : model.getVertices()) {
+                writer.write(OBJ_VERTEX_TOKEN + " " + vertex.X() + " " + vertex.Y() + " " + vertex.Z() + "\n");
+                counter++;
+            }
+
+            if (counter > 0) {
+                writer.write("# " + counter + " vertices\n\n");
+                counter = 0;
+            }
+
+            // Запись текстур вершин
+            for (Vector2d vertexTexture : model.getTextureVertices()) {
+                writer.write(OBJ_TEXTURE_TOKEN + " " + vertexTexture.X() + " " + vertexTexture.Y() + " 0.0000" + "\n");
+                counter++;
+            }
+
+            if (counter > 0) {
+                writer.write("# " + counter + " texture coords\n\n");
+                counter = 0;
+            }
+
+            // Запись нормалей вершин
+            for (Vector3d vertexNormal : model.getNormals()) {
+                writer.write(OBJ_NORMAL_TOKEN + " " + vertexNormal.X() + " " + vertexNormal.Y() + " " + vertexNormal.Z() + "\n");
+                counter++;
+            }
+
+            if (counter > 0) {
+                writer.write("# " + counter + " normals\n\n");
+                counter = 0;
+            }
+
+            int trianglesCounter = 0;
+
+            // Запись полигонов
+            for (Polygon polygon : model.getPolygons()) {
+
+                writer.write(OBJ_FACE_TOKEN);
+
+                if (polygon.getVertexIndices().size() == 3){
+                    trianglesCounter++;
+                }
+
+                int vertexCount = polygon.getVertexIndices().size();
+                boolean hasTextures = polygon.getTextureVertexIndices().size() == vertexCount;
+                boolean hasNormales = polygon.getNormalIndices().size() == vertexCount;
+
+                for (int i = 0; i < vertexCount; i++) {
+                    // Пишем ID вертекса
+                    writer.write( " " + (polygon.getVertexIndices().get(i) + 1));
+
+                    // Пишем ID текстуры
+                    if (hasTextures){
+                        writer.write("/" + (polygon.getTextureVertexIndices().get(i) + 1));
+                    }
+
+                    // Пишем ID нормали
+                    if (hasNormales){
+                        if (!hasTextures) {
+                            writer.write("/");
+                        }
+                        writer.write("/" + (polygon.getNormalIndices().get(i) + 1));
+                    }
+                }
+
+                writer.write("\n");
+
+                counter++;
+            }
+
+            if (counter > 0) {
+                writer.write("# " + counter + " polygons - " + trianglesCounter + " triangles\n\n");
+            }
+
+            System.out.println("Модель успешно сохранена в " + path);
+
+        } catch (IOException e) {
+            System.out.println("Возникла ошибка при сохранении модели: " + e.getMessage());;
+        }
+    }
+}

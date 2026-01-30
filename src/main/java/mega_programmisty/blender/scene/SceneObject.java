@@ -1,0 +1,64 @@
+package mega_programmisty.blender.scene;
+
+import mega_programmisty.blender.app.ObjectMenu;
+import mega_programmisty.blender.math.matrix.Matrix4d;
+import mega_programmisty.blender.math.transform.Transform;
+import mega_programmisty.blender.math.vector.Vector3d;
+
+public abstract class SceneObject {
+    protected final Transform transform;
+    private String name;
+    protected ObjectMenu menu;
+
+    public SceneObject(String objectName) {
+        name = objectName;
+        this.transform = new Transform();
+    }
+
+    public SceneObject(String objectName, boolean doTranslate, boolean doRotate, boolean doScale) {
+        name = objectName;
+        this.transform = new Transform(doTranslate, doRotate, doScale);
+    }
+
+    public ObjectMenu getMenu() {
+        menu.load();
+        return menu;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Matrix4d getTransformMatrix() {
+        return this.transform.getTransformationMatrix();
+    }
+
+    public void setPosition(Vector3d position) {
+        transform.setPosition(position);
+    }
+
+    public void setRotation(Vector3d rotation) {
+        transform.setRotation(rotation);
+    }
+
+    public void setScale(Vector3d scale) {
+        transform.setScale(scale);
+    }
+
+    public Vector3d getPosition() {
+        return transform.getPosition();
+    }
+
+    public Vector3d getRotation() {
+        return transform.getRotation();
+    }
+
+    public Vector3d getScale() {
+        return transform.getScale();
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+}
