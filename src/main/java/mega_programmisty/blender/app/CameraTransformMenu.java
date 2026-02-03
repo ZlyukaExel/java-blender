@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import mega_programmisty.blender.graphics.camera.CameraTransform;
+import mega_programmisty.blender.graphics.camera.Camera;
 import mega_programmisty.blender.math.vector.Vector3d;
 
 import java.io.IOException;
@@ -12,9 +12,9 @@ import java.io.IOException;
 import static mega_programmisty.blender.app.InputFormatter.formatDoubleInput;
 
 public class CameraTransformMenu extends ObjectMenu{
-    private CameraTransform camera;
+    private Camera camera;
 
-    public CameraTransformMenu(CameraTransform camera) {
+    public CameraTransformMenu(Camera camera) {
         this.camera = camera;
     }
 

@@ -35,12 +35,12 @@ public class FPSCameraController implements CameraController {
     public void update(float deltaTime) {
         double velocity = movementSpeed * deltaTime;
 
-        if (forwardPressed) camera.moveForward(velocity);
-        if (backwardPressed) camera.moveForward(-velocity);
-        if (leftPressed) camera.moveRight(-velocity);
-        if (rightPressed) camera.moveRight(velocity);
-        if (upPressed) camera.moveUp(velocity);
-        if (downPressed) camera.moveUp(-velocity);
+//        if (forwardPressed) camera.moveForward(velocity);
+//        if (backwardPressed) camera.moveForward(-velocity);
+//        if (leftPressed) camera.moveRight(-velocity);
+//        if (rightPressed) camera.moveRight(velocity);
+//        if (upPressed) camera.moveUp(velocity);
+//        if (downPressed) camera.moveUp(-velocity);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class FPSCameraController implements CameraController {
 
         Vector3d position = camera.getPosition();
         Vector3d target = (Vector3d) position.addVector(front);
-        camera.setTarget(target.X(), target.Y(), target.Z());
+//        camera.setTarget(target.X(), target.Y(), target.Z());
     }
 
     private void updateCameraVectors() {
@@ -140,8 +140,8 @@ public class FPSCameraController implements CameraController {
     }
 
     private void resetCamera() {
-        camera.setPosition(0.0, 0.0, 5.0);
-        camera.setTarget(0.0, 0.0, 0.0);
+//        camera.setPosition(0.0, 0.0, 5.0);
+//        camera.setTarget(0.0, 0.0, 0.0);
         yaw = -90.0;
         pitch = 0.0;
         updateCameraVectors();

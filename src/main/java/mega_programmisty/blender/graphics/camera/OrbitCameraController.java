@@ -148,8 +148,8 @@ public class OrbitCameraController implements CameraController {
         double y = distance * Math.sin(elevationRad);
         double z = distance * (Math.cos(elevationRad) * Math.cos(azimuthRad));
 
-        camera.setPosition(target.X() + x, target.Y() + y, target.Z() + z);
-        camera.setTarget(target.X(), target.Y(), target.Z());
+//        camera.setPosition(target.X() + x, target.Y() + y, target.Z() + z);
+//        camera.setTarget(target.X(), target.Y(), target.Z());
     }
 
     @Override
