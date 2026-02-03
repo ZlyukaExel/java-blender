@@ -19,12 +19,12 @@ public class Scene {
     private boolean luminationOn = false;
     private boolean polygonGridOn = false;
 
-    private final RenderPanel renderPanel;
+//    private final RenderPanel renderPanel;
 
     public Scene() {
         addCamera();
         currentCamera = cameras.getFirst();
-        renderPanel = new RenderPanel(currentCamera);
+//        renderPanel = new RenderPanel(currentCamera);
     }
 
     public void addModel(Model model) {
@@ -140,7 +140,7 @@ public class Scene {
         int nextIndex = (currentIndex + 1) % cameras.size();
         currentCamera = cameras.get(nextIndex);
 
-        renderPanel.setCamera(currentCamera);
+//        renderPanel.setCamera(currentCamera);
     }
 
     public void prevCamera() {
@@ -149,7 +149,7 @@ public class Scene {
         int prevIndex = (currentIndex - 1 + cameras.size()) % cameras.size();
         currentCamera = cameras.get(prevIndex);
 
-        renderPanel.setCamera(currentCamera);
+//        renderPanel.setCamera(currentCamera);
     }
 
     public void setLuminationOn(boolean isOn) {

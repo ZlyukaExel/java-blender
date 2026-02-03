@@ -9,8 +9,6 @@ import mega_programmisty.blender.math.vector.exception.VectorDivisionByZero;
 import mega_programmisty.blender.math.vector.exception.VectorZeroVectorNormalization;
 import org.junit.Before;
 import org.junit.Test;
-import super_puper_mega_programmisty.blender.math.vector.*;
-import super_puper_mega_programmisty.blender.math.vector.exception.*;
 import static org.junit.Assert.assertEquals;
 
 public class Vector2dTest {

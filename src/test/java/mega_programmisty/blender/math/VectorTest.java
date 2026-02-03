@@ -5,7 +5,6 @@ import mega_programmisty.blender.math.vector.Vector2d;
 import mega_programmisty.blender.math.vector.Vector3d;
 import org.junit.Before;
 import org.junit.Test;
-import super_puper_mega_programmisty.blender.math.vector.*;
 
 import static org.junit.Assert.*;
 

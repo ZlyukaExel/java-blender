@@ -1,6 +1,6 @@
 package mega_programmisty.blender.graphics.camera;
 
-import mega_programmisty.blender.app.CameraMenu;
+import mega_programmisty.blender.app.CameraTransformMenu;
 import mega_programmisty.blender.scene.SceneObject;
 import mega_programmisty.blender.math.matrix.Matrix4d;
 import mega_programmisty.blender.math.vector.Vector3d;
@@ -24,7 +24,7 @@ public class CameraTransform extends SceneObject {
 
     public CameraTransform(Vector3d position, Vector3d rotation, double FOV, double aspectRatio, double nearClip, double farClip) {
         super("Камера", true, true, false);
-//        menu = new CameraMenu(this);
+        menu = new CameraTransformMenu(this);
 
         setPosition(position);
         setRotation(rotation);
