@@ -90,8 +90,6 @@ public class Transform {
         Rotation rotationX = new Rotation(Rotation.Axis.X, this.rotation.X());
         Rotation rotationY = new Rotation(Rotation.Axis.Y, this.rotation.Y());
         Rotation rotationZ = new Rotation(Rotation.Axis.Z, this.rotation.Z());
-        Translation translation = new Translation(this.position);
-
 
         Matrix4d scaleMat = scaling.getTransformationMatrix();
         Matrix4d rotationMat = (Matrix4d) rotationX.getTransformationMatrix()
@@ -99,6 +97,16 @@ public class Transform {
                 .multiply(rotationZ.getTransformationMatrix());
 
         return (Matrix4d)  scaleMat.multiply(rotationMat);
+    }
+
+    public Matrix4d getRotationMatrix() {
+        Rotation rotationX = new Rotation(Rotation.Axis.X, this.rotation.X());
+        Rotation rotationY = new Rotation(Rotation.Axis.Y, this.rotation.Y());
+        Rotation rotationZ = new Rotation(Rotation.Axis.Z, this.rotation.Z());
+
+        return (Matrix4d) rotationX.getTransformationMatrix()
+                .multiply(rotationY.getTransformationMatrix())
+                .multiply(rotationZ.getTransformationMatrix());
     }
 
     @Override
