@@ -3,9 +3,12 @@
 A minimal, self-contained 3D viewer built in pure Java. Designed as a project for quick model inspection.
 
 ## Interface
-![textute_and_light_example](https://github.com/ZlyukaExel/super-mega-puper-blender-jabba/blob/master/screenshots/texture_and_light_example.png)
-
-![polygon_grid_example](https://github.com/ZlyukaExel/super-mega-puper-blender-jabba/blob/master/screenshots/polygon_grid_example.png)
+<table>
+  <tr>
+    <td><img src="https://github.com/ZlyukaExel/super-mega-puper-blender-jabba/blob/master/screenshots/texture_and_light_example.png" alt="textute_and_light_example" width="500"></td>
+    <td><img src="https://github.com/ZlyukaExel/super-mega-puper-blender-jabba/blob/master/screenshots/polygon_grid_example.png" alt="polygon_grid_example" width="500"></td>
+  </tr>
+</table>
 
 ## Features
 *   Model Viewing: Load and display standard Wavefront .obj files with support for vertices, faces, normals and texture coordinates.
